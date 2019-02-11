@@ -6,15 +6,9 @@ class userController extends AController{
 
 	function GET(){
 		parent::GET($Role);
-
 		$model = new User();
-		if (parent::getRequest('LOGINHELLO') == "true")
-			$model->SetValue("Id", $_GET['_LOGGINID']);
-		else
-		{
-			foreach($model->GetProperties() as $key => $value){
-				$model->SetValue($key, parent::getRequest($key));
-			}
+		foreach($model->GetProperties() as $key => $value){
+			$model->SetValue($key, parent::getRequest($key));
 		}
 		$data = $model->Select(-1 , -1, 'IsActive DESC, Id', 'DESC');
 		parent::setData($data);

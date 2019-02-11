@@ -14,44 +14,19 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 include_once 'Initialize.php';
-include_once BASEPATH . 'core/Auth.php';
+// include_once BASEPATH . 'core/Auth.php';
 
 abstract class AController
 {
 	private $data = '' ;
 	private $request = [];
 
+
+	// TODO: Validate the token and Username not password!
+	// Password will only pass to auth controller
 	function login($Role = null)
 	{
-		if ($Role == 'GUEST')
-			return null;
-		
-		$query = [];
-		$parts = parse_url($_SERVER['REQUEST_URI']);
-		if (isset($parts['query']))
-			parse_str($parts['query'], $query);
-		if (isset($query['Username']) && isset($query['Password']))
-		{
-			$LoginResult = (new Authentication())->IsValid($query['Username'], $query['Password']);
-			$_GET['_LOGGINID'] = $LoginResult[0];
-			if
-			(
-				($Role != null)
-				and
-				(
-					($Role != 'USER' and $Role != 'OPERATOR' and $Role != 'ADMIN') or
-					($_GET['_LOGGINID'] == null) or
-					($LoginResult[1] == 'USER' and $Role == 'OPERATOR') or
-					(($LoginResult[1] == 'USER' or $LoginResult[1] == 'OPERATOR') and $Role == 'ADMIN')
-				)
-			)
-			{
-				header("HTTP/1.1 401 Unauthorized");
-				exit;
-			}
-			return $_GET['_LOGGINID'];
-		}
-		return null;
+		// TODO:
 	}
 
 	function __construct(){
@@ -74,24 +49,24 @@ abstract class AController
 		return (isset($this->request[$index])?$this->request[$index]:null);
 	}
 	function returnData (){
-		if (constant('self::'.'resultType')=='JSON')
+		if (APIRESULTTYPE=='application/json')
 		{
-			header("Content-Type: application/json");
+			header("Content-Type: " . APIRESULTTYPE);
 			echo json_encode($this->data);
 		}
 		else echo $this->data;
 	}
-	function GET($Role = 'GUEST'){
+	function GET($Role = 'VSTOR'){
 		$this->login($Role);
 
 		$this->setRequest($_GET);
 	}
-	function POST($Role = 'GUEST'){
+	function POST($Role = 'VSTOR'){
 		$this->login($Role);
 
 		$this->setRequest($_POST);
 	}
-	function DELETE($Role = 'GUEST'){
+	function DELETE($Role = 'VSTOR'){
 		$this->login($Role);
 		
 		$raw_data = file_get_contents('php://input');
@@ -142,7 +117,7 @@ abstract class AController
 		}
 		$this->setRequest($_DELETE);
 	}
-	function PUT($Role = 'GUEST'){
+	function PUT($Role = 'VSTOR'){
 		$this->login($Role);
 
 		$raw_data = file_get_contents('php://input');

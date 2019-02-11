@@ -1,9 +1,8 @@
 <?php
 namespace core;
 
-require_once BASEPATH . 'core/Authorization.php';
-require_once BASEPATH . 'Config.php';
-require_once BASEPATH . 'core/Cryptography.php';
+include_once BASEPATH . 'core/Authorization.php';
+include_once BASEPATH . 'core/Cryptography.php';
 
 class Authentication{
 

@@ -98,6 +98,8 @@ abstract class AModel
 		$query  = "SELECT " . $fields . " FROM `" . $this->table . "`";
 		if ($this->GetProperties()[$this->pk] != null) // TODO: Any parameter that wasn't null
 		{
+			if ($this->pkType == 'String')
+				$this->SetValue($this->pk, "'" .  $this->GetProperties()[$this->pk] . "'" );
 			$query .= " WHERE `" . $this->pk . "` = " . $this->GetProperties()[$this->pk] . ";";
 		}
 		else
@@ -116,7 +118,7 @@ abstract class AModel
 			return;
 		}
 		$rows = array();
-		while(($row = mysqli_fetch_array($result))) {
+		while(($row = mysqli_fetch_assoc($result))) {
 			$rows[] = $row;
 		}
 		return $rows;

@@ -78,9 +78,9 @@ Hi = {
             &&
             (
                 ($.cookie("Type") == undefined) ||
-                (role != 'USER' && role != 'OPERATOR' && role != 'ADMIN') ||
-                ($.cookie("Type") == 'USER' && role == 'OPERATOR') ||
-                (($.cookie("Type") == 'USER' || $.cookie("Type") == 'OPERATOR') && role == 'ADMIN')
+                (role != 'USER' && role != 'EDTOR' && role != 'ADMIN') ||
+                ($.cookie("Type") == 'USER' && role == 'EDTOR') ||
+                (($.cookie("Type") == 'USER' || $.cookie("Type") == 'EDTOR') && role == 'ADMIN')
             )
         )
         {

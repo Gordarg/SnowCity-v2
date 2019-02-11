@@ -1,6 +1,4 @@
 <?php
-require_once 'Config.php';
-
 class AccessLevel {
 
     private $path;

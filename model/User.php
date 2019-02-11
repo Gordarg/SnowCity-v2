@@ -7,14 +7,15 @@ class User extends AModel
 	function __construct()
 	{
 		self::SetTable('users');
-		self::SetPrimaryKey('Id');
+		self::SetPrimaryKey('Username');
+		self::SetPrimaryKeyType('String');
 		self::SetProperties(array(
 			// 'KEY' => DEFAULT_VALUE,
-			'Id'=>NULL,
-			'Username'=>NULL,
-			'HashPassword'=>NULL,
-			'Active'=>0,
-			'Role'=>'VSTOR',
+			'Id' => NULL,
+			'Username' => NULL,
+			'HashPassword' => NULL,
+			'IsActive' => 1,
+			'Role' => 'VSTOR',
 		));
 	}
 }
