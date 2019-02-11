@@ -55,6 +55,7 @@ abstract class AController
 			echo json_encode($this->data);
 		}
 		else echo $this->data;
+		return $this->data;
 	}
 	function GET($Role = 'VSTOR'){
 		$this->login($Role);
