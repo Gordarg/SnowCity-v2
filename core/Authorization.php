@@ -1,34 +1,6 @@
 <?php
-class AccessLevel {
-
-    private $path;
-    private $role;
-
-    public function __construct ($path, $role, $helper = false) {
-        if (!$helper)
-            $this->path = config::Url_PATH . "/" . $path;
-        else
-            $this->path = $path;
-        $this->role = $role;
-    }
-
-    public function __get($property) {
-        if (property_exists($this, $property))
-            return $this->$property;
-    }
-
-    public function __set($property, $value) {
-        if (property_exists($this, $property))
-            $this->$property = $value;
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->role;
-    }
-}
-
+include_once 'Initialize.php';
+include_once BASEPATH . 'model/AccessLevel.php';
 
 class Authorization
 {
@@ -57,7 +29,10 @@ class Authorization
         array_push($this->accesslevels, new AccessLevel("comment_helper.php", "ADMIN", true));
         array_push($this->accesslevels, new AccessLevel("post_comment_delete.php", "ADMIN", true));
     }
-    public function validate($path, $role)
+    
+    // TODO: Needs attention -> this will not work anymore
+    // To check who can access what!
+    public function Validate($path, $role)
     {
         foreach ($this->accesslevels as $acccesslevel)
         {

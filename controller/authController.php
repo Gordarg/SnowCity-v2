@@ -1,24 +1,27 @@
 <?php
-include('../core/AController.php');
-include('../model/User.php');
-include_once '../core/Authentication.php';
-include_once '../core/Cryptography.php';
+include_once '../core/Initialize.php';
+include_once BASEPATH . 'core/AController.php';
+include_once BASEPATH . 'model/User.php';
+include_once BASEPATH . 'core/Authentication.php';
 
 class authController extends AController{
 
+	// TODO: Validate login tokens here
+	function GET($Role = 'VSTOR'){
+		parent::GET($Role = 'VSTOR');
+		parent::setData('');
+		parent::returnData();
+    }
 
 	// Login with username and password
-	function POST(){
-		parent::POST();
-		$model = new User();
-		$model->SetValue("Username", parent::getRequest("Username"));
-		$model->SetValue("HashPassword", "✓");
-		$data = $model->Select(-1 , 1)[0];
-		if (Cryptography::Hash(parent::getRequest("Password")) == $data['HashPassword'])
-		{
-			unset($data["HashPassword"]);
-			parent::setData($data);
-		}
+	function POST($Role = 'VSTOR'){
+		parent::POST($Role = 'VSTOR');
+		parent::setData(
+			Authentication::Login(
+				parent::getRequest("Username")
+				, parent::getRequest("Password")
+			)
+		);
 		parent::returnData();
     }
     

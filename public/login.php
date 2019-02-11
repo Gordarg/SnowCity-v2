@@ -1,26 +1,25 @@
 <?php
-if (isset($_GET['way']) && ($_GET['way'] == 'bye'))
-{
-    session_destroy();
-    exit(header("Location: login.php"));
-}
+include_once BASEPATH . 'core/Authentication.php';
+
 if (isset($_POST['Login']))
 {
-    $_SESSION['PHP_AUTH_USER'] = $_POST['Username'];
-    $_SESSION['PHP_AUTH_PW'] = $_POST['Password'];
-    $authentication = new authentication();
-    $UserId = $authentication->login();
-    $_SESSION['PHP_AUTH_ID'] = $UserId[0];
-    if ($UserId != null)
-        exit(header("Location: profile.php?id=" . $UserId[0]));
+    $data = Authentication::Login(
+        $_POST['Username']
+        , $_POST['Password']
+    );
+    if ($data)
+    {
+        // TODO: Set cookies
+        var_dump($data);
+    }
 }
 
 //TODO: Handle Messages Globally
-if (isset($_POST['Login']))
-    echo '<div class="message">' . $Translate->Label("احراز هویت ناموفق") . '</div>';
+// if (isset($_POST['Login']))
+//     echo '<div class="message">' . $Translate->Label("احراز هویت ناموفق") . '</div>';
 ?>
 <div class="container">
-    <form class="form-signin text-center">
+    <form class="form-signin text-center" method="post">
         <img class="mb-4" src="/docs/4.2/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal"><?php echo Translate::Label("لطفا وارد شوید") ?></h1>
         <label for="inputUsername" class="sr-only"><?php echo Translate::Label("نام کاربری") ?></label>
