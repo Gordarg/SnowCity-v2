@@ -28,9 +28,16 @@ if ($URL == '/')
     $URL = "/home";
 $PATHINFO = explode('/', $URL);
 
+//  Allow partial Ajax Requests
+$AJAX = false;
+if ($PATHINFO[1] == 'ajax')
+{
+    unset($PATHINFO[1]);
+    $PATHINFO = array_values($PATHINFO);
+    $AJAX = true;
+}
 // Check if requested page exists already
-$Filename = BASEPATH.'public/'.$PATHINFO[1].'.php';
-if (!file_exists($Filename))
+else if (!file_exists(BASEPATH.'public/'.$PATHINFO[1].'.php'))
 {
     header("HTTP/1.0 404 Not Found");
     return;
@@ -43,10 +50,12 @@ $LOGINTOKEN = Functionalities::IfExistsIndexInArray($_COOKIE, 'LOGINTOKEN');
 $ROLE = Functionalities::IfExistsIndexInArray($_COOKIE, 'ROLE');
 if ($USERID)
 {
+    // TODO: Validate Token
+    // I mean: Check if Role and Username and Token are valid
 }
 if (!Authorization::ValidatePath($ROLE, 
-        ($PATHINFO[1] == 'post')
-        ? 'post|' . $PATHINFO[2]
+        ($PATHINFO[1] == 'say')
+        ? 'say|' . Functionalities::IfExistsIndexInArray($PATHINFO,2)
         : $PATHINFO[1]
     )
 )
@@ -71,6 +80,7 @@ $Parsedown = new Parsedown();
 
 // Page Meta and Links
 include_once BASEPATH.'public/plug-in/Links.php';
+// Change meta for View/...
 if ($PATHINFO[1] == 'view')
 {
     $Language = $PATHINFO[2];
@@ -88,8 +98,10 @@ $META = Links::GenerateMeta($META_DESCRIPTION, $META_AUTHOR);
 $CSSLINKS = Links::GenerateCssLinks($URL, $CURRENTLANGUAGE, $BASEURL);
 $JSLINKS = Links::GenerateJsLinks($URL, $CURRENTLANGUAGE, $BASEURL);
 
-include_once BASEPATH.'public/master/public-header.php';
-include_once $Filename;
-include_once BASEPATH.'public/master/public-footer.php';
+if (!$AJAX)
+    include_once BASEPATH.'public/master/public-header.php';
+include_once BASEPATH.'public/'.$PATHINFO[1].'.php';
+if (!$AJAX)
+    include_once BASEPATH.'public/master/public-footer.php';
 
 ?>

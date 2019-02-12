@@ -2,7 +2,9 @@
 body {
     font-size: .875rem;
   }
-  
+  .footer{
+    display: none;
+  }
   .feather {
     width: 16px;
     height: 16px;

@@ -8,7 +8,6 @@ else
     // TODO:
     // require_once  'views/securitycheck.php';
 }
-//TODO: Allow partial Ajax Requests
 ?>
 
 

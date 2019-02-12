@@ -2,6 +2,8 @@
 include('../core/AController.php');
 include('../model/User.php');
 
+// TODO: Authenticate and Authorize
+
 class userController extends AController{
 
 	function GET(){

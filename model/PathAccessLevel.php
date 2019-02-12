@@ -7,9 +7,14 @@ class PathAccessLevel{
         // TODO: to read from file
         array_push($output, new PathAccessLevelModel("dashboard", "EDTOR"));
         array_push($output, new PathAccessLevelModel("dashboard", "ADMIN"));
-        array_push($output, new PathAccessLevelModel("post|post", "EDTOR"));
-        array_push($output, new PathAccessLevelModel("post|post", "ADMIN"));
-        array_push($output, new PathAccessLevelModel("post|file", "ADMIN"));
+        array_push($output, new PathAccessLevelModel("say|", "EDTOR"));
+        array_push($output, new PathAccessLevelModel("say|", "ADMIN"));
+        array_push($output, new PathAccessLevelModel("say|post", "EDTOR"));
+        array_push($output, new PathAccessLevelModel("say|post", "ADMIN"));
+        array_push($output, new PathAccessLevelModel("say|file", "ADMIN"));
+        array_push($output, new PathAccessLevelModel("say|comt", "VSTOR"));
+        array_push($output, new PathAccessLevelModel("say|comt", "EDTOR"));
+        array_push($output, new PathAccessLevelModel("say|comt", "ADMIN"));
 
         return $output;
     }

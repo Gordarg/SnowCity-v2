@@ -43,4 +43,3 @@
 91- Button to decrase database size (remove previous versions)
 92- Print option for books
 93- Datawarehouse for enterprise usage
-94- Support ajax request for partial output
