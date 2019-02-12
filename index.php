@@ -98,10 +98,15 @@ $META = Links::GenerateMeta($META_DESCRIPTION, $META_AUTHOR);
 $CSSLINKS = Links::GenerateCssLinks($URL, $CURRENTLANGUAGE, $BASEURL);
 $JSLINKS = Links::GenerateJsLinks($URL, $CURRENTLANGUAGE, $BASEURL);
 
+ob_start();
 if (!$AJAX)
     include_once BASEPATH.'public/master/public-header.php';
 include_once BASEPATH.'public/'.$PATHINFO[1].'.php';
 if (!$AJAX)
     include_once BASEPATH.'public/master/public-footer.php';
 
+include_once BASEPATH.'public/plug-in/tiny-html-minifier.php';
+$result = TinyMinify::html(ob_get_contents());
+ob_end_clean();
+echo $result;
 ?>

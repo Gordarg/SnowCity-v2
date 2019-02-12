@@ -3,14 +3,7 @@ if ($row == null)
 {
     exit(header("HTTP/1.0 404 Not Found"));
 }
-else
-{
-    // TODO:
-    // require_once  'views/securitycheck.php';
-}
 ?>
-
-
 
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="masthead mb-auto">
@@ -39,30 +32,31 @@ else
     // TODO:
     include ('helper/post_comment.php');
     ?>
-    <div class="comments">
-        <?php
-        foreach ($PostDetail->Select(-1, -1, "Submit", "DESC", "WHERE `Type` = 'COMT' AND `RefrenceId`='" . $Id . "'") as $row) {
-            $_GET['masterid'] = $row['MasterID'];
-            $_GET["type"] = 'COMT';
-            
-            echo '<div>';
-            /*
-            $UserId = $authentication->login('comment_helper.php');
-            if ($UserId != null)
-            {
-                // echo $row['MasterID'];
-                // TODO: Delete
-            }
-            */
-            echo '<img src="drawable/profile.png" />';
-            echo '<span>' . $row['Body'] . '</span>';
-            // TODO
-            // include ('helper/post_comment_delete.php');
-            echo '</div>';
-        }
-        ?>
+    <div id="comments">
+      <div id="newcomment"></div>
+      <?php
+      foreach ($PostDetail->Select(-1, -1, "Submit", "DESC", "WHERE `Type` = 'COMT' AND `RefrenceId`='" . $Id . "'") as $row) {
+          $_GET['masterid'] = $row['MasterID'];
+          $_GET["type"] = 'COMT';
+          
+          echo '<div>';
+          /*
+          $UserId = $authentication->login('comment_helper.php');
+          if ($UserId != null)
+          {
+              // echo $row['MasterID'];
+              // TODO: Delete
+          }
+          */
+          echo '<img src="drawable/profile.png" />';
+          echo '<span>' . $row['Body'] . '</span>';
+          // TODO
+          // include ('helper/post_comment_delete.php');
+          echo '</div>';
+      }
+      ?>
     </div>
-    <div class="keywords">
+    <div id="keywords">
         <?php
         foreach ($PostDetail->Select(-1, -1, "Submit", "DESC", "WHERE `Type` = 'KWRD' AND `RefrenceId`='" . $Id . "'") as $row) {
             $_GET['masterid'] = $row['MasterID'];
