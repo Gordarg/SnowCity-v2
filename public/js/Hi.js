@@ -1,11 +1,4 @@
 Hi = {
-    loading(visible)
-    {
-        if (visible)
-            $(".LockOn").show();
-        else
-            $(".LockOn").hide();
-    },
     message: function(text, error = false){
         // TODO: If was error change theme to red
         $(".message").html('<span class="' + (error? 'error' : 'confirm') + '">' + text + '</span>');
@@ -18,14 +11,11 @@ Hi = {
         $(".modal-content>p").html( content );
     },
     load: function(name, params = null){
-        alert('Hi');
         $("html, body").animate({ scrollTop: 0 }, "slow");
-        Hi.loading(true);
         $('.content').load('view/' + name + '.htm', function() {
             $.getScript('functionality/' + name + '.js', function() {
-                Hi.loading(false);
 
-                Hi.paginate();
+                // Change date inputs to persian format
                 $("input[type=date]").attr('id', 'persianDate');
                 $("input[type=date]").attr('type', 'text');
                 $("input[id=persianDate]").persianDatepicker({
@@ -59,18 +49,19 @@ Hi = {
                         // alert($(target).attr("data-gdate"));
                      }
                 });
-
+                
+                // Construct
                 if (jQuery.isFunction(window[name]))
                     window[name](params);
             });
         });
     },
     loginprotocol(){
-        return "Username=" + $.cookie("Username")
-        + "&Password=" + $.cookie("Password");
+        return "UserId=" + $.cookie("USERID")
+        + "&Token=" + $.cookie("LOGINTOKEN");
     },
     home(){
-        return "http://localhost/GoldenRoseBackEnd/controller";
+        return "http://localhost/SnowFramework/controller";
     },
     auth(role){
         if
@@ -91,34 +82,8 @@ Hi = {
         }
         return true;
     },
-    paginate(){
-        var inp=$("<input/>").attr("type","text").attr('id','search').attr('placeholder','جستجو');
-        inp.insertBefore('table');
-        $('table').paginathing({
-        perPage: 20,
-        insertBefore: 'table'
-        });
-        var inp2=$("<input/>").attr("type","button").attr('id','export').attr('value','خروجی گرفتن');
-        inp2.insertAfter('table');
-        $("#search").on("keyup", function() {
-            var value = $(this).val();
-            $('table tr').each(function(){
-                if($(this).text().toLowerCase().indexOf(value) === -1)
-                    $(this).hide();
-                else
-                    $(this).show();
-            });
-        });
-        $("#export").on("click", function() {
-            $('table').csvExport({
-                title:'خروجی'
-                });
-        });
-    }
 }
 
-Hi.load('posts');
-
 $(window).on('load', function () {
-  Hi.loading(false);
+  // TODO: Loading if needed
 });

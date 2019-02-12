@@ -3,19 +3,29 @@
 include('../core/AController.php');
 include('../model/Post.php');
 
-
-// TODO: Authenticate and Authorize
-
 class postController extends AController{
 
+	function HEAD(){
+		parent::setData();
+	}
+
 	function GET(){
+		Authentication::ValidateAutomatic(['VSTOR', 'EDTOR', 'ADMIN']);
+		// TODO: Authorize
 		parent::GET();
-		$data = $model->Select();
+		// TODO: Validations must be done in public side and api side
+		$model = new User();
+		foreach($model->GetProperties() as $key => $value){
+			$model->SetValue($key, parent::getRequest($key));
+		}
+		$data = $model->Select(-1 , -1, 'Submit', 'DESC');
 		parent::setData($data);
 		parent::returnData();
 	}
 
-	function POST(){ 
+	function POST(){
+		Authentication::ValidateAutomatic(['EDTOR', 'ADMIN']);
+		// TODO: Authorize
 		parent::POST();
 		$post = new User();	
 		foreach($post->GetProperties() as $key => $value){
@@ -30,6 +40,8 @@ class postController extends AController{
 
 	function PUT()
 	{
+		Authentication::ValidateAutomatic(['EDTOR', 'ADMIN']);
+		// TODO: Authorize
 		parent::PUT();
 		$post = new Post();
 		foreach($post->GetProperties() as $key => $value){
@@ -44,6 +56,8 @@ class postController extends AController{
 	}
 
 	function DELETE(){
+		Authentication::ValidateAutomatic(['EDTOR', 'ADMIN']);
+		// TODO: Authorize
 		parent::DELETE();
 		$post = new Post();
 		$post->SetValue("Id", parent::getRequest("Id"));

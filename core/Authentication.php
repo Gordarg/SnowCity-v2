@@ -5,7 +5,11 @@ include_once BASEPATH . 'core/Cryptography.php';
 
 class Authentication
 {
-    public static function Validate($Id, $Username, $Token, $Role){
+    public static function Validate($Id, $Username, $Token, $Roles){
+        // TODO: Validate token with database
+        return true;
+    }
+    public static function ValidateAutomatic($Roles){
         // TODO: Validate token with database
         return true;
     }

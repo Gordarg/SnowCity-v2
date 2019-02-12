@@ -1,6 +1,6 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
   <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"><?php echo Translate::Label(Config::NAME) ?></a>
-  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+  <!-- TODO: <input class="form-control form-control-dark w-100" type="text" placeholder="<?php echo Translate::Label('جستجو') ?>" aria-label="Search"> --> -->
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
       <a class="nav-link" href="<?php echo $BASEURL . 'log/out' ?>"><?php echo Translate::Label('خروج') ?></a>
@@ -16,12 +16,12 @@
           <li class="nav-item">
             <a class="nav-link active" href="#">
               <!-- <span data-feather="home"></span> -->
-              <?php echo Translate::Label('پروفایل') ?>
+              <?php echo Translate::Label('داشبورد') ?>
               <!-- <span class="sr-only">(current)</span> -->
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" onclick="Hi.load('post');">
+            <a class="nav-link" href="#" onclick="loadpost()">
               <!-- <span data-feather="file"></span> -->
               <?php echo Translate::Label('پست') ?> 
             </a>
@@ -47,31 +47,13 @@
               <?php echo Translate::Label('کاربران') ?>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <!-- <span data-feather="file-text"></span> -->
-              Last quarter
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <!-- <span data-feather="file-text"></span> -->
-              Social engagement
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <!-- <span data-feather="file-text"></span> -->
-              Year-end sale
-            </a>
-          </li>
         </ul>
       </div>
     </nav>
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Dashboard</h1>
+        <h1 class="h2"><?php echo Translate::Label('داشبورد') ?></h1>
         <div class="btn-toolbar mb-2 mb-md-0">
         </div>
       </div>

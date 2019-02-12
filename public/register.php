@@ -1,20 +1,21 @@
 <?php
-require_once 'core/init.php';
-require_once 'core/functionalities.php';
-require_once $parent . '/semi-orm/Users.php';
-require_once $parent . '/semi-orm/Users.php';
-use orm\Users;
+
+
+// TODO
+
+
+
 if(isset($_POST["btn"]))
 {
-    $conn  = $db->open();
-    $User = new Users($conn);
-    $User->Insert([
-        ["Username", "'" . mysqli_real_escape_string($conn, $_POST['username']) . "'"],
-        ["Password", "'" . mysqli_real_escape_string($conn, $_POST['password']) . "'"],
-    ]);
-    header("Location: " . $npath . '/login.php');
+    // $conn  = $db->open();
+    // $User = new Users($conn);
+    // $User->Insert([
+    //     ["Username", "'" . mysqli_real_escape_string($conn, $_POST['username']) . "'"],
+    //     ["Password", "'" . mysqli_real_escape_string($conn, $_POST['password']) . "'"],
+    // ]);
+    // header("Location: " . $npath . '/login.php');
 }
-include_once ('master/public-header.php');
+
 ?>
 <form action="register.php" method="post" >
     <h1><?= $Translate->Label("عضویت"); ?></h1>
@@ -29,4 +30,3 @@ include_once ('master/public-header.php');
     <a href="index.php"><?= $Translate->Label("انصراف"); ?></a>
 </form>
 
-<?php include_once ('master/public-footer.php'); ?> 

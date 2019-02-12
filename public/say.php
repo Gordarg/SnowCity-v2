@@ -27,4 +27,8 @@ switch ($PATHINFO[2])
     case "comt":
         print('hello world');
         break;
+    case "post":
+        print('hi there');
+        break;
 }
+?>

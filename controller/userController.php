@@ -2,11 +2,11 @@
 include('../core/AController.php');
 include('../model/User.php');
 
-// TODO: Authenticate and Authorize
-
 class userController extends AController{
 
 	function GET(){
+		Authentication::ValidateAutomatic(['ADMIN']);
+		// TODO: Authorize
 		parent::GET();
 		$model = new User();
 		foreach($model->GetProperties() as $key => $value){
@@ -17,7 +17,8 @@ class userController extends AController{
 		parent::returnData();
 	}
 
-	function POST(){ 
+	function POST(){
+		// TODO: Authorize
 		parent::POST();
 		$user = new User();	
 		foreach($user->GetProperties() as $key => $value){
@@ -32,6 +33,8 @@ class userController extends AController{
 
 	function PUT()
 	{
+		Authentication::ValidateAutomatic(['ADMIN','EDTOR','VSTOR']);
+		// TODO: Authorize
 		parent::PUT();
 		$user = new User();
 		foreach($user->GetProperties() as $key => $value){
@@ -46,6 +49,8 @@ class userController extends AController{
 	}
 
 	function DELETE(){
+		Authentication::ValidateAutomatic(['ADMIN']);
+		// TODO: Authorize
 		parent::DELETE();
 		$user = new User();
 		$user->SetValue("Id", parent::getRequest("Id"));

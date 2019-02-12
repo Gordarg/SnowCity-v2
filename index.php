@@ -1,7 +1,11 @@
 <?php
+// Translation
 include_once 'public/plug-in/Language.php';
+
+// Initialize app
 include_once 'core/Initialize.php';
 
+// Authentication and authorization
 include_once 'core/Authentication.php';
 include_once 'core/Authorization.php';
 
@@ -91,22 +95,36 @@ if ($PATHINFO[1] == 'view')
 }
 else
 {
+    // Read meta from config file
     $META_DESCRIPTION = Config::META_DESCRIPTION;
     $META_AUTHOR = Config::META_AUTHOR;
 }
+// Generate meta global variables
 $META = Links::GenerateMeta($META_DESCRIPTION, $META_AUTHOR);
 $CSSLINKS = Links::GenerateCssLinks($URL, $CURRENTLANGUAGE, $BASEURL);
 $JSLINKS = Links::GenerateJsLinks($URL, $CURRENTLANGUAGE, $BASEURL);
 
-ob_start();
+// Handle ajax requests
 if (!$AJAX)
+{
+    // Compress output
+    // TODO: Disable compresion from config
+    ob_start();
+    // Include header
     include_once BASEPATH.'public/master/public-header.php';
-include_once BASEPATH.'public/'.$PATHINFO[1].'.php';
-if (!$AJAX)
+    // Include content
+    include_once BASEPATH.'public/'.$PATHINFO[1].'.php';
+    // Include footer
     include_once BASEPATH.'public/master/public-footer.php';
+    // Minifier Plug-In
+    include_once BASEPATH.'public/plug-in/tiny-html-minifier.php';
+    $result = TinyMinify::html(ob_get_contents());
+    ob_end_clean();
+    echo $result;
+}
+else
+{
+    include_once BASEPATH.'public/'.$PATHINFO[1].'.php';
 
-include_once BASEPATH.'public/plug-in/tiny-html-minifier.php';
-$result = TinyMinify::html(ob_get_contents());
-ob_end_clean();
-echo $result;
+}
 ?>

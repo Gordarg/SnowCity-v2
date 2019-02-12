@@ -14,7 +14,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 include_once 'Initialize.php';
-// include_once BASEPATH . 'core/Auth.php';
+include_once BASEPATH . 'core/Authentication.php';
 
 abstract class AController
 {
