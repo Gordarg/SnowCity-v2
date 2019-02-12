@@ -1,3 +1,6 @@
+function loadpost(){
+  $('.content').load('ajax/say/post');
+}
 function loadStyle(url)
 {
   document.querySelector('head').innerHTML += '<link rel="stylesheet" href="' + url + '" type="text/css"/>';

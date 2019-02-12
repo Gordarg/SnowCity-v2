@@ -30,7 +30,6 @@ if ($row == null)
 
     <?php
     // TODO:
-    include ('helper/post_comment.php');
     ?>
     <div id="comments">
       <div id="newcomment"></div>

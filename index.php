@@ -84,21 +84,26 @@ $Parsedown = new Parsedown();
 
 // Page Meta and Links
 include_once BASEPATH.'public/plug-in/Links.php';
-// Change meta for View/...
+// Read meta from config file
+$META_DESCRIPTION = Config::META_DESCRIPTION;
+$META_AUTHOR = Config::META_AUTHOR;
 if ($PATHINFO[1] == 'view')
 {
     $Language = $PATHINFO[2];
     $Id = $PATHINFO[3];
     $row = $PostDetail->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $Id . "'")[0];
+
+    // Generate custom meta
     $META_DESCRIPTION = Text::GenerateAbstractForPost($Parsedown->text($row['Body']), 500);
     $META_AUTHOR = $row['Username'];
 }
-else
+else if ($PATHINFO[1] == 'post')
 {
-    // Read meta from config file
-    $META_DESCRIPTION = Config::META_DESCRIPTION;
-    $META_AUTHOR = Config::META_AUTHOR;
+    $Language = $PATHINFO[3];
+    $Id = $PATHINFO[4];
+    $row = $PostDetail->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $Id . "'")[0];
 }
+
 // Generate meta global variables
 $META = Links::GenerateMeta($META_DESCRIPTION, $META_AUTHOR);
 $CSSLINKS = Links::GenerateCssLinks($URL, $CURRENTLANGUAGE, $BASEURL);
