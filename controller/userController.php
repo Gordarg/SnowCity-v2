@@ -5,7 +5,7 @@ include('../model/User.php');
 class userController extends AController{
 
 	function GET(){
-		parent::GET($Role);
+		parent::GET();
 		$model = new User();
 		foreach($model->GetProperties() as $key => $value){
 			$model->SetValue($key, parent::getRequest($key));
@@ -16,7 +16,7 @@ class userController extends AController{
 	}
 
 	function POST(){ 
-		parent::POST($Role);
+		parent::POST();
 		$user = new User();	
 		foreach($user->GetProperties() as $key => $value){
 			$user->SetValue($key, 
@@ -30,7 +30,7 @@ class userController extends AController{
 
 	function PUT()
 	{
-		parent::PUT($Role);
+		parent::PUT();
 		$user = new User();
 		foreach($user->GetProperties() as $key => $value){
 			if (parent::getRequest($key) == null)
@@ -44,7 +44,7 @@ class userController extends AController{
 	}
 
 	function DELETE(){
-		parent::DELETE($Role);
+		parent::DELETE();
 		$user = new User();
 		$user->SetValue("Id", parent::getRequest("Id"));
 		$user->Delete();

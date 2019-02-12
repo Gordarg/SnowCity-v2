@@ -20,17 +20,8 @@ abstract class AController
 {
 	private $data = '' ;
 	private $request = [];
-
-
-	// TODO: Validate the token and Username not password!
-	// Password will only pass to auth controller
-	function login($Role = null)
-	{
-		// TODO:
-	}
-
+	
 	function __construct(){
-		(new Db())->Log(json_encode($_REQUEST), $this->login(), json_encode(apache_request_headers()));	
 		$this->{$_SERVER['REQUEST_METHOD']}();
 	}
 	function __destruct(){
@@ -57,19 +48,13 @@ abstract class AController
 		else echo $this->data;
 		return $this->data;
 	}
-	function GET($Role = 'VSTOR'){
-		$this->login($Role);
-
+	function GET(){
 		$this->setRequest($_GET);
 	}
-	function POST($Role = 'VSTOR'){
-		$this->login($Role);
-
+	function POST(){
 		$this->setRequest($_POST);
 	}
-	function DELETE($Role = 'VSTOR'){
-		$this->login($Role);
-		
+	function DELETE(){	
 		$raw_data = file_get_contents('php://input');
 		$_DELETE = array();
 		$boundary = substr($raw_data, 0, strpos($raw_data, "\r\n"));
@@ -118,9 +103,7 @@ abstract class AController
 		}
 		$this->setRequest($_DELETE);
 	}
-	function PUT($Role = 'VSTOR'){
-		$this->login($Role);
-
+	function PUT(){
 		$raw_data = file_get_contents('php://input');
 		$_PUT = array();
 		$boundary = substr($raw_data, 0, strpos($raw_data, "\r\n"));

@@ -1,54 +1,54 @@
 <?php
 
-include('../core/APostController.php');
+include('../core/AController.php');
 include('../model/Post.php');
 
-class userController extends APostController{
+class postController extends AController{
 
-	function GET($Role = 'VSTOR'){
-		parent::GET($Role);
+	function GET(){
+		parent::GET();
 		$data = $model->Select();
 		parent::setData($data);
 		parent::returnData();
 	}
 
-	function POST($Role = 'VSTOR'){ 
-		parent::POST($Role);
-		$user = new User();	
-		foreach($user->GetProperties() as $key => $value){
-			$user->SetValue($key, 
+	function POST(){ 
+		parent::POST();
+		$post = new User();	
+		foreach($post->GetProperties() as $key => $value){
+			$post->SetValue($key, 
 				(parent::getRequest($key) == null) ? $value : parent::getRequest($key)
 			);
 		}
-		$user->Insert();
-		parent::setData($user->GetProperties());
+		$post->Insert();
+		parent::setData($post->GetProperties());
 		parent::returnData();
 	}
 
-	function PUT($Role = 'VSTOR')
+	function PUT()
 	{
-		parent::PUT($Role);
-		$user = new User();
-		foreach($user->GetProperties() as $key => $value){
+		parent::PUT();
+		$post = new Post();
+		foreach($post->GetProperties() as $key => $value){
 			if (parent::getRequest($key) == null)
 				continue;
-			$user->SetValue($key, parent::getRequest($key));
-			$user->SetOperand($key);
+			$post->SetValue($key, parent::getRequest($key));
+			$post->SetOperand($key);
 		}
-		$user->Update(parent::getRequest("previousId"));
-		parent::setData($user->GetProperties());
+		$post->Update(parent::getRequest("previousId"));
+		parent::setData($post->GetProperties());
 		parent::returnData();
 	}
 
-	function DELETE($Role = 'VSTOR'){
-		parent::DELETE($Role);
-		$user = new User();
-		$user->SetValue("Id", parent::getRequest("Id"));
-		$user->Delete();
-		parent::setData($user->GetProperties());
+	function DELETE(){
+		parent::DELETE();
+		$post = new Post();
+		$post->SetValue("Id", parent::getRequest("Id"));
+		$post->Delete();
+		parent::setData($post->GetProperties());
 		parent::returnData();
 	}
 }
 
-$user = new userController();
+$post = new postController();
 ?>

@@ -5,6 +5,10 @@ include_once BASEPATH . 'core/Cryptography.php';
 
 class Authentication
 {
+    public static function Validate($Id, $Username, $Token, $Role){
+        // TODO: Validate token with database
+        return true;
+    }
 
     public static function Login($Username, $Password){
 
@@ -15,6 +19,7 @@ class Authentication
 		if (Cryptography::Hash($Password) == $data['HashPassword'])
 		{
             // TODO: Set token for future validations
+            $data['Token'] = 'abc';
             unset($data["HashPassword"]);
             return $data;
         }
