@@ -18,6 +18,7 @@ Hi = {
         $(".modal-content>p").html( content );
     },
     load: function(name, params = null){
+        alert('Hi');
         $("html, body").animate({ scrollTop: 0 }, "slow");
         Hi.loading(true);
         $('.content').load('view/' + name + '.htm', function() {

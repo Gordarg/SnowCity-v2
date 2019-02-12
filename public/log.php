@@ -16,6 +16,15 @@ if (isset($_POST['Login']))
         header('Location: ' . $BASEURL . 'dashboard');
     }
 }
+if ($PATHINFO[2] == 'out')
+{
+    setcookie('USERID', $data['Id'],  time() - 3600, '/');
+    setcookie('USERNAME', $data['Username'], time() - 3600, '/');
+    setcookie('ROLE', $data['Role'], time() - 3600, '/');        
+    setcookie('LOGINTOKEN', $data['Token'], time() - 3600, '/');   
+    header('Location: ' . $BASEURL . 'log/in');
+    exit;
+}
 
 //TODO: Handle Messages Globally
 // if (isset($_POST['Login']))

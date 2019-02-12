@@ -69,6 +69,9 @@ ku-iq:
 -سریع
 en-us:Fast
 ku-iq:
+-ادمین
+en-us:Administrator
+ku-iq:
 -فرم‌ساز
 en-us:Form Builder
 ku-iq:
@@ -113,6 +116,9 @@ en-us:Add Field
 ku-iq:
 -متن تک خط
 en-us:Single Line Text
+ku-iq:
+-پروفایل
+en-us:Profile
 ku-iq:
 -متن چند خط
 en-us:Multiline Text

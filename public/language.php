@@ -7,7 +7,7 @@ setcookie('LANG', $PATHINFO[2], time() + (86400 * 30), '/');
   <nav class="my-2 my-md-0 mr-md-3">
     <a class="p-2 text-dark" href="<?php echo $BASEURL ?>"><?php echo $Translate::Label('خانه'); ?></a>
   </nav>
-  <a class="btn btn-outline-primary" href="<?php echo $BASEURL . 'login' ?>"><?php echo $Translate::Label('ورود به سیستم'); ?></a>
+  <a class="btn btn-outline-primary" href="<?php echo $BASEURL . 'log/in' ?>"><?php echo $Translate::Label('ورود به سیستم'); ?></a>
 
 </div>
 
