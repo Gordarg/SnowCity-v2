@@ -49,7 +49,7 @@ if ($Q != null)
                     break;
                 case 'POST':
                     echo '<a href="view.php?lang=' . $row['Language'] . '&id=' . $row['MasterID'] . '">' .
-                    '<img src="download.php?id=' . $row['MasterID'] . '" alt="' . $row['Title'] . '" />' .
+                    '<img src="' . $BASEURL . 'download.php?id=' . $row['MasterID'] . '" alt="' . $row['Title'] . '" />' .
                     '<span>' . $row['Title'] . '</span>' .
                     '<p>' . Text::GenerateAbstractForPost($Parsedown->text($row['Body']), 480)  . '</p>' .
                     '</a>';
