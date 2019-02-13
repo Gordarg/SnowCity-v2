@@ -7,10 +7,10 @@
 <input type="hidden" name="language" value="<?= $CURRENTLANGUAGE ?>" />
 
 <label for="title"><?= $Translate->Label("عنوان"); ?></label>
-<input name="title" required placeholder="<?= $Translate->Label("عنوان"); ?>" type="text" value="<?= $Title ?>" />
+<input class="form-control" name="title" required placeholder="<?= $Translate->Label("عنوان"); ?>" type="text" value="<?= $Title ?>" />
 
 <label for="level"><?= $Translate->Label("مرتبه"); ?></label>
-<select name="level">
+<select class="form-control"  name="level">
   <option <?= ($Level == "1") ? "selected" : ""  ?> value="1"><?= $Translate->Label("سریع"); ?> - <?= $Translate->Label("بالا"); ?></option>
   <option <?= ($Level == "2") ? "selected" : ""  ?> value="2"><?= $Translate->Label("متوسط"); ?> - <?= $Translate->Label("مرکز"); ?></option>
   <option <?= ($Level == "3") ? "selected" : ""  ?> value="3"><?= $Translate->Label("کند"); ?> - <?= $Translate->Label("پایین"); ?></option>
@@ -19,7 +19,7 @@
 <label for="body"><?= $Translate->Label("متن"); ?></label>
 <textarea name="body"><?= $Body  ?></textarea>
 <label for="content"><?= $Translate->Label("پرونده"); ?></label>
-<input type="file" name="content" id="file" />
+<input class="form-control" type="file" name="content" id="file" />
 <?php
 /*
 TODO: create drafting and publish mechanisms
@@ -38,5 +38,5 @@ if ($Id == null ) {
     echo '<input type="submit" name="clear" value="' . $Translate->Label("حذف پیوست") . '" />';
     echo '<a href="view.php?lang=' . $_COOKIE['LANG'] . '&id=' . $row['MasterID'] . '">' . $Translate->Label("مشاهده") . '</a>';
 }
-    echo '<a href="index.php">' . $Translate->Label("انصراف") . '</a>';
+    echo '<a href="' . $BASEURL . 'dashboard">' . $Translate->Label("انصراف") . '</a>';
 ?>

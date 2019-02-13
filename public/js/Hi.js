@@ -60,8 +60,11 @@ Hi = {
         return "UserId=" + $.cookie("USERID")
         + "&Token=" + $.cookie("LOGINTOKEN");
     },
-    home(){
-        return "http://localhost/SnowFramework/controller";
+    baseurl(){
+        return "http://localhost/SnowFramework/";
+    },
+    controller(){
+        return baseurl() + "controller/";
     },
     auth(role){
         if

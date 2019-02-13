@@ -1,0 +1,73 @@
+      /*
+   * Footer
+   */
+      .footer {
+        position: absolute;
+        width: 100%;
+        background-color: #f5f5f5;
+      }
+      .blog-footer {
+        background: #007b5e !important;
+        height: 500px;
+    }
+    .blog-footer h5{
+      padding-left: 10px;
+        border-left: 3px solid #eeeeee;
+        padding-bottom: 6px;
+        margin-bottom: 20px;
+        color:#ffffff;
+    }
+    .blog-footer a {
+        color: #ffffff;
+        text-decoration: none !important;
+        background-color: transparent;
+        -webkit-text-decoration-skip: objects;
+    }
+    .blog-footer ul.social li{
+      padding: 3px 0;
+    }
+    .blog-footer ul.social li a i {
+        margin-right: 5px;
+      font-size:25px;
+      -webkit-transition: .5s all ease;
+      -moz-transition: .5s all ease;
+      transition: .5s all ease;
+    }
+    .blog-footer ul.social li:hover a i {
+      font-size:30px;
+      margin-top:-10px;
+    }
+    .blog-footer ul.social li a,
+    .blog-footer ul.quick-links li a{
+      color:#ffffff;
+    }
+    .blog-footer ul.social li a:hover{
+      color:#eeeeee;
+    }
+    .blog-footer ul.quick-links li{
+      padding: 3px 0;
+      -webkit-transition: .5s all ease;
+      -moz-transition: .5s all ease;
+      transition: .5s all ease;
+    }
+    .blog-footer ul.quick-links li:hover{
+      padding: 3px 0;
+      margin-left:5px;
+      font-weight:700;
+    }
+    .blog-footer ul.quick-links li a i{
+      margin-right: 5px;
+    }
+    .blog-footer ul.quick-links li:hover a i {
+        font-weight: 700;
+    }
+  .blog-footer {
+    padding: 2.5rem 0;
+    color: #999;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-top: .05rem solid #e5e5e5;
+  }
+  .blog-footer p:last-child {
+    margin-bottom: 0;
+  }

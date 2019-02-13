@@ -89,8 +89,8 @@
       foreach ($rows as $row) {
         echo '
         <div class="blog-post">
-        <h2 class="blog-post-title">Sample blog post</h2>
-        <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
+        <h2 class="blog-post-title">' . $row['Title'] . '</h2>
+        <p class="blog-post-meta">' . $row['Submit'] . ' <a href="' . $BASEURL . 'explore/@' . $row['Username'] . '">' . $row['Username'] . '</a></p>
         ' . $Parsedown->text($row['Body']) . '
         </div>
         ';

@@ -12,7 +12,7 @@ $Q = Functionalities::IfExistsIndexInArray($PATHINFO, 2) != null ? $PATHINFO[2]
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#"><?php echo Translate::Label('خانه') ?><span class="sr-only">(<?php echo Translate::Label('فعلی') ?>)</span></a>
+        <a class="nav-link" href="<?php echo $BASEURL ?>"><?php echo Translate::Label('خانه') ?><span class="sr-only">(<?php echo Translate::Label('فعلی') ?>)</span></a>
       </li>
     </ul>
   </div>

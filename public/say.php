@@ -240,8 +240,23 @@ $RefrenceID = null;
 // }
 
 ?>
-
-<form id="gordform" method="post" action="<?= $BASEURL . 'post/' . $Type ?>" enctype="multipart/form-data">
+<?php
+if (!$AJAX)
+{
+    echo '
+    <nav class="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">' . Translate::Label('پست') . '</a>
+    <ul class="navbar-nav px-3">
+      <li class="nav-item text-nowrap">
+        <a class="nav-link" href="' . $BASEURL . 'dashboard">' . Translate::Label('بازگشت') . '</a>
+      </li>
+    </ul>
+    </nav>
+    <main role="main" class="container p-5">
+  ';
+}
+?>
+<form id="gordform" method="post" action="<?= $BASEURL . 'say/' . $Type ?>" enctype="multipart/form-data">
 <input type="hidden" name="masterid" value="<?= $MasterID ?>" />
 <?php
 // Render form
@@ -249,3 +264,11 @@ include BASEPATH . 'public/forms/' . $Type . '.php';
 ?>
 <input type="hidden" name="type" value="<?= $Type ?>" />
 </form>
+<?php
+if (!$AJAX)
+{
+echo '
+</main>
+';
+}
+?>

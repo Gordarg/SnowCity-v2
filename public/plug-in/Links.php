@@ -28,6 +28,7 @@ class Links
 <script src="' . $BASEURL . 'public/js/jquery.tayyebi.js"></script>
 <script src="' . $BASEURL . 'public/js/persianDatepicker.js"></script>
 <script src="' . $BASEURL . 'public/js/bootstrap.min.js"></script>
+<script src="' . $BASEURL . 'public/js/Hi.js"></script>
 ';
         for ($i = 1 ; $i < count($items); $i++ )
         {
