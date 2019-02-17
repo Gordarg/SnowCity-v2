@@ -90,7 +90,7 @@
         echo '
         <div class="blog-post">
         <h2 class="blog-post-title">' . $row['Title'] . '</h2>
-        <p class="blog-post-meta">' . $row['Submit'] . ' <a href="' . $BASEURL . 'explore/@' . $row['Username'] . '">' . $row['Username'] . '</a></p>
+        <p class="blog-post-meta"><a href="' . $BASEURL . 'view/' . $row['Language'] . '/' . $row['MasterID'] . '">' . $row['Submit'] . '</a> <a href="' . $BASEURL . 'explore/@' . $row['Username'] . '">' . $row['Username'] . '</a></p>
         ' . $Parsedown->text($row['Body']) . '
         </div>
         ';

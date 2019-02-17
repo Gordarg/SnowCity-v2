@@ -21,15 +21,15 @@ class Post extends AModel
             'Submit' => constant("DATETIMENOW"),
             'Type' => NULL,
             'Level' => 1,
-            'Content' => NULL,
+            'BinContent' => NULL,
             'Body' => '',
             'UserId' => NULL,
             'Status' => 'Publish',
             'Language' => 'en-us',
             'RefrenceId' => NULL,
             'Index' => '0',
-            'Deleted' => false,
-            'ContentDeleted' => false,
+            'IsDeleted' => false,
+            'IsContentDeleted' => false,
 		));
 	}
 }
