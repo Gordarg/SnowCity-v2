@@ -221,6 +221,7 @@ function loadStyle(url)
 }
 function loadScript(url, callback)
 {
+    // var len = $('script[src="' + url + '"]').length;
     var head = document.getElementsByTagName('head')[0];
     var script = document.createElement('script');
     script.type = 'text/javascript';
