@@ -25,6 +25,7 @@ class Links
         $items = explode('/',preg_replace("/[^a-zA-Z0-9_\-\/اآبپتثجچحخدذرزسشصضطظعغفقکگلمنوهی]/","-",$URL));
         $output = '
 <script src="' . $BASEURL . 'public/js/jquery.min.js"></script>
+<script src="' . $BASEURL . 'public/js/jquery.cookie.js"></script>
 <script src="' . $BASEURL . 'public/js/jquery.tayyebi.js"></script>
 <script src="' . $BASEURL . 'public/js/persianDatepicker.js"></script>
 <script src="' . $BASEURL . 'public/js/bootstrap.min.js"></script>

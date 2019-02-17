@@ -5,16 +5,25 @@ Hi = {
         $(".message").append("<a style=\"float: right; color:red; margin-right: 40px\" onclick=\"$('.message').hide();\">&times;</a>");
         $(".message").fadeIn('slow').delay(5000).fadeOut();
     },
+    loginprotocol(){
+        return "UserId=" + $.cookie("USERID")
+        + "&Token=" + $.cookie("LOGINTOKEN");
+    },
+    baseurl(){
+        return "http://localhost/SnowFramework/";
+    },
+    controller(){
+        return Hi.baseurl() + "controller/";
+    },
     modal: function(content)
     {
-        (document.getElementById('myModal')).style.display = "block";
-        $(".modal-content>p").html( content );
+        // (document.getElementById('myModal')).style.display = "block";
+        // $(".modal-content>p").html( content );
     },
     load: function(name, params = null){
         $("html, body").animate({ scrollTop: 0 }, "slow");
-        $('.content').load('view/' + name + '.htm', function() {
-            $.getScript('functionality/' + name + '.js', function() {
-
+        $('.content').load(Hi.baseurl() + 'public/view/' + name + '.htm', function() {
+            $.getScript(Hi.baseurl() + 'public/js/' + name + '.js', function() {
                 // Change date inputs to persian format
                 $("input[type=date]").attr('id', 'persianDate');
                 $("input[type=date]").attr('type', 'text');
@@ -56,16 +65,6 @@ Hi = {
             });
         });
     },
-    loginprotocol(){
-        return "UserId=" + $.cookie("USERID")
-        + "&Token=" + $.cookie("LOGINTOKEN");
-    },
-    baseurl(){
-        return "http://localhost/SnowFramework/";
-    },
-    controller(){
-        return baseurl() + "controller/";
-    },
     auth(role){
         if
         (
@@ -86,7 +85,3 @@ Hi = {
         return true;
     },
 }
-
-$(window).on('load', function () {
-  // TODO: Loading if needed
-});

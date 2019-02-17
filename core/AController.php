@@ -48,6 +48,9 @@ abstract class AController
 		else echo $this->data;
 		return $this->data;
 	}
+	function HEAD(){
+		// TODO: Show hint about this controller 
+	}
 	function GET(){
 		$this->setRequest($_GET);
 	}

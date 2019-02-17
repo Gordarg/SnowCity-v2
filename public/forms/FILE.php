@@ -15,6 +15,5 @@ if ($Id == null ) {
 } else {
     echo '<input type="submit" name="update" value="' . $Translate->Label("به‌روز رسانی") . '" />';
     echo '<input type="submit" name="delete" value="' . $Translate->Label("حذف") . '" />';
-    echo '<a href="box.php">' . $Translate->Label("انصراف") . '</a>';
 }
 ?>

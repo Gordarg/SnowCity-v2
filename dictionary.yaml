@@ -54,6 +54,9 @@ ku-iq:
 -واژگان کلیدی
 en-us:Keywords
 ku-iq:
+-مرتبه
+en-us:Level
+ku-iq:
 -کلمه‌ی کلیدی
 en-us:Keyword
 ku-iq:
@@ -126,6 +129,9 @@ ku-iq:
 -متن چند خط
 en-us:Multiline Text
 ku-iq:
+-آرشیو
+en-us:Archive
+ku-iq:
 -لیست آبشاری
 en-us:Drop Down List
 ku-iq:
@@ -188,6 +194,9 @@ en-us:Wrong previous password
 ku-iq:
 -مشاهده پاسخ‌های قبلی
 en-us:Previous answers
+ku-iq:
+-مشاهده
+en-us:View
 ku-iq:
 -ورود به سیستم
 en-us:Sign In

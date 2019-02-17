@@ -6,7 +6,7 @@ include('../model/Post.php');
 class postController extends AController{
 
 	function HEAD(){
-		parent::setData();
+		// TODO: Return this controller hints
 	}
 
 	function GET(){
@@ -14,7 +14,7 @@ class postController extends AController{
 		// TODO: Authorize
 		parent::GET();
 		// TODO: Validations must be done in public side and api side
-		$model = new User();
+		$model = new Post();
 		foreach($model->GetProperties() as $key => $value){
 			$model->SetValue($key, parent::getRequest($key));
 		}
@@ -27,7 +27,7 @@ class postController extends AController{
 		Authentication::ValidateAutomatic(['EDTOR', 'ADMIN']);
 		// TODO: Authorize
 		parent::POST();
-		$post = new User();	
+		$post = new Post();	
 		foreach($post->GetProperties() as $key => $value){
 			$post->SetValue($key, 
 				(parent::getRequest($key) == null) ? $value : parent::getRequest($key)

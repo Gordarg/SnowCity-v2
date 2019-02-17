@@ -2,6 +2,7 @@
 // Handle html method="post"
 
 include_once BASEPATH.'model/Post.php';
+
 $Post = new Post();
 
 if (isset($_POST["type"]))
@@ -81,12 +82,12 @@ if (
     $Post->SetValue("IsContentDeleted", "0");
     $Post->SetValue("IsDeleted", "0");
     $Post->Insert();
-    
+    $Id = $Post->GetProperties()['Id'];  
 }
-else if (isset($_POST["delete"])) {
-    $Post->Delete($_POST['id'], 
-        $_POST['language']);
-}
+// else if (isset($_POST["delete"])) {
+//     $Post->Delete($_POST['id'], 
+//         $_POST['language']);
+// }
 if (isset($_POST["clear"]))
 {
     $Post->Update(mysqli_insert_id($conn),[
@@ -167,19 +168,20 @@ $Status = 'Publish';
 $Content = null;
 $RefrenceID = null;
 
-// switch ($Type)
-// {   
-//     case "POST":
-//         $Id = mysqli_real_escape_string($conn, Functionalities::IfExistsIndexInArray($_GET, 'id'));
-//         $Language = mysqli_real_escape_string($conn, Functionalities::IfExistsIndexInArray($_GET, 'lang'));
-//         if ($Id != null)
-//             $MasterID = $Id;
-//         $row = $Post->FirstOrDefault($Id, $Language);
-//         $Id = $Post->GetIdByMasterId($MasterID, $Language);
-//         $Title = Functionalities::IfExistsIndexInArray($row,'Title');
-//         $Level = Functionalities::IfExistsIndexInArray($row,'Level');
-//         $Body = Functionalities::IfExistsIndexInArray($row,'Body');
-//         break;
+if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
+switch ($Type)
+{   
+    case "POST":
+        $Id = Functionalities::IfExistsIndexInArray($PATHINFO, 4);
+        $Language = Functionalities::IfExistsIndexInArray($PATHINFO, 3);
+        if ($Id != null)
+            $MasterID = $Id;
+        $row = $Post->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $Id . "'")[0];
+        // $Id = $Post->GetIdByMasterId($MasterID, $Language);
+        $Title = Functionalities::IfExistsIndexInArray($row,'Title');
+        $Level = Functionalities::IfExistsIndexInArray($row,'Level');
+        $Body = Functionalities::IfExistsIndexInArray($row,'Body');
+        break;
 //     case "COMT":
 //         $Language = $CURRENTLANGUAGE; // Comes from Index
 //         $RefrenceID = Functionalities::IfExistsIndexInArray($row,'RefrenceID');
@@ -235,9 +237,9 @@ $RefrenceID = null;
 //             Functionalities::IfExistsIndexInArray($_GET, 'langauge'));
 //         $RefrenceID = Functionalities::IfExistsIndexInArray($_GET, 'refrenceid');
 //         break;
-// }
-
+}
 ?>
+
 <?php
 if (!$AJAX)
 {
@@ -258,7 +260,52 @@ if (!$AJAX)
 <input type="hidden" name="masterid" value="<?= $MasterID ?>" />
 <?php
 // Render form
-include BASEPATH . 'public/forms/' . $Type . '.php'; 
+switch ($Type)
+{
+    case ('POST'):
+    echo '
+        <input type="hidden" name="id" value="' . $Id . '" />
+        <input type="hidden" name="submit" value="' . $Submit . '" />
+        <input type="hidden" name="userid" value="' . $UserID . '" />
+        <input type="hidden" name="index" value="' . $Index . '" />
+        <input type="hidden" name="refrenceid" value="' . $RefrenceID . '" />
+        <input type="hidden" name="status" value="' . $Status . '" />
+        <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
+
+        <label for="title">' . Translate::Label("عنوان") . '</label>
+        <input class="form-control" name="title" required placeholder="' . Translate::Label("عنوان") . '" type="text" value="' . $Title . '" />
+
+        <label for="level">' . Translate::Label("مرتبه") . '</label>
+        <select class="form-control"  name="level">
+        <option ' . ( ($Level == "1") ? "selected" : "" ) . ' value="1">' . Translate::Label("سریع") . ' - ' . Translate::Label("بالا") . '</option>
+        <option ' . ( ($Level == "2") ? "selected" : "" ) . ' value="2">' . Translate::Label("متوسط") . ' - ' . Translate::Label("مرکز") . '</option>
+        <option ' . ( ($Level == "3") ? "selected" : "" ) . ' value="3">' . Translate::Label("کند") . ' - ' . Translate::Label("پایین") . '</option>
+        </select>
+
+        <label for="body">' . Translate::Label("متن") . '</label>
+        <textarea name="body">' . $Body  . '</textarea>
+        <label for="content">' . Translate::Label("پرونده") . '</label>
+        <input class="form-control" type="file" name="content" id="file" />
+        ';
+        /*
+        TODO: create drafting and publish mechanisms
+            based on user role
+
+            echo '<input type="submit" name="draft" value="پیش‌نویس" />';
+            echo '<input type="submit" name="edit" value="ویرایش" />';
+            echo '<input type="submit" name="publish" value="انتشار عمومی" />';
+            echo '<input type="submit" name="burn" value="لغو انتشار" />';
+        */
+        if ($Id == null ) {
+            echo '<input type="submit" class="btn btn-outline-primary m-1" name="insert" value="' . $Translate->Label("ارسال") . '" />';
+        } else {
+            echo '<input type="submit" name="update" class="btn btn-success m-1" value="' . $Translate->Label("به‌روز رسانی") . '" />';
+            echo '<input type="submit" name="delete" class="btn btn-danger m-1" value="' . $Translate->Label("حذف") . '" />';
+            echo '<input type="submit" name="clear" class="btn btn-warning m-1" value="' . $Translate->Label("حذف پیوست") . '" />';
+            echo '<a target="_blank" href="' . $BASEURL . 'view/' . $_COOKIE['LANG'] . '/' . $row['MasterId'] . '">' . $Translate->Label("مشاهده") . '</a>';
+        }
+        break;
+}
 ?>
 <input type="hidden" name="type" value="<?= $Type ?>" />
 </form>
