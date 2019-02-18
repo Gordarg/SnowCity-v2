@@ -82,7 +82,7 @@ if (
     $Post->SetValue("IsContentDeleted", "0");
     $Post->SetValue("IsDeleted", "0");
     $Post->Insert();
-    $Id = $Post->GetProperties()['Id'];  
+    // $Id = $Post->GetProperties()['Id'];
 }
 // else if (isset($_POST["delete"])) {
 //     $Post->Delete($_POST['id'], 
@@ -90,17 +90,17 @@ if (
 // }
 if (isset($_POST["clear"]))
 {
-    $Post->Update(mysqli_insert_id($conn),[
-        ["ContentDeleted", "1"],
-    ]);
+    $Post->SetOperand("IsContentDeleted");
+    $Post->SetValue("IsContentDeleted", "1");
+    $Post->Update();
+    $Post->ClearOperands("IsContentDeleted");
 }
-else if ((isset($_POST["update"])) or (isset($_POST["insert"])))
+else if (((isset($_POST["update"])) or (isset($_POST["insert"])))
+        && ($_FILES['content']['size'] > 0))
 {
-    if ($_FILES['content']['size'] > 0) 
-    $Post->Update(mysqli_insert_id($conn), [
-        ["Content", 
-            "'" . mysqli_real_escape_string($conn, file_get_contents($_FILES['content']['tmp_name'])) . "'"],
-    ]);
+    $Post->SetOperand("BinContent");
+    $Post->SetValue("BinContent", ',' . urlencode(base64_encode(file_get_contents($_FILES['content']['tmp_name']))));
+    $Post->Update();
 }
 if (!empty($_POST))
 {
@@ -313,6 +313,7 @@ switch ($Type)
 if (!$AJAX)
 {
 echo '
+<a class="btn btn-info" href="' . $BASEURL . 'dashboard">' . Translate::Label('داشبورد') . '</a>
 </main>
 ';
 }

@@ -43,11 +43,17 @@ abstract class AModel
 	function SetValue($Key, $Value){
 		$this->props[$Key] = $Value;
 	}
-	function SetOperand($Key){
-		array_push($this->operands, $Key);	
+	function SetOperand($Key) {
+		array_push($this->operands, $Key);
 	}
 	function IsOperand($Key){
 		return in_array($Key,$this->operands);
+	}
+	function ClearOperands($Key = null) {
+		if ($Key == null)
+			$this->operands = [];
+		else
+			unset($this->operands[$Key]);
 	}
 	function SetProperties($Properties){
 		$this->props = $Properties;
@@ -132,13 +138,14 @@ abstract class AModel
 		$query  = "DELETE FROM `" . $this->table . "` WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];
 		mysqli_query($conn, $query);
 	}
-	function Update($previousId)
+	function Update()
 	{
 		if ($this->readonly) return;
 		$db = new Db();
 		$conn = $db->Open();
 		$query  = "UPDATE `" . $this->table . "` SET ";
 		$i=0;
+
 		foreach($this->GetProperties() as $key => $value)
 		{
 			if (!$this->IsOperand($key))
@@ -169,11 +176,9 @@ abstract class AModel
 					$query .= '`' . $key . "` = '" . $value . "', ";
 		}
 		$query = substr($query, 0, -2); // Delete last ,
-		$query .=" WHERE " . $this->pk . "=" . $previousId;
-		if (!$this->IsOperand($this->pk))
-			$this->SetValue($this->pk,$previousId);
-		$this->Select();
+		$query .=" WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];
 		mysqli_query($conn, $query);
+		$this->Select();
 	}
 	function Insert()
 	{
