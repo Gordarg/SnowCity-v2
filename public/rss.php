@@ -12,7 +12,8 @@ if (!$AJAX)
         <pre class="container"><code class="xml">
 ';
 $Language = $PATHINFO[2] ?? Config::DefaultLanguage;
-$output = '
+$Sender = Functionalities::IfExistsIndexInArray($PATHINFO, 3);
+$output = '<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
 <channel>
     <title>' . Config::TITLE . '</title>
@@ -23,22 +24,19 @@ $output = '
         <url>https://www.xul.fr/xul-icon.gif</url>
         <link>https://www.xul.fr/en/index.php</link>
     </image>
-</channel>
-
 ';
 
-// <![CDATA[
-//     <img src="http://example.com/img/smiley.gif" alt="Smiley face" />         
-// ]>
-
-$rows = $PostDetail->Select(-1, 10, "Submit", "DESC", "");
+$rows = $PostDetail->Select(-1, 10, "Submit", "DESC",
+"WHERE `Language` = '" . $Language . "'" . 
+(($Sender != null) ? " AND CONCAT('@',`Username`) LIKE '@%'" : ""));
 foreach ($rows as $row) {
     $output .= '
     <item>
-    <link>' . $row['Title'] . '</link>
+    <title>' . $row['Title'] . '</title>
+    <link>' . $BASEURL . 'view/' . $row['Language'] . '/' . $row['MasterID'] . '</link>
     <description>
-
-    ' . $row['Body'] . '</description>
+    ' . $row['Body'] . '
+    </description>
     </item>
 ';
 }
@@ -47,7 +45,8 @@ foreach ($rows as $row) {
 if (!$AJAX)
 {
     echo str_replace("\n", "<br/>", htmlentities($output));
-    echo '</rss>
+    echo '</channel>
+</rss>
     </code>
 </pre>
 ';
@@ -55,7 +54,8 @@ if (!$AJAX)
 else
 {
     echo $output;
-    echo '</rss>';
+    echo '</channel>
+</rss>';
 }
 
 ?>

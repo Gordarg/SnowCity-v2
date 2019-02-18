@@ -2,7 +2,7 @@
   <header class="blog-header py-3">
     <div class="row flex-nowrap justify-content-between align-items-center">
       <div class="col-4 pt-1">
-        <a class="text-muted" href="<?php echo $BASEURL ?>"><?php echo $Translate::Label('خانه'); ?></a>
+        <a class="text-muted" href="<?php echo $BASEURL . 'rss' ?>"><?php echo $Translate::Label('خوراک'); ?></a>
       </div>
       <div class="col-4 text-center">
         <a class="blog-header-logo text-dark" href="#"><?php echo $Translate::Label(Config::TITLE); ?></a>
