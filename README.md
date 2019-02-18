@@ -5,7 +5,7 @@
 
 Steps to pass:
 
-1. Send posts and enable update and delete from archive
+1. Admin must publish sent posts
 2. Create and manage forms
 3. Send, review and manage answers
 4. Manage users, passwords and roles

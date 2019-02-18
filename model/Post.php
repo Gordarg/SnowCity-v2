@@ -24,12 +24,12 @@ class Post extends AModel
             'BinContent' => NULL,
             'Body' => '',
             'UserId' => NULL,
-            'Status' => 'Publish',
+            'Status' => 'Sent',
             'Language' => 'en-us',
             'RefrenceId' => NULL,
             'Index' => '0',
-            'IsDeleted' => false,
-            'IsContentDeleted' => false,
+            'IsDeleted' => '0',
+            'IsContentDeleted' => '0',
 		));
 	}
 }

@@ -42,7 +42,7 @@
           <li class="nav-item">
             <a class="nav-link" href="#">
               <!-- <span data-feather="file-text"></span> -->
-              <?php echo Translate::Label('کاربران') ?>
+              <?php echo Translate::Label('مردم') ?>
             </a>
           </li>
         </ul>

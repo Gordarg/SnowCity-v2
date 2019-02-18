@@ -192,6 +192,12 @@ ku-iq:
 -کلمه‌ی عبور قبلی نادرست است
 en-us:Wrong previous password
 ku-iq:
+-بلوکه
+en-us:Block
+ku-iq:
+-پیش‌نویس
+en-us:Draft
+ku-iq:
 -مشاهده پاسخ‌های قبلی
 en-us:Previous answers
 ku-iq:
@@ -269,8 +275,11 @@ ku-iq:
 -ویرایش فارسی
 en-us:Edit English
 ku-iq:
--کاربران
-en-us:Users
+-مردم
+en-us:People
+ku-iq:
+-انتشار
+en-us:Publish
 ku-iq:
 -انتخاب زبان
 en-us:Choose Language

@@ -12,6 +12,7 @@ function archive(){ // Constructor class
                 + '<td>' + obj["Title"] + '</td>'
                 + '<td>' + obj["Submit"] + '</td>'
                 + '<td>' + obj["Username"] + '</td>'
+                + '<td>' + obj["Status"] + '</td>'
                 // + '<td style="overflow: hidden; word-break: break-all; width:100px;">' + obj["Body"] + '</td>'
                 + (
                     (obj["BinContent"] != null)
