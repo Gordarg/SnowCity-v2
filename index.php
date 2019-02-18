@@ -103,6 +103,11 @@ else if ($PATHINFO[1] == 'post')
     $Id = $PATHINFO[4];
     $row = $PostDetail->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $Id . "'")[0];
 }
+else if ($PATHINFO[1] == 'rss' && $AJAX)
+{
+    header("Content-Type: application/xml; charset=utf-8");
+}
+
 
 // Generate meta global variables
 $META = Links::GenerateMeta($META_DESCRIPTION, $META_AUTHOR);

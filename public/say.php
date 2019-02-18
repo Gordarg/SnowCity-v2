@@ -26,7 +26,7 @@ $Index = '0';
 $Submit = DATETIMENOW; // Comes from Initialize
 $UserID = Functionalities::IfExistsIndexInArray($_COOKIE, 'USERID');
                             // TODO: WHY the function recived array? [0]
-$Level = '1';
+$Level = '0';
 $Body = '';
 $Status = 'Publish';
 $Content = null;
@@ -38,35 +38,6 @@ $RefrenceID = null;
 
 
 <?php
-
-// TODO: Maybe following lines are describing post method
-
-switch ($Type)
-{
-
-    // case "QUST":
-    //     $MasterID = Functionalities::IfExistsIndexInArray($PATHINFO, 4);
-    //     $Language = Functionalities::IfExistsIndexInArray($PATHINFO, 3);
-    //     $row = $Post->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $Id . "'")[0];
-    //     $Title = Functionalities::IfExistsIndexInArray($row,'Title');
-    //     $Level = Functionalities::IfExistsIndexInArray($row,'Level');
-    //     $Body = html_entity_decode(Functionalities::IfExistsIndexInArray($row,'Body'));
-    //     break;
-
-    // case "ANSR":
-    //     $data = array();
-    //     foreach($_POST as $key => $value)
-    //     {
-    //         if (substr($key, 0, 5) === 'form_')
-    //         $data[substr($key, 5)] = $value;
-    //         else continue;
-    //     }
-    //     $Body = json_encode($data, JSON_UNESCAPED_UNICODE);
-    //     break;
-
-}
-
-
 
 $Post = new Post();
 
@@ -213,6 +184,22 @@ switch ($Type)
             else {
                 echo '<input type="submit" class="btn btn-success m-1" name="insert" value="' . $Translate->Label("ارسال") . '" />';
             } 
+        break;
+    
+    case "QUST":
+        // Level will count dynamic inputs
+        echo '
+            <input type="hidden" name="submit" value="' . $Submit . '" />
+            <input type="hidden" name="userid" value="' . $UserID . '" />
+            <input type="hidden" name="index" value="' . $Index . '" />
+            <input type="hidden" name="refrenceid" value="' . $RefrenceID . '" />
+            <input type="hidden" name="status" value="' . $Status . '" />
+            <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
+            <input type="hidden" name="level" value="' . $Level . '" />
+        ';
+        echo '
+            
+        ';
         break;
 }
 ?>

@@ -8,11 +8,13 @@ if ($row == null)
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="masthead mb-auto">
     <div class="inner">
-      <h3 class="masthead-brand"><?php echo Translate::Label(Config::NAME, $Language) ?></h3>
+      <h3 class="masthead-brand"><?php echo Translate::Label(Config::NAME, $row['Language']) ?></h3>
       <nav class="nav nav-masthead justify-content-center">
-        <a class="nav-link" href="<?php echo $BASEURL ?>"><?php echo Translate::Label("خانه", $Language) ?></a>
-        <a class="nav-link active" href="#"><?php echo Translate::Label("پست", $Language) ?></a>
-        <a class="nav-link" href="#comments"><?php echo Translate::Label("نظرات", $Language) ?></a>
+        <a class="nav-link" href="<?php echo $BASEURL ?>"><?php echo Translate::Label("خانه", $row['Language']) ?></a>
+        <a class="nav-link active" href="#"><?php echo Translate::Label("پست", $row['Language']) ?></a>
+        <a class="nav-link" href="#comments"><?php echo Translate::Label("نظرات", $row['Language']) ?></a>
+        <?php //TODO: If was admin enable edit ?>
+        <a class="nav-link" href="<?php echo $BASEURL . 'say/post/' . $row['Language'] . '/' . $row['MasterID'] ?>"><?php echo Translate::Label("ویرایش", $row['Language']) ?></a>
       </nav>
     </div>
   </header>
