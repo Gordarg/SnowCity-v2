@@ -18,6 +18,7 @@ if ($row == null)
   </header>
 
   <main role="main" class="inner cover">
+    <img class="img-fluid" src="<?php echo $BASEURL . 'download.php?id=' . $row['MasterID'] ?>"
     <h1 class="cover-heading"><?php echo $row['Title'] ?></h1>
     <p class="lead">
       <a href="<?php echo $BASEURL . 'explore/@' . $row['Username'] ?>" class="btn btn-lg btn-secondary"><?php echo $row['Username'] ?></a>

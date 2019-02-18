@@ -5,7 +5,7 @@
         <h5><?php echo $Translate->Label("یادداشت ها"); ?></h5>
         <ul class="list-unstyled quick-links">
         <?php
-        $rows = $PostDetail->Select(0, 2, "Submit", "DESC", "WHERE Level = 3");
+        $rows = $PostDetail->Select(0, 10, "Submit", "DESC", "WHERE Level = '3'");
         foreach ($rows as $row) {
             echo '<li><a href="' . $BASEURL . 'view/' . $row['Language'] . '/' . $row['MasterID'] . '"><i class="fa fa-angle-double-right"></i>' . Text::GenerateAbstractForPost($row['Title'], 40) . '</a></li>';
         }

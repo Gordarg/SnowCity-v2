@@ -26,7 +26,7 @@ $Index = '0';
 $Submit = DATETIMENOW; // Comes from Initialize
 $UserID = Functionalities::IfExistsIndexInArray($_COOKIE, 'USERID');
                             // TODO: WHY the function recived array? [0]
-$Level = 1;
+$Level = '1';
 $Body = '';
 $Status = 'Publish';
 $Content = null;
@@ -138,7 +138,7 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
 {
     $MasterID = Functionalities::IfExistsIndexInArray($PATHINFO, 4);
     $Language = Functionalities::IfExistsIndexInArray($PATHINFO, 3);
-    $row = $Post->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $MasterID . "'");
+    $row = $Post->Select(-1, 1, 'Id', 'DESC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $MasterID . "'");
     if (sizeof($row) > 0)
     {
         $row = $row[0];
@@ -172,6 +172,7 @@ if (!$AJAX)
 <input type="hidden" name="masterid" value="<?= $MasterID ?>" />
 <?php
 // Render form
+
 switch ($Type)
 {
     case 'POST':
