@@ -40,10 +40,18 @@ $RefrenceID = null;
 <?php
 
 $Post = new Post();
+$FormItems = array();
+// Handle Post
 
-if (isset($_POST['form_additem']))
+if (isset($_POST['form_add_submit']))
 {
-
+    $item =        [
+        $_POST['form_add_title'] ,
+        $_POST['form_add_type'] ,
+        $_POST['form_add_after']
+    ];
+    array_push($FormItems, $item);
+    array_push($FormItems, $item);
 }
 else if (isset($_POST['masterid']))
 {
@@ -98,7 +106,12 @@ if (!empty($_POST))
 {
     if (isset($_POST["delete"]))
         exit(header("Location: " . $BASEURL . 'dashboard' ));
-    else
+    else if (isset($_POST["form_add_submit"])) { 
+        // Ignore
+    }
+    else if ($Post->GetProperties()['Type'] == 'QUST')
+        exit(header("Location: " . $BASEURL . 'say/qust/' . $_POST['language'] . '/' . $_POST['masterid']));
+    else if ($Post->GetProperties()['Type'] == 'POST')
         exit(header("Location: " . $BASEURL . 'say/post/' . $_POST['language'] . '/' . $_POST['masterid']));
 }
 
@@ -184,7 +197,7 @@ switch ($Type)
             <input type="hidden" name="index" value="' . $Index . '" />
             <input type="hidden" name="status" value="' . $Status . '" />
             <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
-            <input type="hidden" name="level" value="' . $Level . '" />
+            <input type="hidden" name="level" value="' . $Level . '" /> <!-- Keeps form count -->
             <div class="form-group">
             <label for="title">' . Translate::Label('عنوان') . '</label>
             <input type="text" class="form-control" name="title" value="' . $Title . '" />
@@ -194,41 +207,93 @@ switch ($Type)
             <input type="text" class="form-control" name="refrenceid" value="' . $RefrenceID . '" /><!--TODO: پیش نیاز-->
             </div>
             '
-
             . '
             <div class="card">
-                <div class="card bg-light text-dark m-4">'
-                . 'TODO: Items here'
-                . '</div>
-                <div class="card bg-primary text-light m-4">
-                    <span class="card-heading">' . Translate::Label('افزودن فیلد') . '</span>
-                    <div class="form-inline card-body">
+                <div class="card bg-light text-dark m-4">
+                <div class="form-inline card-body">
+                ';
+
+                $i = 0;
+                foreach ($FormItems as $item)
+                {
+                    $i ++;
+
+                    echo '
+                    <div class="row">
                         <div class="form-group">
-                            <label for="form_title">' . Translate::Label('عنوان') . '</label>
-                            <input class="form-control m-1" type="text" name="form_title">
+                            <label for="form_add_type">' . Translate::Label('عنوان') . '</label>
+                            <input type="text" class="form-control m-1" value="' . $item[0] . '" />
                         </div>
                         <div class="form-group">
-                            <label for="form_after">' . Translate::Label('نوع') . '</label>
-                            <select class="form-control m-1" name="form_after">
-                                    <option value="Numeric">' . Translate::Label('عددی') . '</option>
-                                    <option value="Characters">' . Translate::Label('رشته') . '</option>
-                                    <option value="File">' . Translate::Label('پرونده') . '</option>
-                                    <option value="Multiline Text">' . Translate::Label('متن چند خط') . '</option>
-                                    <option value="Drop Down List">' . Translate::Label('لیست آبشاری') . '</option>
-                                    <option value="Radio buttons">' . Translate::Label('دکمه‌های رادیویی') . '</option>
-                                    <option value="Check Box">' . Translate::Label('چک باکس') . '</option>
-                                    <option value="Agree Box">' . Translate::Label('باکس تائید') . '</option>
-                                    <option value="Heading">meta:' . Translate::Label('سر‌عنوان') . '</option>
-                                    <option value="Link">meta:' . Translate::Label('پیوند') . '</option>
-                                    <option value="Long Text">meta:' . Translate::Label('متن بلند') . '</option>
+                            <label for="form_add_type">' . Translate::Label('نوع') . '</label>
+                            <select class="form-control m-1" name="form_add_type">
+                                <option ' . ($item[1] == 'Numeric' ? "selected" : "") . ' value="Numeric">' . Translate::Label('عددی') . '</option>
+                                <option ' . ($item[1] == 'Characters' ? "selected" : "") . ' value="Characters">' . Translate::Label('رشته') . '</option>
+                                <option ' . ($item[1] == 'File' ? "selected" : "") . ' value="File">' . Translate::Label('پرونده') . '</option>
+                                <option ' . ($item[1] == 'Multiline Text' ? "selected" : "") . ' value="Multiline Text">' . Translate::Label('متن چند خط') . '</option>
+                                <option ' . ($item[1] == 'Drop Down List' ? "selected" : "") . ' value="Drop Down List">' . Translate::Label('لیست آبشاری') . '</option>
+                                <option ' . ($item[1] == 'Radio buttons' ? "selected" : "") . ' value="Radio buttons">' . Translate::Label('دکمه‌های رادیویی') . '</option>
+                                <option ' . ($item[1] == 'Check Box' ? "selected" : "") . ' value="Check Box">' . Translate::Label('چک باکس') . '</option>
+                                <option ' . ($item[1] == 'Agree Box' ? "selected" : "") . ' value="Agree Box">' . Translate::Label('باکس تائید') . '</option>
+                                <option ' . ($item[1] == 'Heading' ? "selected" : "") . ' value="Heading">meta:' . Translate::Label('سر‌عنوان') . '</option>
+                                <option ' . ($item[1] == 'Link' ? "selected" : "") . ' value="Link">meta:' . Translate::Label('پیوند') . '</option>
+                                <option ' . ($item[1] == 'Long Text' ? "selected" : "") . ' value="Long Text">meta:' . Translate::Label('متن بلند') . '</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="form_after">' . Translate::Label('بعد از') . '</label>
-                            <select class="form-control m-1" name="form_after">'
+                            <input name="form-operation-delete-' . $i . '" type="submit" class="form-control m-1 btn-sm btn-danger" value="' . Translate::Label('حذف') . '" />
+                            <input name="form-operation-edit-' . $i . '" type="submit" class="form-control m-1 btn-sm btn-warning" value="' . Translate::Label('ویرایش') . '" />
+                            <input name="form-operation-up-' . $i . '" type="submit" class="form-control m-1 btn-sm btn-info" value="' . Translate::Label('انتقال به بالا') . '" />
+                            <input name="form-operation-down-' . $i . '" type="submit" class="form-control m-1 btn-sm btn-info" value="' . Translate::Label('انتقال به پایین') . '" />
+                        </div>
+                    </div>
+                    ';
+
+                    // Use commented lines in view page :)
+
+                    // switch ($item[1])
+                    // {
+                    //     case "Numeric":
+                    //         echo '<input class="form-control" type="number" name="form_item_' . $i . '" />';
+                    //         break;
+                    // }
+                }
+
+                echo '                
+                </div>
+                </div>
+                <div class="card bg-primary text-light m-4">
+                    <div class="form-inline card-body">
+                        <div class="form-group">
+                            <label for="form_add_title">' . Translate::Label('عنوان') . '</label>
+                            <input class="form-control m-1" type="text" name="form_add_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="form_add_type">' . Translate::Label('نوع') . '</label>
+                            <select class="form-control m-1" name="form_add_type">
+                                <option value="Numeric">' . Translate::Label('عددی') . '</option>
+                                <option value="Characters">' . Translate::Label('رشته') . '</option>
+                                <option value="File">' . Translate::Label('پرونده') . '</option>
+                                <option value="Multiline Text">' . Translate::Label('متن چند خط') . '</option>
+                                <option value="Drop Down List">' . Translate::Label('لیست آبشاری') . '</option>
+                                <option value="Radio buttons">' . Translate::Label('دکمه‌های رادیویی') . '</option>
+                                <option value="Check Box">' . Translate::Label('چک باکس') . '</option>
+                                <option value="Agree Box">' . Translate::Label('باکس تائید') . '</option>
+                                <option value="Heading">meta:' . Translate::Label('سر‌عنوان') . '</option>
+                                <option value="Link">meta:' . Translate::Label('پیوند') . '</option>
+                                <option value="Long Text">meta:' . Translate::Label('متن بلند') . '</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="form_add_after">' . Translate::Label('بعد از') . '</label>
+                            <select class="form-control m-1" name="form_add_after">
+                                <option value="0">' . Translate::Label('ابتدا') . '</option>'
                                 //        . '<option value="test">Hello world</option>'
                             . '</select>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="form_add_submit" class="btn btn-primary btn-block btn-sm" value="' . $Translate->Label("افزودن فیلد") . '" />
                     </div>
                 </div>
             </div>
