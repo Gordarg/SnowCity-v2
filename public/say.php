@@ -40,17 +40,40 @@ $RefrenceID = null;
 <?php
 
 $Post = new Post();
-$FormItems = array();
+
 // Handle Post
+
+if ($Type == 'QUST')
+{
+    $FormItems = json_decode(html_entity_decode(Functionalities::IfExistsIndexInArray($_POST, 'temp_body')));
+    if (!is_array($FormItems))
+        $FormItems = array();
+}
 
 if (isset($_POST['form_add_submit']))
 {
+
+    // TODO: Reorder the array
+    // $_POST['form_add_after']
+
     $item =        [
         $_POST['form_add_title'] ,
-        $_POST['form_add_type'] ,
-        $_POST['form_add_after']
+        $_POST['form_add_type'] 
     ];
+    
     array_push($FormItems, $item);
+
+    $Body = '';
+    for ($i = 0 ; $i < sizeof($FormItems) ; $i++)
+    {
+        $Body .= str_replace(",", "-", $FormItems[$i][0]) . ",";
+    }
+    $Body .= '\n';
+    for ($i = 0 ; $i < sizeof($FormItems) ; $i++)
+    {
+        $Body .= $FormItems[$i][1] . ', ';
+    }
+
 }
 else if (isset($_POST['masterid']))
 {
@@ -131,25 +154,19 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
         $row = $row[0];
         $Title = Functionalities::IfExistsIndexInArray($row,'Title');
         $Level = Functionalities::IfExistsIndexInArray($row,'Level');
-        $Body = Functionalities::IfExistsIndexInArray($row,'Body');
+
+        switch ($Type)
+        {
+            case "POST":
+                $Body = Functionalities::IfExistsIndexInArray($row,'Body');
+                break;
+            case "QUST":
+                $Body = Functionalities::IfExistsIndexInArray($row,'Body');
+                break;
+        }
     }
 }
-// TODO: We have to do some operations on $body based on type
 
-switch ($Type)
-{
-    case "QUST":
-        for ($i = 0 ; $i < sizeof($FormItems) ; $i++)
-        {
-            $Body .= str_replace(",", "-", $FormItems[$i][0]) . ",";
-        }
-        $Body .= '\n';
-        for ($i = 0 ; $i < sizeof($FormItems) ; $i++)
-        {
-            $Body .= $FormItems[$i][1] . ', ';
-        }
-        break;
-}
 
 ?>
 
@@ -216,6 +233,7 @@ switch ($Type)
             <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
             <input type="hidden" name="level" value="' . $Level . '" /> <!-- Keeps form count -->
             <input type="hidden" name="body" value="' . $Body . '" />            
+            <input type="hidden" name="temp_body" value="' . htmlentities(json_encode($FormItems)) . '" />            
             <div class="form-group">
             <label for="title">' . Translate::Label('عنوان') . '</label>
             <input type="text" class="form-control bg-dark text-light" name="title" value="' . $Title . '" />
