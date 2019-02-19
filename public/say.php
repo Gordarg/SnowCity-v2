@@ -39,6 +39,7 @@ $RefrenceID = null;
 <?php
 
 $Post = new Post();
+$FormItems = array();
 
 // Handle Post
 
@@ -138,19 +139,20 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
                     $Lines = explode('\n', str_replace('\\' . '\n', '\n', Functionalities::IfExistsIndexInArray($_POST,'body')));
                 }
 
-                $ItemTitles = explode(",", $Lines[0]);
-                $ItemTypes = explode(",", $Lines[1]);
-
-                $FormItems = array();
-
-                for ($i = 0; $i < sizeof($ItemTitles) - 1; $i++)
+                if (sizeof($Lines) > 1)
                 {
-                    $item = [
-                        $ItemTitles[$i] ,
-                        $ItemTypes[$i]
-                    ];
-                    
-                    array_push($FormItems, $item);
+                    $ItemTitles = explode(",", $Lines[0]);
+                    $ItemTypes = explode(",", $Lines[1]);
+
+                    for ($i = 0; $i < sizeof($ItemTitles) - 1; $i++)
+                    {
+                        $item = [
+                            $ItemTitles[$i] ,
+                            $ItemTypes[$i]
+                        ];
+                        
+                        array_push($FormItems, $item);
+                    }
                 }
                 if (isset($_POST['form_add_submit']))
                 {
@@ -164,9 +166,9 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
                     array_push($FormItems, $item);
 
                     $Body = '';
-                    $Body .= $Lines[0] . str_replace(",", "-", $item[0]) . ",";
+                    $Body .= Functionalities::IfExistsIndexInArray($Lines,0) . str_replace(",", "-", $item[0]) . ",";
                     $Body .= '\\' . '\n';
-                    $Body .= $Lines[1] . $item[1] . ',';
+                    $Body .= Functionalities::IfExistsIndexInArray($Lines,1) . $item[1] . ',';
                 }
                 
 
