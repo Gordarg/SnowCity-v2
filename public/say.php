@@ -132,7 +132,7 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
             case "QUST":
 
                 $Body =  Functionalities::IfExistsIndexInArray($row,'Body');
-                $Lines = explode(',,', $Body);
+                $Lines = explode(',,', $Body); // TODO: Change delimiter
                 if (isset($_POST['form_add_submit']))
                 {
                     $Lines = explode(',,', Functionalities::IfExistsIndexInArray($_POST,'body'));
