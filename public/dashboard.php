@@ -25,9 +25,14 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" onclick="loadform()">
               <!-- <span data-feather="shopping-cart"></span> -->
               <?php echo Translate::Label('فرم‌ساز') ?> 
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="Hi.load('collection')">
+              <?php echo Translate::Label('کلکسیون') ?> 
             </a>
           </li>
         </ul>

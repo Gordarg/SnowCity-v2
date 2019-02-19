@@ -41,7 +41,11 @@ $RefrenceID = null;
 
 $Post = new Post();
 
-if (isset($_POST['masterid']))
+if (isset($_POST['form_additem']))
+{
+
+}
+else if (isset($_POST['masterid']))
 {
     $Post->SetValue("MasterId",  $_POST['masterid']);
     $Post->SetValue("Title",  $_POST['title']);
@@ -170,20 +174,6 @@ switch ($Type)
             <label for="content">' . Translate::Label("پرونده") . '</label>
             <input class="form-control" type="file" name="content" id="file" />
             ';
-
-            echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
-
-            if ($row != null) {
-                //TODO (ADMIN): echo '<input type="submit" class="btn btn-outline-primary m-1" name="publish" value="' . $Translate->Label("انتشار") . '" />';
-                echo '<input type="submit" name="update" class="btn btn-success m-1" value="' . $Translate->Label("به روز رسانی") . '" />';
-                echo '<input type="submit" name="clear" class="btn btn-warning m-1" value="' . $Translate->Label("حذف پیوست") . '" />';
-                echo '<input type="submit" name="block" class="btn btn-danger m-1" value="' . $Translate->Label("بلوکه") . '" />';
-                echo '<input type="submit" name="delete" class="btn btn-dark m-1" value="' . $Translate->Label("حذف") . '" />';
-                echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . $_COOKIE['LANG'] . '/' . $row['MasterId'] . '">' . $Translate->Label("مشاهده") . '</a>';
-            }
-            else {
-                echo '<input type="submit" class="btn btn-success m-1" name="insert" value="' . $Translate->Label("ارسال") . '" />';
-            } 
         break;
     
     case "QUST":
@@ -192,16 +182,72 @@ switch ($Type)
             <input type="hidden" name="submit" value="' . $Submit . '" />
             <input type="hidden" name="userid" value="' . $UserID . '" />
             <input type="hidden" name="index" value="' . $Index . '" />
-            <input type="hidden" name="refrenceid" value="' . $RefrenceID . '" />
             <input type="hidden" name="status" value="' . $Status . '" />
             <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
             <input type="hidden" name="level" value="' . $Level . '" />
-        ';
-        echo '
-            
+            <div class="form-group">
+            <label for="title">' . Translate::Label('عنوان') . '</label>
+            <input type="text" class="form-control" name="title" value="' . $Title . '" />
+            </div>
+            <div class="form-group">
+            <label for="refrenceid">' . Translate::Label('پیش نیاز') . '</label>
+            <input type="text" class="form-control" name="refrenceid" value="' . $RefrenceID . '" /><!--TODO: پیش نیاز-->
+            </div>
+            '
+
+            . '
+            <div class="card">
+                <div class="card bg-light text-dark m-4">'
+                . 'TODO: Items here'
+                . '</div>
+                <div class="card bg-primary text-light m-4">
+                    <span class="card-heading">' . Translate::Label('افزودن فیلد') . '</span>
+                    <div class="form-inline card-body">
+                        <div class="form-group">
+                            <label for="form_title">' . Translate::Label('عنوان') . '</label>
+                            <input class="form-control m-1" type="text" name="form_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="form_after">' . Translate::Label('نوع') . '</label>
+                            <select class="form-control m-1" name="form_after">
+                                    <option value="Numeric">' . Translate::Label('عددی') . '</option>
+                                    <option value="Characters">' . Translate::Label('رشته') . '</option>
+                                    <option value="File">' . Translate::Label('پرونده') . '</option>
+                                    <option value="Multiline Text">' . Translate::Label('متن چند خط') . '</option>
+                                    <option value="Drop Down List">' . Translate::Label('لیست آبشاری') . '</option>
+                                    <option value="Radio buttons">' . Translate::Label('دکمه‌های رادیویی') . '</option>
+                                    <option value="Check Box">' . Translate::Label('چک باکس') . '</option>
+                                    <option value="Agree Box">' . Translate::Label('باکس تائید') . '</option>
+                                    <option value="Heading">meta:' . Translate::Label('سر‌عنوان') . '</option>
+                                    <option value="Link">meta:' . Translate::Label('پیوند') . '</option>
+                                    <option value="Long Text">meta:' . Translate::Label('متن بلند') . '</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="form_after">' . Translate::Label('بعد از') . '</label>
+                            <select class="form-control m-1" name="form_after">'
+                                //        . '<option value="test">Hello world</option>'
+                            . '</select>
+                        </div>
+                    </div>
+                </div>
+            </div>
         ';
         break;
 }
+echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
+
+if ($row != null) {
+    //TODO (ADMIN): echo '<input type="submit" class="btn btn-outline-primary m-1" name="publish" value="' . $Translate->Label("انتشار") . '" />';
+    echo '<input type="submit" name="update" class="btn btn-success m-1" value="' . $Translate->Label("به روز رسانی") . '" />';
+    echo '<input type="submit" name="clear" class="btn btn-warning m-1" value="' . $Translate->Label("حذف پیوست") . '" />';
+    echo '<input type="submit" name="block" class="btn btn-danger m-1" value="' . $Translate->Label("بلوکه") . '" />';
+    echo '<input type="submit" name="delete" class="btn btn-dark m-1" value="' . $Translate->Label("حذف") . '" />';
+    echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . $_COOKIE['LANG'] . '/' . $row['MasterId'] . '">' . $Translate->Label("مشاهده") . '</a>';
+}
+else {
+    echo '<input type="submit" class="btn btn-success m-1" name="insert" value="' . $Translate->Label("ارسال") . '" />';
+} 
 ?>
 <input type="hidden" name="type" value="<?= $Type ?>" />
 </form>

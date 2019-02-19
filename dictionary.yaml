@@ -126,6 +126,9 @@ ku-iq:
 -پروفایل
 en-us:Profile
 ku-iq:
+-متن بلند
+en-us:Long Text
+ku-iq:
 -متن چند خط
 en-us:Multiline Text
 ku-iq:
@@ -214,7 +217,7 @@ ku-iq:
 en-us:Payments
 ku-iq:
 -پیش نیاز
-en-us:Requrements
+en-us:Requirements
 ku-iq:
 -تغییر کلمه‌ی عبور
 en-us:Change Password
@@ -271,6 +274,27 @@ en-us:Login failed
 ku-iq:
 -ذخیره
 en-us:Save
+ku-iq:
+-نوع
+en-us:Type
+ku-iq:
+-عددی
+en-us:Numeric
+ku-iq:
+-رشته
+en-us:Characters
+ku-iq:
+-سر‌عنوان
+en-us:Heading
+ku-iq:
+-پیوند
+en-us:Link
+ku-iq:
+-کلکسیون
+en-us:Collection
+ku-iq:
+-بعد از
+en-us:After
 ku-iq:
 -خوراک
 en-us:Feed
