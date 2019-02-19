@@ -70,7 +70,7 @@ if (isset($_POST['masterid'])
         $Post->SetValue("Status", 'DRAFT');
     else if (isset($_POST["insert"]) || isset($_POST["update"])) // WAITING FOR ADMIN TO PUBLISH
         $Post->SetValue("Status", 'SENT');
-
+    
     $Post->Insert();
     // $Id = $Post->GetProperties()['Id'];
 }
