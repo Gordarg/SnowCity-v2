@@ -43,12 +43,15 @@ $FormItems = array();
 
 // Handle Post
 
-if (isset($_POST['masterid'])
-&&
-    (   // NOT DYNAMIC FORM OPERATIONS
-        !isset($_POST['form_add_submit']) 
-    )
+if (
+isset($_POST["block"]) ||
+isset($_POST["approve"]) ||
+isset($_POST["pubilsh"]) ||
+isset($_POST["draft"]) ||
+isset($_POST["insert"]) ||
+isset($_POST["update"])
 )
+
 {
     $Post->SetValue("MasterId",  $_POST['masterid']);
     $Post->SetValue("Title",  $_POST['title']);
@@ -117,6 +120,8 @@ if (!empty($_POST)) // TODO: Disable redirects in Ajax calls (needs UI designer 
 // Select Post Details for Edit Window
 
 $row = null;
+$lines = array();
+
 if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
 {
     $MasterID = Functionalities::IfExistsIndexInArray($PATHINFO, 4);
@@ -131,53 +136,54 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
         switch ($Type)
         {
             case "QUST":
-
                 $Body =  Functionalities::IfExistsIndexInArray($row,'Body');
-                $Lines = explode('\n', $Body); // TODO: Change delimiter
-                if (isset($_POST['form_add_submit']))
-                {
-                    $Lines = explode('\n', str_replace('\\' . '\n', '\n', Functionalities::IfExistsIndexInArray($_POST,'body')));
-                }
-
-                if (sizeof($Lines) > 1)
-                {
-                    $ItemTitles = explode(",", $Lines[0]);
-                    $ItemTypes = explode(",", $Lines[1]);
-
-                    for ($i = 0; $i < sizeof($ItemTitles) - 1; $i++)
-                    {
-                        $item = [
-                            $ItemTitles[$i] ,
-                            $ItemTypes[$i]
-                        ];
-                        
-                        array_push($FormItems, $item);
-                    }
-                }
-                if (isset($_POST['form_add_submit']))
-                {
-                    // TODO: Reorder the array
-                    // $_POST['form_add_after']
-                    $item = [
-                        $_POST['form_add_title'] ,
-                        $_POST['form_add_type'] 
-                    ];
-                    
-                    array_push($FormItems, $item);
-
-                    $Body = '';
-                    $Body .= Functionalities::IfExistsIndexInArray($Lines,0) . str_replace(",", "-", $item[0]) . ",";
-                    $Body .= '\\' . '\n';
-                    $Body .= Functionalities::IfExistsIndexInArray($Lines,1) . $item[1] . ',';
-                }
-                
-
-                
+                $lines = explode('\n', $Body);
                 break;
             case "POST":
                 $Body = Functionalities::IfExistsIndexInArray($row,'Body');
                 break;
         }
+    }
+}
+// Add items to form
+if (isset($_POST['form_add_submit']))
+{
+    $lines = explode('\n', str_replace('\\' . '\n', '\n', Functionalities::IfExistsIndexInArray($_POST,'body')));
+}
+if (sizeof($lines) > 1)
+{
+    $ItemTitles = explode(",", $lines[0]);
+    $ItemTypes = explode(",", $lines[1]);
+
+    for ($i = 0; $i < sizeof($ItemTitles) - 1; $i++)
+    {
+        $item = [
+            $ItemTitles[$i] ,
+            $ItemTypes[$i]
+        ];
+        
+        array_push($FormItems, $item);
+    }
+}
+if (isset($_POST['form_add_submit']))
+{
+// TODO: Reorder the array
+// $_POST['form_add_after']
+$item = [
+    $_POST['form_add_title'] ,
+    $_POST['form_add_type'] 
+];
+
+array_push($FormItems, $item);
+}
+if ($Type == 'QUST')
+{
+    if (isset($item))
+    {
+        $Body = '';
+        $Body .= Functionalities::IfExistsIndexInArray($lines,0) . str_replace(",", "-", $item[0]) . ",";
+        $Body .= '\\' . '\n';
+        $Body .= Functionalities::IfExistsIndexInArray($lines,1) . $item[1] . ',';
     }
 }
 ?>
