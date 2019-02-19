@@ -51,7 +51,6 @@ if (isset($_POST['form_add_submit']))
         $_POST['form_add_after']
     ];
     array_push($FormItems, $item);
-    array_push($FormItems, $item);
 }
 else if (isset($_POST['masterid']))
 {
@@ -102,7 +101,7 @@ else if (((isset($_POST["update"])) or (isset($_POST["insert"])))
     $Post->Update();
 }
 
-if (!empty($_POST))
+if (!empty($_POST)) // TODO: Disable redirects in Ajax calls (needs UI designer attention)
 {
     if (isset($_POST["delete"]))
         exit(header("Location: " . $BASEURL . 'dashboard' ));
@@ -137,6 +136,21 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
 }
 // TODO: We have to do some operations on $body based on type
 
+switch ($Type)
+{
+    case "QUST":
+        for ($i = 0 ; $i < sizeof($FormItems) ; $i++)
+        {
+            $Body .= str_replace(",", "-", $FormItems[$i][0]) . ",";
+        }
+        $Body .= '\n';
+        for ($i = 0 ; $i < sizeof($FormItems) ; $i++)
+        {
+            $Body .= $FormItems[$i][1] . ', ';
+        }
+        break;
+}
+
 ?>
 
 
@@ -156,6 +170,9 @@ if (!$AJAX)
   ';
 }
 ?>
+<!--
+    TODO: Disable redirects for ajax calls (Needs UI Designer Attention)
+    <form id="gordform" method="post" action="<?= $BASEURL . ($AJAX ? "ajax/" : "") . 'say/' . $Type ?>" enctype="multipart/form-data"> -->
 <form id="gordform" method="post" action="<?= $BASEURL . 'say/' . $Type ?>" enctype="multipart/form-data">
 <input type="hidden" name="masterid" value="<?= $MasterID ?>" />
 <?php
@@ -198,13 +215,14 @@ switch ($Type)
             <input type="hidden" name="status" value="' . $Status . '" />
             <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
             <input type="hidden" name="level" value="' . $Level . '" /> <!-- Keeps form count -->
+            <input type="hidden" name="body" value="' . $Body . '" />            
             <div class="form-group">
             <label for="title">' . Translate::Label('عنوان') . '</label>
-            <input type="text" class="form-control" name="title" value="' . $Title . '" />
+            <input type="text" class="form-control bg-dark text-light" name="title" value="' . $Title . '" />
             </div>
             <div class="form-group">
             <label for="refrenceid">' . Translate::Label('پیش نیاز') . '</label>
-            <input type="text" class="form-control" name="refrenceid" value="' . $RefrenceID . '" /><!--TODO: پیش نیاز-->
+            <input type="text" class="form-control bg-dark text-light" name="refrenceid" value="' . $RefrenceID . '" /><!--TODO: پیش نیاز-->
             </div>
             '
             . '
@@ -258,6 +276,8 @@ switch ($Type)
                     //         break;
                     // }
                 }
+                if ($i == 0)
+                echo Translate::Label('هیچ موردی یافت نشد');
 
                 echo '                
                 </div>
