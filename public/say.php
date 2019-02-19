@@ -132,10 +132,10 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
             case "QUST":
 
                 $Body =  Functionalities::IfExistsIndexInArray($row,'Body');
-                $Lines = explode(',,', $Body); // TODO: Change delimiter
+                $Lines = explode('\n', $Body); // TODO: Change delimiter
                 if (isset($_POST['form_add_submit']))
                 {
-                    $Lines = explode(',,', Functionalities::IfExistsIndexInArray($_POST,'body'));
+                    $Lines = explode('\n', str_replace('\\' . '\n', '\n', Functionalities::IfExistsIndexInArray($_POST,'body')));
                 }
 
                 $ItemTitles = explode(",", $Lines[0]);
@@ -143,7 +143,7 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
 
                 $FormItems = array();
 
-                for ($i = 0; $i < sizeof($ItemTitles) ; $i++)
+                for ($i = 0; $i < sizeof($ItemTitles) - 1; $i++)
                 {
                     $item = [
                         $ItemTitles[$i] ,
@@ -164,8 +164,8 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
                     array_push($FormItems, $item);
 
                     $Body = '';
-                    $Body .= $Lines[0] . ',' . str_replace(",", "-", $item[0]) . ",";
-                    $Body .= ',';
+                    $Body .= $Lines[0] . str_replace(",", "-", $item[0]) . ",";
+                    $Body .= '\\' . '\n';
                     $Body .= $Lines[1] . $item[1] . ',';
                 }
                 
