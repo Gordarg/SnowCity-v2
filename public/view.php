@@ -3,6 +3,8 @@ if ($row == null)
 {
     exit(header("HTTP/1.0 404 Not Found"));
 }
+
+// TODO: Show post contributers
 ?>
 
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">

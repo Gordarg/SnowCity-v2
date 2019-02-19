@@ -26,6 +26,8 @@ if ($PATHINFO[2] == 'out')
     exit;
 }
 
+// TODO: Register page
+
 //TODO: Handle Messages Globally
 // if (isset($_POST['Login']))
 //     echo '<div class="message">' . $Translate->Label("احراز هویت ناموفق") . '</div>';
