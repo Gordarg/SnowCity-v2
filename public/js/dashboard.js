@@ -8,4 +8,4 @@ function loadpost(){
     loadScript(Hi.baseurl() + "public/js/say/post.js", function(){    });
   });
 }
-loadform();
+loadpost();

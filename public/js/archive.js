@@ -1,6 +1,6 @@
 function archive(){ // Constructor class
 
-    $.get(Hi.controller() + "/postdetailController.php?BinContent=✓&" + Hi.loginprotocol() , function(data, status){ 
+    $.get(Hi.controller() + "postdetailController.php?BinContent=✓&Type=POST&" + Hi.loginprotocol() , function(data, status){ 
         if (JSON.stringify(data).charAt(0) == "{")
             data = JSON.parse("[" + JSON.stringify(data) + "]");
     

@@ -15,6 +15,8 @@ class postdetailController extends AController{
 			$model->SetValue($key, parent::getRequest($key));
 		}
 		$data = $model->Select(-1 , -1, 'Submit', 'DESC');
+		if (parent::getRequest('Type') != null)
+			$data = $model->Select(-1 , -1, 'Submit', 'DESC', "WHERE `Type` = '" . parent::getRequest('Type') . "'");
 		parent::setData($data);
 		parent::returnData();
 	}
