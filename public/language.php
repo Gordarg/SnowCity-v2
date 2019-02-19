@@ -36,7 +36,7 @@ setcookie('LANG', $PATHINFO[2], time() + (86400 * 30), '/');
                 // <li>Priority email support</li>
                 // <li>Help center access</li>
                 '</ul>
-                <a class="btn btn-lg btn-block btn-primary" href="'. $lang->code . '-' . $lang->region . '">' . Translate::Label('انتخاب', $lang->code . '-' . $lang->region) . '</a>
+                <a class="btn btn-lg btn-block btn-primary" href="'. $BASEURL . 'language/' . $lang->code . '-' . $lang->region . '">' . Translate::Label('انتخاب', $lang->code . '-' . $lang->region) . '</a>
             </div>
         </div>
         ';

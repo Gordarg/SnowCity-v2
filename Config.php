@@ -13,10 +13,10 @@ class Config
     {
         $languages = array();
 
-        array_push($languages, new Language("fa", "فارسی", "ir", "r", "🇮🇷"));
+        // array_push($languages, new Language("fa", "فارسی", "ir", "r", "🇮🇷"));
         array_push($languages, new Language("en", "English", "us", "l", "🇺🇸"));
-        array_push($languages, new Language("ku", "کوردی", "iq", "r", "🇮🇶"));
-        array_push($languages, new Language("ar", "العربية", "ae", "r", "🇦🇪"));
+        // array_push($languages, new Language("ku", "کوردی", "iq", "r", "🇮🇶"));
+        // array_push($languages, new Language("ar", "العربية", "ae", "r", "🇦🇪"));
         
         return $languages;
     }

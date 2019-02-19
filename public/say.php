@@ -20,7 +20,7 @@ mt_rand( 0, 0x3fff ) | 0x8000,
 mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ));
 
 $Title = '';
-$Language = 'fa-ir';
+$Language = $CURRENTLANGUAGE;
 $Index = '0';
 $Submit = DATETIMENOW; // Comes from Initialize
 $UserID = Functionalities::IfExistsIndexInArray($_COOKIE, 'USERID');
@@ -49,7 +49,9 @@ isset($_POST["approve"]) ||
 isset($_POST["pubilsh"]) ||
 isset($_POST["draft"]) ||
 isset($_POST["insert"]) ||
-isset($_POST["update"])
+isset($_POST["update"]) ||
+isset($_POST["clear"]) ||
+isset($_POST["delete"])
 )
 
 {
@@ -83,6 +85,7 @@ if (isset($_POST["delete"])) {
     $Post->SetOperand("IsDeleted");
     $Post->SetValue("IsDeleted", "1");
     $Post->Update();
+    // Attention: Maybe there is a bug when deleting a post <> $CURRENTLANGUAGE or $PATHINFO or etc ...
     $Post->ClearOperands("IsDeleted");
 }
 else if (isset($_POST["clear"]))

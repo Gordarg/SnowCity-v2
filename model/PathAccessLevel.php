@@ -12,9 +12,6 @@ class PathAccessLevel{
         array_push($output, new PathAccessLevelModel("say|post", "EDTOR"));
         array_push($output, new PathAccessLevelModel("say|post", "ADMIN"));
         array_push($output, new PathAccessLevelModel("say|file", "ADMIN"));
-        array_push($output, new PathAccessLevelModel("say|comt", "VSTOR"));
-        array_push($output, new PathAccessLevelModel("say|comt", "EDTOR"));
-        array_push($output, new PathAccessLevelModel("say|comt", "ADMIN"));
 
         return $output;
     }
