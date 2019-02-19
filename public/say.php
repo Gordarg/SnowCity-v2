@@ -2,7 +2,6 @@
 // Handle html method="post"
 
 include_once BASEPATH.'model/Post.php';
-
 ?>
 
 
@@ -43,39 +42,12 @@ $Post = new Post();
 
 // Handle Post
 
-if ($Type == 'QUST')
-{
-    $FormItems = json_decode(html_entity_decode(Functionalities::IfExistsIndexInArray($_POST, 'temp_body')));
-    if (!is_array($FormItems))
-        $FormItems = array();
-}
-
-if (isset($_POST['form_add_submit']))
-{
-
-    // TODO: Reorder the array
-    // $_POST['form_add_after']
-
-    $item =        [
-        $_POST['form_add_title'] ,
-        $_POST['form_add_type'] 
-    ];
-    
-    array_push($FormItems, $item);
-
-    $Body = '';
-    for ($i = 0 ; $i < sizeof($FormItems) ; $i++)
-    {
-        $Body .= str_replace(",", "-", $FormItems[$i][0]) . ",";
-    }
-    $Body .= '\n';
-    for ($i = 0 ; $i < sizeof($FormItems) ; $i++)
-    {
-        $Body .= $FormItems[$i][1] . ', ';
-    }
-
-}
-else if (isset($_POST['masterid']))
+if (isset($_POST['masterid'])
+&&
+    (   // NOT DYNAMIC FORM OPERATIONS
+        !isset($_POST['form_add_submit']) 
+    )
+)
 {
     $Post->SetValue("MasterId",  $_POST['masterid']);
     $Post->SetValue("Title",  $_POST['title']);
@@ -157,17 +129,55 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
 
         switch ($Type)
         {
-            case "POST":
-                $Body = Functionalities::IfExistsIndexInArray($row,'Body');
-                break;
             case "QUST":
+
+                $Body =  Functionalities::IfExistsIndexInArray($row,'Body');
+                $Lines = explode(',,', $Body);
+                if (isset($_POST['form_add_submit']))
+                {
+                    $Lines = explode(',,', Functionalities::IfExistsIndexInArray($_POST,'body'));
+                }
+
+                $ItemTitles = explode(",", $Lines[0]);
+                $ItemTypes = explode(",", $Lines[1]);
+
+                $FormItems = array();
+
+                for ($i = 0; $i < sizeof($ItemTitles) ; $i++)
+                {
+                    $item = [
+                        $ItemTitles[$i] ,
+                        $ItemTypes[$i]
+                    ];
+                    
+                    array_push($FormItems, $item);
+                }
+                if (isset($_POST['form_add_submit']))
+                {
+                    // TODO: Reorder the array
+                    // $_POST['form_add_after']
+                    $item = [
+                        $_POST['form_add_title'] ,
+                        $_POST['form_add_type'] 
+                    ];
+                    
+                    array_push($FormItems, $item);
+
+                    $Body = '';
+                    $Body .= $Lines[0] . ',' . str_replace(",", "-", $item[0]) . ",";
+                    $Body .= ',';
+                    $Body .= $Lines[1] . $item[1] . ',';
+                }
+                
+
+                
+                break;
+            case "POST":
                 $Body = Functionalities::IfExistsIndexInArray($row,'Body');
                 break;
         }
     }
 }
-
-
 ?>
 
 
@@ -189,8 +199,8 @@ if (!$AJAX)
 ?>
 <!--
     TODO: Disable redirects for ajax calls (Needs UI Designer Attention)
-    <form id="gordform" method="post" action="<?= $BASEURL . ($AJAX ? "ajax/" : "") . 'say/' . $Type ?>" enctype="multipart/form-data"> -->
-<form id="gordform" method="post" action="<?= $BASEURL . 'say/' . $Type ?>" enctype="multipart/form-data">
+-->
+<form id="gordform" method="post" action="<?= $BASEURL . 'say/' . $Type . (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null ? ('/' . $PATHINFO[3] . '/' . $PATHINFO[4]) : '' )  ?>" enctype="multipart/form-data">
 <input type="hidden" name="masterid" value="<?= $MasterID ?>" />
 <?php
 // Render form
@@ -233,7 +243,6 @@ switch ($Type)
             <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
             <input type="hidden" name="level" value="' . $Level . '" /> <!-- Keeps form count -->
             <input type="hidden" name="body" value="' . $Body . '" />            
-            <input type="hidden" name="temp_body" value="' . htmlentities(json_encode($FormItems)) . '" />            
             <div class="form-group">
             <label for="title">' . Translate::Label('عنوان') . '</label>
             <input type="text" class="form-control bg-dark text-light" name="title" value="' . $Title . '" />
