@@ -31,18 +31,6 @@ SELECT DISTINCT
     OR  `A`.`Type` = 'FILE' 
     OR  `A`.`Type` = 'QUST'
     )
-    AND
-    (
-        (
-            `pd2`.`Type` = 'POST'
-            AND
-            `A`.RefrenceID IS NOT NULL
-        )
-        OR
-        (
-            `A`.RefrenceID IS NULL
-        )
-    )
 
     ORDER BY `A`.`Submit`
     Limit 10
