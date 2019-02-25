@@ -5,8 +5,11 @@ include('../model/Post.php');
 
 class postController extends AController{
 
-	function HEAD(){
-		// TODO: Return this controller hints
+	function VIEW(){
+		parent::VIEW();
+		$model = new Post();
+		parent::setData($model->GetProperties());
+		parent::returnData();
 	}
 
 	function GET(){
