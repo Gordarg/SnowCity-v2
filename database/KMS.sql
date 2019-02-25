@@ -111,6 +111,7 @@ SELECT `P`.`masterid`   AS `MasterID`,
            ELSE (SELECT `P1`.`bincontent` 
                  FROM   `posts` `P1` 
                  WHERE  ( ( `P1`.`bincontent` IS NOT NULL ) 
+                          AND ( `P`.`iscontentdeleted` = 0 )
                           AND ( `P`.`masterid` = `P1`.`masterid` ) ) 
                  ORDER  BY `P1`.`submit` DESC 
                  LIMIT  1) 
