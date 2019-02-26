@@ -1,7 +1,7 @@
 <?php
 
-include('../core/AController.php');
-include('../model/PostDetail.php');
+include_once '../core/AController.php';
+include_once BASEPATH . 'model/PostDetail.php';
 
 class postdetailController extends AController{
 

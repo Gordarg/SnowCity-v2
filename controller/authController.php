@@ -1,6 +1,6 @@
 <?php
-include_once '../core/Initialize.php';
-include_once BASEPATH . 'core/AController.php';
+
+include_once '../core/AController.php';
 include_once BASEPATH . 'model/User.php';
 include_once BASEPATH . 'core/Authentication.php';
 

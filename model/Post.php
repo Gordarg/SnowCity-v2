@@ -24,7 +24,7 @@ class Post extends AModel
             'BinContent' => NULL,
             'Body' => '',
             'UserId' => NULL,
-            'Status' => 'Sent',
+            'Status' => 'SENT',
             'Language' => 'en-us',
             'RefrenceId' => NULL,
             'Index' => '0',

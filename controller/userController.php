@@ -1,6 +1,7 @@
-<?php 
-include('../core/AController.php');
-include('../model/User.php');
+<?php
+
+include_once '../core/AController.php';
+include_once BASEPATH . 'model/User.php';
 
 class userController extends AController{
 
