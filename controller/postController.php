@@ -16,7 +16,6 @@ class postController extends AController{
 		Authentication::ValidateAutomatic(['VSTOR', 'EDTOR', 'ADMIN']);
 		// TODO: Authorize
 		parent::GET();
-		// TODO: Validations must be done in public side and api side
 		$model = new Post();
 		foreach($model->GetProperties() as $key => $value){
 			$model->SetValue($key, parent::getRequest($key));

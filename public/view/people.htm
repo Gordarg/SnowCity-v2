@@ -13,7 +13,7 @@
 </tbody>
 </table>
 
-<div class="modal" id="myModal">
+<div class="modal" id="myModal" style="display:none;">
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
@@ -23,7 +23,7 @@
         <div class="modal-body">
             <div class="form-group">
                 <label for="usenrame">Username</label>
-                <input type="text" class="form-control" name="username" />
+                <input type="text" class="form-control" name="username" disabled />
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -35,6 +35,14 @@
             </div>
             <div class="form-group checkbox">
                 <label><input type="checkbox">Is Active</label>
+            </div>
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select name="role" class="form-control">
+                    <option value="ADMIN">Administrator</option>
+                    <option value="EDTOR">Editor</option>
+                    <option value="VSTOR">Visitor</option>
+                </select>
             </div>
         </div>
         <div class="modal-footer">

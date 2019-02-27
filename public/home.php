@@ -39,7 +39,7 @@
 
   <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
     <?php
-    $rows = $PostDetail-> Select(-1, 1, "Submit", "DESC", "WHERE `Level` = '3' AND `LANGUAGE`='" . $CURRENTLANGUAGE  . "'");
+    $rows = $PostDetail-> Select(-1, 1, "Submit", "DESC", "WHERE `Type` = 'POST' AND `Level` = '3' AND `LANGUAGE`='" . $CURRENTLANGUAGE  . "'");
     foreach ($rows as $row) {
       echo '
       <div class="col-md-6 px-0">
@@ -54,7 +54,7 @@
 
   <div class="row mb-2">
     <?php
-    $rows = $PostDetail-> Select(-1, 2, "Submit", "DESC", "WHERE `Level` = '2' AND `LANGUAGE`='" . $CURRENTLANGUAGE  . "'");
+    $rows = $PostDetail-> Select(-1, 2, "Submit", "DESC", "WHERE `Type` = 'POST' AND `Level` = '2' AND `LANGUAGE`='" . $CURRENTLANGUAGE  . "'");
     foreach ($rows as $row) {
       echo '
         <div class="col-md-6">
@@ -85,7 +85,7 @@
       </h3> -->
 
       <?php
-      $rows = $PostDetail->Select(-1, 3, "Submit", "DESC", "WHERE `Level` = '1' AND `LANGUAGE`='" . $CURRENTLANGUAGE  . "'");
+      $rows = $PostDetail->Select(-1, 3, "Submit", "DESC", "WHERE `Type` = 'POST' AND `Level` = '1' AND `LANGUAGE`='" . $CURRENTLANGUAGE  . "'");
       foreach ($rows as $row) {
         echo '
         <div class="blog-post">
@@ -110,7 +110,7 @@
         <p class="mb-0"> <?php echo Translate::Label(Config::TITLE) ?> <em> <?php echo Translate::Label(Config::NAME) ?> </em> <?php echo Config::META_DESCRIPTION ?> </p>
       </div>
 
-      <div class="p-3">
+      <!-- <div class="p-3">
         <h4 class="font-italic">Archives</h4>
         <ol class="list-unstyled mb-0">
           <li><a href="#">March 2014</a></li>
@@ -126,7 +126,7 @@
           <li><a href="#">May 2013</a></li>
           <li><a href="#">April 2013</a></li>
         </ol>
-      </div>
+      </div> -->
 
       <div class="p-3">
         <h4 class="font-italic"><?= $Translate->Label("واژگان کلیدی"); ?></h4>

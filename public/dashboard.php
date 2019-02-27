@@ -1,64 +1,63 @@
-<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0">
-  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"><?php echo Translate::Label(Config::NAME) ?></a>
-  <!-- TODO: --><input class="form-control form-control-dark w-100" type="text" placeholder="<?php echo Translate::Label('جستجو') ?>" aria-label="Search"> -->
-  <ul class="navbar-nav px-3">
-    <li class="nav-item text-nowrap">
-      <a class="nav-link" href="<?php echo $BASEURL . 'log/out' ?>"><?php echo Translate::Label('خروج') ?></a>
-    </li>
-  </ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+  <a class="navbar-brand" href="#">
+    <img src="https://gordarg.github.io/brand/MonoChrome.svg" width="30" height="30" class="d-inline-block align-top" alt="<?php echo Translate::Label(Config::TITLE) ?>">
+  </a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="dropdown-item" href="<?php echo $BASEURL . 'dashboard' ?>"><?php echo Translate::Label('داشبورد') ?><span class="sr-only">(current)</span></a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <?php echo Translate::Label(Config::NAME) ?>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          
+          <a class="dropdown-item" style="cursor:pointer" onclick="loadpost()"><?php echo Translate::Label('پست') ?></a>
+          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('archive')"><?php echo Translate::Label('آرشیو') ?> </a>
+          <a class="dropdown-item" style="cursor:pointer" onclick="loadform()"><?php echo Translate::Label('فرم‌ساز') ?></a>
+
+          <div class="dropdown-divider"></div>
+          <h6 class="px-3 mb-1 text-muted"><span><?php echo Translate::Label('ادمین') ?></span></h6>
+
+          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('people')"><?php echo Translate::Label('مردم') ?></a>
+        </div>
+      </li>
+      
+      <li class="nav-item">
+        <a class="dropdown-item" href="<?php echo $BASEURL . 'log/out' ?>"><?php echo Translate::Label('خروج') ?></a>
+      </li>
+
+    </ul>
+    <form class="form-inline my-2 my-lg-0" action="<?php echo $BASEURL . 'explore' ?>">
+      <input name="Q" class="form-control mr-sm-2" type="search" placeholder="<?php echo Translate::Label('جستجو') ?>" aria-label="<?php echo Translate::Label('جستجو') ?>">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><?php echo Translate::Label('کاوش') ?>.</button>
+    </form>
+  </div>
 </nav>
 
-<div class="container-fluid">
-  <div class="row">
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-      <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-          <li class="nav-item active">
-            <a class="nav-link" onclick="loadpost()">
-              <!-- <span data-feather="file"></span> -->
-              <?php echo Translate::Label('پست') ?> 
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" onclick="Hi.load('archive')">
-              <?php echo Translate::Label('آرشیو') ?> 
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" onclick="loadform()">
-              <!-- <span data-feather="shopping-cart"></span> -->
-              <?php echo Translate::Label('فرم‌ساز') ?> 
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" onclick="Hi.load('collection')">
+<?php
+/*
+
+
+
+
+            <a class="dropdown-item" onclick="Hi.load('collection')">
               <?php echo Translate::Label('کلکسیون') ?> 
             </a>
-          </li>
-        </ul>
+  
 
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span><?php echo Translate::Label('ادمین') ?></span>
-        </h6>
-        <ul class="nav flex-column mb-2">
-          <li class="nav-item">
-            <a class="nav-link" onclick="Hi.load('people')">
-              <!-- <span data-feather="file-text"></span> -->
-              <?php echo Translate::Label('مردم') ?>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-      <!-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2"><?php echo Translate::Label('داشبورد') ?></h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-        </div>
-      </div> -->
-      <div class="content mb-4 mb-md-3">
-      </div>
-    </main>
+    
+    */
+?>
+<main role="main" class="m-4">
+  <div class="content m-4 px-4">
   </div>
-</div>
+</main>

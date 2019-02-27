@@ -3,11 +3,7 @@ var myPrettyCode = function() {
         element: document.getElementsByName("body")[0],
         spellChecker: false,
   });
-  $('[type="file"]').ezdz('options', {
-      validators: {
-          maxSize: 10000
-      }
-  });
+  $('[type="file"]').ezdz();
 };
 loadStyle(Hi.baseurl() + "public/css/simplemde.css");
 loadStyle(Hi.baseurl() + "public/css/ezdz.css");

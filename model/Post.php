@@ -4,6 +4,11 @@ include_once BASEPATH . 'core/AModel.php';
 class Post extends AModel
 {
 
+    // TODO: Access levels must be validated in model level
+    // Other Validations are based on
+    // Circles, Types, Roles,
+    // Refrence ID, ...
+
 	function __construct()
 	{
 		self::SetTable('posts');
