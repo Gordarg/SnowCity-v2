@@ -39,7 +39,6 @@ $RefrenceID = null;
 <?php
 
 $Post = new Post();
-$FormItems = array();
 
 // Handle Post
 
@@ -51,20 +50,31 @@ isset($_POST["draft"]) ||
 isset($_POST["insert"]) ||
 isset($_POST["update"]) ||
 isset($_POST["clear"]) ||
-isset($_POST["delete"])
+isset($_POST["delete"]) ||
+isset($_POST["post_add_keyword"])
 )
 
 {
-    $Post->SetValue("MasterId",  $_POST['masterid']);
-    $Post->SetValue("Title",  $_POST['title']);
-    $Post->SetValue("Submit", $_POST['submit']);
+    if (isset($_POST['post_add_keyword']))
+    {
+        $Post->SetValue("MasterId",  $MasterID);
+        $Post->SetValue("RefrenceId", Functionalities::IfExistsIndexInArray($_POST, 'masterid'));
+        $Post->SetValue("Title",  $_POST['post_title_keyword']);
+        $_POST['type'] = 'KWRD';
+        $Post->SetValue("Body", null);
+    }
+    else{
+        $Post->SetValue("MasterId",  $_POST['masterid']);
+        $Post->SetValue("RefrenceId", Functionalities::IfExistsIndexInArray($_POST, 'refrenceid'));
+        $Post->SetValue("Title",  $_POST['title']);
+        $Post->SetValue("Body", $_POST['body']);
+        $Post->SetValue("Index", ((Functionalities::IfExistsIndexInArray($_POST, 'index') == NULL) ? "NULL" : $_POST['index']));
+        $Post->SetValue("Level", (Functionalities::IfExistsIndexInArray($_POST, 'level') == NULL) ? "NULL" : $_POST['level']);
+    }
     $Post->SetValue("Type", $_POST['type']);
+    $Post->SetValue("Submit", $_POST['submit']);
     $Post->SetValue("Language", $_POST['language']);
-    $Post->SetValue("Level", (Functionalities::IfExistsIndexInArray($_POST, 'level') == NULL) ? "NULL" : $_POST['level']);
-    $Post->SetValue("Body", $_POST['body']);
     $Post->SetValue("UserId", $_POST['userid']);
-    $Post->SetValue("RefrenceId", (Functionalities::IfExistsIndexInArray($_POST, 'refrenceid') == NULL) ? "NULL" : mysqli_real_escape_string($conn, ($_POST['refrenceid'])));
-    $Post->SetValue("Index", ((Functionalities::IfExistsIndexInArray($_POST, 'index') == NULL) ? "NULL" : $_POST['index']));
     
     if (isset($_POST["block"])) // BLOCK A CONTENT WITHOUT DELETING
         $Post->SetValue("Status", 'BLOCKED');
@@ -76,7 +86,7 @@ isset($_POST["delete"])
         $Post->SetValue("Status", 'DRAFT');
     else if (isset($_POST["insert"]) || isset($_POST["update"])) // WAITING FOR ADMIN TO PUBLISH
         $Post->SetValue("Status", 'SENT');
-    
+
     $Post->Insert();
     // $Id = $Post->GetProperties()['Id'];
 }
@@ -111,9 +121,12 @@ if (!empty($_POST)) // TODO: Disable redirects in Ajax calls (needs UI designer 
         // Ignore
     }
     else if ($Post->GetProperties()['Type'] == 'QUST')
-        exit(header("Location: " . $BASEURL . 'say/qust/' . $_POST['language'] . '/' . $_POST['masterid']));
+        exit(header("Location: " . $BASEURL . 'say/qust/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
     else if ($Post->GetProperties()['Type'] == 'POST')
-        exit(header("Location: " . $BASEURL . 'say/post/' . $_POST['language'] . '/' . $_POST['masterid']));
+        exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
+    else if ($Post->GetProperties()['Type'] == 'KWRD')
+        exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['RefrenceId'] ));
+
 }
 
 ?>
@@ -144,15 +157,21 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
                 break;
             case "POST":
                 $Body = Functionalities::IfExistsIndexInArray($row,'Body');
+                $RefrenceID = Functionalities::IfExistsIndexInArray($row,'RefrenceID');
                 break;
         }
     }
 }
+?>
+
+<?php
 // Add items to form
 if (isset($_POST['form_add_submit']))
 {
     $lines = explode('\n', str_replace('\\' . '\n', '\n', Functionalities::IfExistsIndexInArray($_POST,'body')));
 }
+
+$FormItems = array();
 if (sizeof($lines) > 1)
 {
     $ItemTitles = explode(",", $lines[0]);
@@ -241,7 +260,25 @@ switch ($Type)
             <textarea name="body">' . $Body  . '</textarea>
             <label for="content">' . Translate::Label("پرونده") . '</label>
             <input class="form-control" type="file" name="content" id="file" />
-            ';
+            '
+            . '<div class="card m-4">
+            <div class="form-inline card-body">
+            <div class="form-group row">
+                <label for="form_add_type">' . Translate::Label('کلمه‌ی کلیدی') . '</label>
+                <input type="text" name="post_title_keyword" class="form-control m-1" value="'  . '" />
+                <input type="submit" name="post_add_keyword" class="btn btn-success m-1" value="' . $Translate->Label("افزودن") . '" />
+            </div><hr/>';
+            foreach ($Post->Select(-1, -1, 'Id', 'DESC', "WHERE `TYPE` = 'KWRD' AND `Language`='" . $Language . "' AND `RefrenceID`='" . $MasterID . "'")
+            as $keyword)
+            {
+                /* TODO: Delete keyword here */
+                echo '<a class="btn btn-sm btn-link" target="_blank" href="' . $BASEURL . 'explore?Q=#' . $keyword['Title'] . '">' . $keyword['Title'] . '</a>';
+            }
+        echo
+            '</div>
+            </div>
+            '
+            ;
         break;
     
     case "QUST":
@@ -346,7 +383,7 @@ switch ($Type)
                             <label for="form_add_after">' . Translate::Label('بعد از') . '</label>
                             <select class="form-control m-1" name="form_add_after">
                                 <option value="0">' . Translate::Label('ابتدا') . '</option>'
-                                //        . '<option value="test">Hello world</option>'
+                                //        . '<option value="test">TODO</option>'
                             . '</select>
                         </div>
                     </div>

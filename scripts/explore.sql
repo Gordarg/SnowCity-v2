@@ -21,17 +21,18 @@ SELECT DISTINCT
     (
         `A`.`Title` LIKE '%@Q%'
     OR `pd2`.`Title` LIKE '%@Q%'
+    OR CONCAT ('#', `pd2`.`Title`) LIKE '@Q'
     OR CONCAT ('@', `A`.`Username`) LIKE '@Q'
     OR `A`.`Body` LIKE '%@Q%'
     )
     AND
     (
         `A`.`Type` = 'POST'
-    OR  `A`.`Type` = 'COMT' 
-    OR  `A`.`Type` = 'FILE' 
+    OR  `A`.`Type` = 'COMT'
+    OR  `A`.`Type` = 'FILE'
     OR  `A`.`Type` = 'QUST'
     )
 
     ORDER BY `A`.`Submit`
-    Limit 10
+    Limit 30
     ;

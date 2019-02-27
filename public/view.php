@@ -66,10 +66,9 @@ if ($row == null)
             $_GET['masterid'] = $row['MasterID'];
             $_GET["type"] = 'KWRD';
             
-            echo '<div>';
-            /* TODO: Delete keyword helper here */
-            echo '  <a href="' . $BASEURL . 'explore/%23' . substr($row['Title'], 1) . '" rel="tag">' . $row['Title'] . '</a>';
-            echo '</div>';
+            echo '<div>
+            <a href="' . $BASEURL . 'explore?Q=%23' . $row['Title'] . '" rel="tag">' . $row['Title'] . '</a>
+            </div>';
         }
         ?>
     </div>

@@ -34,35 +34,37 @@ if ($Q != null)
     include_once BASEPATH . 'core/Bridge.php';
     $rows = Bridge::Execute('explore', [['Q', $Q]], true);
 
-    if (count($rows)>1)
+    if (count($rows)>=1)
     {
-        foreach ($rows as $row) {
-            echo '<div class="' . $row['Type'] . '">';
-            switch ($row['Type'])
-            {
-                // TODO: UI
-                case 'COMT':
-                    echo '<a href="view.php?lang=' . $row['Language'] . '&id=' . $row['RefrenceID'] . '">' . $row['Body']. '</a>';
-                    break;
-                case 'FILE':
-                    echo '<a href="download.php?id=' . $row['MasterID'] . '">' . $row['Title']. '</a>';
-                    break;
-                case 'POST':
-                    echo '<a href="view.php?lang=' . $row['Language'] . '&id=' . $row['MasterID'] . '">' .
-                    '<img src="' . $BASEURL . 'download.php?id=' . $row['MasterID'] . '" alt="' . $row['Title'] . '" />' .
-                    '<span>' . $row['Title'] . '</span>' .
-                    '<p>' . Text::GenerateAbstractForPost($Parsedown->text($row['Body']), 480)  . '</p>' .
-                    '</a>';
-                    break;
-                case 'QUST':
-                    echo '<a href="view.php?lang=' . $_COOKIE['LANG'] . '&id=' . $row['MasterID'] . '">' . $row['Title']. '</a>';
-                    break;
-                // case 'KWRD':
-                //     echo '<a href="view.php?id=' . $row['RefrenceID'] . '">' . $row['Title']. '</p>';
-                //     break;
-            }
-            echo "</div>";
-        }
+      foreach ($rows as $row) {
+          echo '<div class="' . $row['Type'] . '">';
+          switch ($row['Type'])
+          {
+              // TODO: UI
+              case 'COMT':
+                  echo '<a href="' . $BASEURL . 'view/' . $row['Language'] . '/' . $row['RefrenceID'] . '">' . $row['Body']. '</a>';
+                  break;
+              case 'FILE':
+                  echo '<a href="download.php?id=' . $row['MasterID'] . '">' . $row['Title']. '</a>';
+                  break;
+              case 'POST':
+
+
+                  echo '<a href="' . $BASEURL . 'view/' . $row['Language'] . '/' . $row['MasterID'] . '">' .
+                  '<img src="' . $BASEURL . 'download.php?id=' . $row['MasterID'] . '" alt="' . $row['Title'] . '" />' .
+                  '<span>' . $row['Title'] . '</span>' .
+                  '<p>' . Text::GenerateAbstractForPost($Parsedown->text($row['Body']), 480)  . '</p>' .
+                  '</a>';
+                  break;
+              case 'QUST':
+                  echo '<a href="' . $BASEURL . 'view/' . $_COOKIE['LANG'] . '/' . $row['MasterID'] . '">' . $row['Title']. '</a>';
+                  break;
+              // case 'KWRD':
+              //     echo '<a href="view.php?id=' . $row['RefrenceID'] . '">' . $row['Title']. '</p>';
+              //     break;
+          }
+          echo "</div>";
+      }
     }
     else
     {
