@@ -287,8 +287,8 @@ switch ($Type)
                 "' AND `RefrenceID`='" . $MasterID . "'")
             as $keyword)
             {
-                /* TODO: Delete keyword here */
-                echo '<a class="btn btn-sm btn-link" href="' . $BASEURL . 'say/kwrd/' . $keyword['Language'] . '/' . $keyword['MasterID'] . '/delete">' . $keyword['Title'] . '</a>';
+                /* TODO: tooltip??? hint on hover */
+                echo '<a class="btn btn-sm btn-link" tooltip="' . Translate::Label('حذف') . '" href="' . $BASEURL . 'say/kwrd/' . $keyword['Language'] . '/' . $keyword['MasterID'] . '/delete">' . $keyword['Title'] . '</a>';
             }
         echo
             '</div>

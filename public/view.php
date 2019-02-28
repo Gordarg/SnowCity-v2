@@ -22,57 +22,30 @@ if ($row == null)
   </header>
 
   <main role="main" class="inner cover">
-    <img class="img-fluid" src="<?php echo $BASEURL . 'download.php?id=' . $row['MasterID'] ?>"
-    <h1 class="cover-heading"><?php echo $row['Title'] ?></h1>
+    <img class="img-fluid" src="<?php echo $BASEURL . 'download.php?id=' . $row['MasterID'] ?>" />
+    <h1 class="cover-heading h1"><?php echo $row['Title'] ?></h1>
     <p class="lead">
       <a href="<?php echo $BASEURL . 'explore/@' . $row['Username'] ?>" class="btn btn-lg btn-secondary"><?php echo $row['Username'] ?></a>
       <span><?php echo $row['Submit'] ?></span>
       <!-- <a class="attachment" href="download.php?id=' . $Id . '">' . $functionalitiesInstance->label("دانلود پیوست") . '</a>' -->
     </p>
+    <div id="keywords">
+    <?php
+    foreach
+    ((new PostDetail())->
+        Select(-1, -1, 'Id', 'DESC',
+        "WHERE `TYPE` = 'KWRD' AND `Language`='" . $Language .
+        "' AND `RefrenceID`='" . $row['MasterID'] . "'")
+    as $keyword)
+    {
+        echo '<a class="btn btn-sm btn-link text-light bg-dark" href="' . $BASEURL . 'explore?Q=%23' . $keyword['Title'] . '">' . $keyword['Title'] . '</a>';
+    }
+    ?>
+    </div>
     <article>
     <?php echo $Parsedown->text($row['Body']) ?>   
     </article>
-
-    <?php
-    // TODO:
-    ?>
     <div id="comments">
-      <div id="newcomment"></div>
-      <?php
-      foreach ($PostDetail->Select(-1, -1, "Submit", "DESC", "WHERE `Type` = 'COMT' AND `RefrenceId`='" . $Id . "'") as $row) {
-          $_GET['masterid'] = $row['MasterID'];
-          $_GET["type"] = 'COMT';
-          
-          echo '<div>';
-          /*
-          $UserId = $authentication->login('comment_helper.php');
-          if ($UserId != null)
-          {
-              // echo $row['MasterID'];
-              // TODO: Delete
-          }
-          */
-          echo '<img src="drawable/profile.png" />';
-          echo '<span>' . $row['Body'] . '</span>';
-          // TODO
-          // include ('helper/post_comment_delete.php');
-          echo '</div>';
-      }
-      ?>
     </div>
-    <div id="keywords">
-        <?php
-        foreach ($PostDetail->Select(-1, -1, "Submit", "DESC", "WHERE `Type` = 'KWRD' AND `RefrenceId`='" . $Id . "'") as $row) {
-            $_GET['masterid'] = $row['MasterID'];
-            $_GET["type"] = 'KWRD';
-            
-            echo '<div>
-            <a href="' . $BASEURL . 'explore?Q=%23' . $row['Title'] . '" rel="tag">' . $row['Title'] . '</a>
-            </div>';
-        }
-        ?>
-    </div>
-
   </main>
-
 </div>

@@ -5,7 +5,7 @@
         <a class="text-muted" href="<?php echo $BASEURL . 'rss' ?>"><?php echo $Translate::Label('خوراک'); ?></a>
       </div>
       <div class="col-4 text-center">
-        <a class="blog-header-logo text-dark" href="#"><?php echo $Translate::Label(Config::TITLE); ?></a>
+        <span class="blog-header-logo text-dark" href="#"><?php echo $Translate::Label(Config::TITLE); ?></span>
       </div>
       <div class="col-4 d-flex justify-content-end align-items-center">
         <a class="text-muted" href="<?php echo $BASEURL . 'explore' ?>">
