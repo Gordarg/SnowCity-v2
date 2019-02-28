@@ -176,7 +176,7 @@ abstract class AModel
 					$query .= '`' . $key . "` = '" . $value . "', ";
 		}
 		$query = substr($query, 0, -2); // Delete last ,
-		$query .=" WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];
+		$query .=" WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];	
 		mysqli_query($conn, $query);
 		$this->Select();
 	}

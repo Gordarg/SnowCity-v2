@@ -68,8 +68,8 @@ isset($_POST["post_add_keyword"])
         $Post->SetValue("RefrenceId", Functionalities::IfExistsIndexInArray($_POST, 'refrenceid'));
         $Post->SetValue("Title",  $_POST['title']);
         $Post->SetValue("Body", $_POST['body']);
-        $Post->SetValue("Index", ((Functionalities::IfExistsIndexInArray($_POST, 'index') == NULL) ? "NULL" : $_POST['index']));
-        $Post->SetValue("Level", (Functionalities::IfExistsIndexInArray($_POST, 'level') == NULL) ? "NULL" : $_POST['level']);
+        $Post->SetValue("Index", Functionalities::IfExistsIndexInArray($_POST, 'index'));
+        $Post->SetValue("Level", Functionalities::IfExistsIndexInArray($_POST, 'level'));
     }
     $Post->SetValue("Type", $_POST['type']);
     $Post->SetValue("Submit", $_POST['submit']);
@@ -116,7 +116,11 @@ else if (((isset($_POST["update"])) or (isset($_POST["insert"])))
 if (!empty($_POST)) // TODO: Disable redirects in Ajax calls (needs UI designer attention)
 {
     if (isset($_POST["delete"]))
-        exit(header("Location: " . $BASEURL . 'dashboard' ));
+        if ($Post->GetProperties()['Type'] == 'KWRD') 
+            exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['RefrenceId'] ));
+        else
+            exit(header("Location: " . $BASEURL . 'dashboard' ));
+    
     else if (isset($_POST["form_add_submit"])) { 
         // Ignore
     }
@@ -124,8 +128,6 @@ if (!empty($_POST)) // TODO: Disable redirects in Ajax calls (needs UI designer 
         exit(header("Location: " . $BASEURL . 'say/qust/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
     else if ($Post->GetProperties()['Type'] == 'POST')
         exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
-    else if ($Post->GetProperties()['Type'] == 'KWRD')
-        exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['RefrenceId'] ));
 
 }
 
@@ -148,6 +150,7 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
         $row = $row[0];
         $Title = Functionalities::IfExistsIndexInArray($row,'Title');
         $Level = Functionalities::IfExistsIndexInArray($row,'Level');
+        $RefrenceID = Functionalities::IfExistsIndexInArray($row,'RefrenceId');
 
         switch ($Type)
         {
@@ -157,7 +160,6 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
                 break;
             case "POST":
                 $Body = Functionalities::IfExistsIndexInArray($row,'Body');
-                $RefrenceID = Functionalities::IfExistsIndexInArray($row,'RefrenceID');
                 break;
         }
     }
@@ -233,10 +235,20 @@ if (!$AJAX)
 <form id="gordform" method="post" action="<?= $BASEURL . 'say/' . $Type . (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null ? ('/' . $PATHINFO[3] . '/' . $PATHINFO[4]) : '' )  ?>" enctype="multipart/form-data">
 <input type="hidden" name="masterid" value="<?= $MasterID ?>" />
 <?php
-// Render form
-
+if (Functionalities::IfExistsIndexInArray($PATHINFO, 5) == 'delete')
+    echo '
+        <input type="hidden" name="submit" value="' . $Submit . '" />
+        <input type="hidden" name="userid" value="' . $UserID . '" />
+        <input type="hidden" name="index" value="' . $Index . '" />
+        <input type="hidden" name="refrenceid" value="' . $RefrenceID . '" />
+        <input type="hidden" name="status" value="' . $Status . '" />
+        <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
+        <input type="text" disabled class="form-control" name="title" value="' . $Title . '" />
+        <input type="hidden" name="body" value="' . $Body . '" />
+        ';
+else    
 switch ($Type)
-{
+{    
     case 'POST':
         echo '
             <input type="hidden" name="submit" value="' . $Submit . '" />
@@ -268,11 +280,15 @@ switch ($Type)
                 <input type="text" name="post_title_keyword" class="form-control m-1" value="'  . '" />
                 <input type="submit" name="post_add_keyword" class="btn btn-success m-1" value="' . $Translate->Label("افزودن") . '" />
             </div><hr/>';
-            foreach ($Post->Select(-1, -1, 'Id', 'DESC', "WHERE `TYPE` = 'KWRD' AND `Language`='" . $Language . "' AND `RefrenceID`='" . $MasterID . "'")
+            foreach (
+            (new PostDetail())->
+                Select(-1, -1, 'Id', 'DESC',
+                "WHERE `TYPE` = 'KWRD' AND `Language`='" . $Language .
+                "' AND `RefrenceID`='" . $MasterID . "'")
             as $keyword)
             {
                 /* TODO: Delete keyword here */
-                echo '<a class="btn btn-sm btn-link" target="_blank" href="' . $BASEURL . 'explore?Q=#' . $keyword['Title'] . '">' . $keyword['Title'] . '</a>';
+                echo '<a class="btn btn-sm btn-link" href="' . $BASEURL . 'say/kwrd/' . $keyword['Language'] . '/' . $keyword['MasterID'] . '/delete">' . $keyword['Title'] . '</a>';
             }
         echo
             '</div>
@@ -395,17 +411,28 @@ switch ($Type)
         ';
         break;
 }
-echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
 
-if ($row != null) {
+if (Functionalities::IfExistsIndexInArray($PATHINFO, 5) == 'delete' && $row != null)
+{
+    echo ' 
+    <div class="alert alert-danger" role="alert">
+        ' . $Translate::Label('آیا اطمینان دارید؟') . '
+    </div>
+    <input type="submit" name="delete" class="btn btn-dark m-1" value="' . $Translate->Label("حذف") . '" />
+    <a class="btn btn-info m-1" href="' . $BASEURL . 'say/post/' . $Language . '/' . $MasterID . '">' . $Translate->Label("بازگشت") . '</a>
+    ';
+}
+else if ($row != null) {
     //TODO (ADMIN): echo '<input type="submit" class="btn btn-outline-primary m-1" name="publish" value="' . $Translate->Label("انتشار") . '" />';
+    echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
     echo '<input type="submit" name="update" class="btn btn-success m-1" value="' . $Translate->Label("به روز رسانی") . '" />';
     echo '<input type="submit" name="clear" class="btn btn-warning m-1" value="' . $Translate->Label("حذف پیوست") . '" />';
     echo '<input type="submit" name="block" class="btn btn-danger m-1" value="' . $Translate->Label("بلوکه") . '" />';
-    echo '<input type="submit" name="delete" class="btn btn-dark m-1" value="' . $Translate->Label("حذف") . '" />';
+    echo '<a class="btn btn-dark m-1 text-light" href="' . $BASEURL . 'say/post/' . $Language . '/' . $MasterID . '/' . 'delete' . '">' . $Translate->Label("حذف") . '</a>';
     echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . $_COOKIE['LANG'] . '/' . $row['MasterId'] . '">' . $Translate->Label("مشاهده") . '</a>';
 }
 else {
+    echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
     echo '<input type="submit" class="btn btn-success m-1" name="insert" value="' . $Translate->Label("ارسال") . '" />';
 } 
 ?>
