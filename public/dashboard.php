@@ -23,6 +23,7 @@
           <a class="dropdown-item" style="cursor:pointer" onclick="loadpost()"><?php echo Translate::Label('پست') ?></a>
           <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('archive')"><?php echo Translate::Label('آرشیو') ?> </a>
           <a class="dropdown-item" style="cursor:pointer" onclick="loadform()"><?php echo Translate::Label('فرم‌ساز') ?></a>
+          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('collection')"><?php echo Translate::Label('کلکسیون') ?></a>
 
           <div class="dropdown-divider"></div>
           <h6 class="px-3 mb-1 text-muted"><span><?php echo Translate::Label('ادمین') ?></span></h6>
@@ -42,21 +43,6 @@
     </form>
   </div>
 </nav>
-
-<?php
-/*
-
-
-
-
-            <a class="dropdown-item" onclick="Hi.load('collection')">
-              <?php echo Translate::Label('کلکسیون') ?> 
-            </a>
-  
-
-    
-    */
-?>
 <main role="main" class="m-4">
   <div class="content m-4 px-4">
   </div>
