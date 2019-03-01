@@ -23,6 +23,7 @@ SELECT DISTINCT
     OR `pd2`.`Title` LIKE '%@Q%'
     OR CONCAT ('#', `pd2`.`Title`) LIKE '@Q'
     OR CONCAT ('@', `A`.`Username`) LIKE '@Q'
+    OR CONCAT ('~', EXTRACT(YEAR_MONTH FROM `A`.`Submit`)) LIKE '@Q'
     OR `A`.`Body` LIKE '%@Q%'
     )
     AND

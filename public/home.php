@@ -1,3 +1,6 @@
+<?php
+include_once BASEPATH . 'core/Bridge.php';
+?>
 <div class="container">
   <header class="blog-header py-3">
     <div class="row flex-nowrap justify-content-between align-items-center">
@@ -22,8 +25,7 @@
       foreach (Config::Languages() as $lang)
           echo '<a class="p-2 text-muted" href="' . $BASEURL . 'language/' . $lang->code . '-' . $lang->region . '">' . $lang->flag . '</a>';
       
-      include_once BASEPATH . 'core/Bridge.php';
-      // TODO: Customize results based on username;
+      // TODO: Customize results based on @Username;
       foreach (Bridge::Execute('categories', [['Username', null]], true) as $category)
           echo '<a class="p-2 text-muted" href="' . $BASEURL . 'explore?Q=%23' . $category['Title'] . '">' . $category['Title'] . '</a>';
       ?>
@@ -103,23 +105,15 @@
         <p class="mb-0"> <?php echo Translate::Label(Config::TITLE) ?> <em> <?php echo Translate::Label(Config::NAME) ?> </em> <?php echo Config::META_DESCRIPTION ?> </p>
       </div>
 
-      <!-- <div class="p-3">
+      <div class="p-3">
         <h4 class="font-italic">Archives</h4>
         <ol class="list-unstyled mb-0">
-          <li><a href="#">March 2014</a></li>
-          <li><a href="#">February 2014</a></li>
-          <li><a href="#">January 2014</a></li>
-          <li><a href="#">December 2013</a></li>
-          <li><a href="#">November 2013</a></li>
-          <li><a href="#">October 2013</a></li>
-          <li><a href="#">September 2013</a></li>
-          <li><a href="#">August 2013</a></li>
-          <li><a href="#">July 2013</a></li>
-          <li><a href="#">June 2013</a></li>
-          <li><a href="#">May 2013</a></li>
-          <li><a href="#">April 2013</a></li>
+        <?php
+        foreach (Bridge::Execute('archive', [], true) as $archive)
+            echo '<li><a href="' . $BASEURL . 'explore/~' . $archive['link'] . '">' . $archive['formatted'] . '</a></li>';
+        ?>
         </ol>
-      </div> -->
+      </div>
 
       <div class="p-3">
         <h4 class="font-italic"><?= $Translate->Label("واژگان کلیدی"); ?></h4>

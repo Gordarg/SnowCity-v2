@@ -1,7 +1,9 @@
 select
     count(*) as rate, `Title`
 from post_details
-where `Type`='KWRD'
+where `Type` = 'KWRD'
 group by `Title`
 order by rate desc
 limit 10
+
+-- TODO : Change rating based on @Username
