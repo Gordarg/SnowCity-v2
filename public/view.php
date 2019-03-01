@@ -16,7 +16,7 @@ if ($row == null)
         <a class="nav-link active" href="#"><?php echo Translate::Label("پست", $row['Language']) ?></a>
         <a class="nav-link" href="#comments"><?php echo Translate::Label("نظرات", $row['Language']) ?></a>
         <?php //TODO: If was admin enable edit ?>
-        <a class="nav-link" href="<?php echo $BASEURL . 'say/post/' . $row['Language'] . '/' . $row['MasterID'] ?>"><?php echo Translate::Label("ویرایش", $row['Language']) ?></a>
+        <a class="nav-link" href="<?php echo $BASEURL . 'say/' . $row['Type'] . '/' . $row['Language'] . '/' . $row['MasterID'] ?>"><?php echo Translate::Label("ویرایش", $row['Language']) ?></a>
       </nav>
     </div>
   </header>

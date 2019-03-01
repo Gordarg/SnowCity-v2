@@ -1,3 +1,5 @@
+select distinct * from
+(
 select
     DATE_FORMAT(`Submit`, '%M %Y')  as formatted,
     EXTRACT(YEAR_MONTH FROM `Submit`)  as link
@@ -6,3 +8,4 @@ where `Type` = 'POST'
 group by `Submit`
 order by `Submit` asc
 limit 10
+) X

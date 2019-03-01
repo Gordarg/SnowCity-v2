@@ -1,30 +1,28 @@
-// TODO:
+function collection(){ // Constructor class
 
-// function archive(){ // Constructor class
-
-//     $.get(Hi.controller() + "/postdetailController.php?BinContent=✓&" + Hi.loginprotocol() , function(data, status){ 
-//         if (JSON.stringify(data).charAt(0) == "{")
-//             data = JSON.parse("[" + JSON.stringify(data) + "]");
+    $.get(Hi.controller() + "postdetailController.php?BinContent=✓&Type=QUST&" + Hi.loginprotocol() , function(data, status){ 
     
-//         data.forEach(obj => {
-//             $("tbody").append('<tr>'
-//                 + '<th scope="row">'
-//                 + '<a href="' + Hi.baseurl() + "say/post/" + obj["Language"] + '/' + obj['MasterID'] +'">Edit</a>'
-//                 + '</th>'
-//                 + '<td>' + obj["Title"] + '</td>'
-//                 + '<td>' + obj["Submit"] + '</td>'
-//                 + '<td>' + obj["Username"] + '</td>'
-//                 + '<td>' + obj["Status"] + '</td>'
-//                 // + '<td style="overflow: hidden; word-break: break-all; width:100px;">' + obj["Body"] + '</td>'
-//                 + (
-//                     (obj["BinContent"] != null)
-//                 ?
-//                     '<td><img width="100" height="100" src="data:image/jpeg;base64,'+obj["BinContent"]+'" /></td></tr>'
-//                 :
-//                     '<td>Image not found</td>'
-//                 )
-//                 + "</tr>"
-//             );
-//         });
-//     });
-// }
+        data.forEach(obj => {
+            $("tbody").append('<tr>'
+                + '<th scope="row">'
+                + '<a class="m-1 btn-sm" href="' + Hi.baseurl() + "say/qust/" + obj["Language"] + '/' + obj['MasterID'] +'">Edit Form</a>'
+                + '<a class="m-1 btn-sm" href="' + Hi.baseurl() + "say/qust/" + obj["Language"] + '/' + obj['MasterID'] +'">View Answers</a>'
+                + '<a class="m-1 btn-sm" href="' + Hi.baseurl() + "say/qust/" + obj["Language"] + '/' + obj['MasterID'] +'">Export Data</a>'
+                + '</th>'
+                + '<td>' + obj["Title"] + '</td>'
+                + '<td>' + obj["Submit"] + '</td>'
+                + '<td>' + obj["Username"] + '</td>'
+                + '<td>' + obj["Status"] + '</td>'
+                // + '<td style="overflow: hidden; word-break: break-all; width:100px;">' + obj["Body"] + '</td>'
+                + (
+                    (obj["BinContent"] != null)
+                ?
+                    '<td><img width="100" height="100" src="data:image/jpeg;base64,'+obj["BinContent"]+'" /></td></tr>'
+                :
+                    '<td>Image not found</td>'
+                )
+                + "</tr>"
+            );
+        });
+    });
+}
