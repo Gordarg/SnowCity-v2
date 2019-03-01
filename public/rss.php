@@ -37,6 +37,9 @@ foreach ($rows as $row) {
     <description>
     ' . $row['Body'] . '
     </description>
+    <enclosure 
+        url="' . $BASEURL . 'download.php?id=' . $row['MasterID'] . '"
+        />
     </item>
 ';
 }
