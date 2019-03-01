@@ -30,5 +30,5 @@
     </div>	
   </div>
 </footer>
-<? echo $JSLINKS ?>
+<?php echo $JSLINKS ?>
 </html>
