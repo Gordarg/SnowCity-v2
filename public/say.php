@@ -170,74 +170,74 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
 ?>
 
 <?php
-$FormItems = array();
-if (sizeof($lines) > 1)
-{
-    $ItemTitles = explode(",", $lines[0]);
-    $ItemTypes = explode(",", $lines[1]);
-
-    for ($i = 0; $i < sizeof($ItemTitles) - 1; $i++)
-    {
-        $item = [
-            $ItemTitles[$i] ,
-            $ItemTypes[$i]
-        ];
-        
-        array_push($FormItems, $item);
-    }
-}
 // Add items to form
 if (isset($_POST['form_add_submit']))
 {
     $lines = explode('\n', str_replace('\\' . '\n', '\n', Functionalities::IfExistsIndexInArray($_POST,'body')));
 }
-foreach(array_keys($_POST) as $key)
+$FormItems = array();
+if (sizeof($lines) > 1)
 {
-    $delete = Functionalities::IfStringStartsWith($key, 'form-operation-delete-');
-    $edit = Functionalities::IfStringStartsWith($key, 'form-operation-edit-');
-    $up = Functionalities::IfStringStartsWith($key, 'form-operation-up-');
-    $down = Functionalities::IfStringStartsWith($key, 'form-operation-down-');
-    if ($delete)
+
+    global $form_delete;
+    global $form_edit;
+    global $form_up;
+    global $form_down;
+
+    $form_delete = $form_edit = $form_up = $form_down = false;
+
+    foreach(array_keys($_POST) as $key)
     {
+        $form_delete = Functionalities::IfStringStartsWith($key, 'form-operation-delete-');
+        $form_edit = Functionalities::IfStringStartsWith($key, 'form-operation-edit-');
+        $form_up = Functionalities::IfStringStartsWith($key, 'form-operation-up-');
+        $form_down = Functionalities::IfStringStartsWith($key, 'form-operation-down-');
+
+        if ($form_delete || $form_edit || $form_up || $form_down)
+            break;
     }
-    else if ($edit)
+
+    $ItemTitles = explode(",", $lines[0]);
+    $ItemTypes = explode(",", $lines[1]);
+    
+    for ($i = 0; $i < sizeof($ItemTitles) - 1; $i++)
     {
-    }
-    else if ($up)
-    {
-        if ($up != '1')
-        {
+        // TODO: Complete me.
+
+        if ($form_edit)
+        {       
+            $item = [
+                Functionalities::IfExistsIndexInArray($_POST, 'form-add-title-' . ($form_edit)),
+                Functionalities::IfExistsIndexInArray($_POST, 'form-add-type-' . ($form_edit))
+            ];
             
+            // TODO: 
+            var_dump($item); exit;
         }
-    }
-    else if ($down)
-    {
-        if (sizeof($FormItems) != (int)$down)
-        {
-            
-        }
+        else
+        $item = [
+            $ItemTitles[$i] ,
+            $ItemTypes[$i]
+        ];
+
+        array_push($FormItems, $item);
     }
 }
+
 if (isset($_POST['form_add_submit']))
 {
-// TODO: Reorder the array
-// $_POST['form_add_after']
-$item = [
-    $_POST['form_add_title'] ,
-    $_POST['form_add_type'] 
-];
+    // TODO: Reorder the array
+    // $_POST['form_add_after']
+    $item = [
+        $_POST['form_add_title'] ,
+        $_POST['form_add_type'] 
+    ];
 
-array_push($FormItems, $item);
-}
-if ($Type == 'QUST')
-{
-    if (isset($item))
-    {
-        $Body = '';
-        $Body .= Functionalities::IfExistsIndexInArray($lines,0) . str_replace(",", "-", $item[0]) . ",";
-        $Body .= '\\' . '\n';
-        $Body .= Functionalities::IfExistsIndexInArray($lines,1) . $item[1] . ',';
-    }
+    array_push($FormItems, $item);
+
+    $Body = Functionalities::IfExistsIndexInArray($lines,0) . str_replace(",", "-", $item[0]) . ",";
+    $Body .= '\\' . '\n';
+    $Body .= Functionalities::IfExistsIndexInArray($lines,1) . $item[1] . ',';
 }
 ?>
 
@@ -359,12 +359,12 @@ switch ($Type)
                     echo '
                     <div class="row">
                         <div class="form-group">
-                            <label for="form_add_type">' . Translate::Label('عنوان') . '</label>
-                            <input type="text" class="form-control m-1" value="' . $item[0] . '" />
+                            <label for="form-add-title-' . $i . '">' . Translate::Label('عنوان') . '</label>
+                            <input name="form-add-title-' . $i . '" type="text" class="form-control m-1" value="' . $item[0] . '" />
                         </div>
                         <div class="form-group">
-                            <label for="form_add_type">' . Translate::Label('نوع') . '</label>
-                            <select class="form-control m-1" name="form_add_type">
+                            <label for="form-add-type-' . $i . '">' . Translate::Label('نوع') . '</label>
+                            <select class="form-control m-1" name="form-add-type-' . $i . '">
                                 <option ' . ($item[1] == 'Numeric' ? "selected" : "") . ' value="Numeric">' . Translate::Label('عددی') . '</option>
                                 <option ' . ($item[1] == 'Characters' ? "selected" : "") . ' value="Characters">' . Translate::Label('رشته') . '</option>
                                 <option ' . ($item[1] == 'File' ? "selected" : "") . ' value="File">' . Translate::Label('پرونده') . '</option>
