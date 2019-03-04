@@ -113,22 +113,25 @@ else if (((isset($_POST["update"])) or (isset($_POST["insert"])))
     $Post->Update();
 }
 
-if (!empty($_POST)) // TODO: Disable redirects in Ajax calls (needs UI designer attention)
+if (isset($_POST["delete"]))
+if ($Post->GetProperties()['Type'] == 'KWRD') 
+    exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['RefrenceId'] ));
+else
+    exit(header("Location: " . $BASEURL . 'dashboard' ));
+else if (
+    isset($_POST["block"]) ||
+    isset($_POST["approve"]) ||
+    isset($_POST["pubilsh"]) ||
+    isset($_POST["draft"]) ||
+    isset($_POST["insert"]) ||
+    isset($_POST["update"]) ||
+    isset($_POST["clear"])
+)   // TODO: Disable redirects in Ajax calls (needs UI designer attention)
 {
-    if (isset($_POST["delete"]))
-        if ($Post->GetProperties()['Type'] == 'KWRD') 
-            exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['RefrenceId'] ));
-        else
-            exit(header("Location: " . $BASEURL . 'dashboard' ));
-    
-    else if (isset($_POST["form_add_submit"])) { 
-        // Ignore
-    }
-    else if ($Post->GetProperties()['Type'] == 'QUST')
+    if ($Post->GetProperties()['Type'] == 'QUST')
         exit(header("Location: " . $BASEURL . 'say/qust/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
     else if ($Post->GetProperties()['Type'] == 'POST')
         exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
-
 }
 
 ?>
@@ -167,12 +170,6 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
 ?>
 
 <?php
-// Add items to form
-if (isset($_POST['form_add_submit']))
-{
-    $lines = explode('\n', str_replace('\\' . '\n', '\n', Functionalities::IfExistsIndexInArray($_POST,'body')));
-}
-
 $FormItems = array();
 if (sizeof($lines) > 1)
 {
@@ -187,6 +184,38 @@ if (sizeof($lines) > 1)
         ];
         
         array_push($FormItems, $item);
+    }
+}
+// Add items to form
+if (isset($_POST['form_add_submit']))
+{
+    $lines = explode('\n', str_replace('\\' . '\n', '\n', Functionalities::IfExistsIndexInArray($_POST,'body')));
+}
+foreach(array_keys($_POST) as $key)
+{
+    $delete = Functionalities::IfStringStartsWith($key, 'form-operation-delete-');
+    $edit = Functionalities::IfStringStartsWith($key, 'form-operation-edit-');
+    $up = Functionalities::IfStringStartsWith($key, 'form-operation-up-');
+    $down = Functionalities::IfStringStartsWith($key, 'form-operation-down-');
+    if ($delete)
+    {
+    }
+    else if ($edit)
+    {
+    }
+    else if ($up)
+    {
+        if ($up != '1')
+        {
+            
+        }
+    }
+    else if ($down)
+    {
+        if (sizeof($FormItems) != (int)$down)
+        {
+            
+        }
     }
 }
 if (isset($_POST['form_add_submit']))
