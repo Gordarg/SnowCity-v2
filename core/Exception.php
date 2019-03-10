@@ -15,7 +15,7 @@ class MyException extends Exception
         return  __CLASS__ . ": [{$this->code}]: {$this->message}\n" ;
     }
     
-    public function print() {
+    public function s_print() {
         // TODO: BeutifulUI if on Web
         echo '<div style="background-color:lightgrey;display:block;">' .
         str_replace('\n' , '<br/>' , $this->message) . '</div>';

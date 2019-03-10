@@ -16,7 +16,7 @@ set_error_handler(function($errno, $errstr, $errfile, $errline ){
     "\nfile" . $errfile .
     "\nline:" . $errline
     , $errno);
-    $exp -> print();
+    $exp -> s_print();
 
     // TODO: Handle all header() functions globally
     header("HTTP/1.0 500 Internal Server Error");
@@ -69,7 +69,7 @@ if (!Authorization::ValidatePath($ROLE,
 }
 
 // Choose Language
-if(!isset($_COOKIE["LANG"]))   
+if(!isset($_COOKIE["LANG"]) && !$AJAX)   
     header('Location:language/' . Config::DefaultLanguage);
 // Multi-Language Plug-In
 include_once BASEPATH.'public/plug-in/Translate.php';
