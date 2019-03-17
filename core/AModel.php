@@ -193,6 +193,15 @@ abstract class AModel
 		$query = $query . ") VALUES (";
 		$i=0;
 		foreach($this->GetProperties() as $key => $value){
+
+			// prevenet sql injection ;)
+			// TODO: find a better way!
+
+			$value = 
+			($value != null) ?
+			str_replace("'", "\'", $value)
+			: null;
+
 			if ($this->IsReserved($key)
 				&& substr($key, 0, 2) == "Is")
 			{

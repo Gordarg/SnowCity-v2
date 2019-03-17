@@ -93,6 +93,10 @@ body {
 /*
  * Cover
  */
+ main{
+   max-height: 100%;
+   overflow-y:auto;
+ }
 .cover {
   padding: 0 1.5rem;
 }
