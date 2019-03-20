@@ -170,57 +170,87 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
 ?>
 
 <?php
-// Add items to form
-if (isset($_POST['form_add_submit']))
+global $form_delete;
+global $form_edit;
+global $form_up;
+global $form_down;
+
+$form_delete = $form_edit = $form_up = $form_down = false;
+
+foreach(array_keys($_POST) as $key)
+{
+    $form_delete = Functionalities::IfStringStartsWith($key, 'form-operation-delete-');
+    $form_edit = Functionalities::IfStringStartsWith($key, 'form-operation-edit-');
+    $form_up = Functionalities::IfStringStartsWith($key, 'form-operation-up-');
+    $form_down = Functionalities::IfStringStartsWith($key, 'form-operation-down-');
+
+    if ($form_delete || $form_edit || $form_up || $form_down)
+        break;
+}
+
+// Generate Form Items from hidden value
+if (
+    $form_delete || $form_edit || $form_up || $form_down
+    || isset($_POST['form_add_submit']))
 {
     $lines = explode('\n', str_replace('\\' . '\n', '\n', Functionalities::IfExistsIndexInArray($_POST,'body')));
 }
+
+
 $FormItems = array();
+
+
 if (sizeof($lines) > 1)
 {
 
-    global $form_delete;
-    global $form_edit;
-    global $form_up;
-    global $form_down;
-
-    $form_delete = $form_edit = $form_up = $form_down = false;
-
-    foreach(array_keys($_POST) as $key)
-    {
-        $form_delete = Functionalities::IfStringStartsWith($key, 'form-operation-delete-');
-        $form_edit = Functionalities::IfStringStartsWith($key, 'form-operation-edit-');
-        $form_up = Functionalities::IfStringStartsWith($key, 'form-operation-up-');
-        $form_down = Functionalities::IfStringStartsWith($key, 'form-operation-down-');
-
-        if ($form_delete || $form_edit || $form_up || $form_down)
-            break;
-    }
-
+    // Items stored in hidden values
     $ItemTitles = explode(",", $lines[0]);
     $ItemTypes = explode(",", $lines[1]);
     
+    // Foreach new* from items
     for ($i = 0; $i < sizeof($ItemTitles) - 1; $i++)
     {
-        // TODO: Complete me.
 
-        if ($form_edit)
-        {       
+        // If edit button was clicked
+        if ($form_edit == $i + 1)
+        {
+            echo 'Form Edit: ' . $form_edit;
+            
+            // Detect Edited Item Values
             $item = [
                 Functionalities::IfExistsIndexInArray($_POST, 'form-add-title-' . ($form_edit)),
                 Functionalities::IfExistsIndexInArray($_POST, 'form-add-type-' . ($form_edit))
             ];
-            
-            // TODO: 
-            var_dump($item); exit;
+
         }
-        else
-        $item = [
-            $ItemTitles[$i] ,
-            $ItemTypes[$i]
-        ];
+        else if ($form_delete == $i + 1)
+        {
+            echo 'Form Delete: ' . $form_delete;
+            // $item = null;
+            // TODO:
+        }
+        else if ($form_up == $i + 1)
+        {
+            echo 'Form Up: ' . $form_up;
+            // TODO:
+        }
+        else if ($form_down == $i + 1)
+        {
+            echo 'Form Down: ' . $form_down;
+            // TODO:
+        }
+        else // Just do nothing
+        {
+
+            // Load other items to UI
+            $item = [
+                $ItemTitles[$i] ,
+                $ItemTypes[$i]
+            ];
+        }
 
         array_push($FormItems, $item);
+        $FormItems = $FormItems;
     }
 }
 
@@ -235,10 +265,26 @@ if (isset($_POST['form_add_submit']))
 
     array_push($FormItems, $item);
 
-    $Body = Functionalities::IfExistsIndexInArray($lines,0) . str_replace(",", "-", $item[0]) . ",";
-    $Body .= '\\' . '\n';
-    $Body .= Functionalities::IfExistsIndexInArray($lines,1) . $item[1] . ',';
+    // $Body = Functionalities::IfExistsIndexInArray($lines,0) . str_replace(",", "-", $item[0]) . ",";
+    // $Body .= '\\' . '\n';
+    // $Body .= Functionalities::IfExistsIndexInArray($lines,1) . $item[1] . ',';
 }
+
+
+// Generate Hidden Value from Form Items
+if (
+    $form_delete || $form_edit || $form_up || $form_down
+    || isset($_POST['form_add_submit']))
+{
+    $Body = '';
+    for ($i = 0; $i < sizeof($FormItems); $i++)
+        $Body .= $FormItems[$i][0] . ',';
+    $Body .= '\\' . '\n';
+    for ($i = 0; $i < sizeof($FormItems); $i++)
+        $Body .= $FormItems[$i][1] . ',';
+}
+
+
 ?>
 
 
@@ -341,8 +387,8 @@ switch ($Type)
             <input type="text" class="form-control bg-dark text-light" name="title" value="' . $Title . '" />
             </div>
             <div class="form-group">
-            <label for="refrenceid">' . Translate::Label('پیش نیاز') . '</label>
-            <input type="text" class="form-control bg-dark text-light" name="refrenceid" value="' . $RefrenceID . '" /><!--TODO: پیش نیاز-->
+            <!--<label for="refrenceid">' . Translate::Label('پیش نیاز') . '</label>-->
+            <input type="hidden" class="form-control bg-dark text-light" name="refrenceid" value="' . $RefrenceID . '" /><!--TODO: پیش نیاز-->
             </div>
             '
             . '
