@@ -198,46 +198,58 @@ if (
 
 
 $FormItems = array();
-
-
 if (sizeof($lines) > 1)
 {
 
     // Items stored in hidden values
     $ItemTitles = explode(",", $lines[0]);
     $ItemTypes = explode(",", $lines[1]);
-    
+    $form_last_item = sizeof($ItemTitles) - 1;
+
+    if ($form_up > 1)
+    {
+        // TODO: Swap with previous
+        $temp_title = $ItemTitles[$form_up - 2];
+        $ItemTitles[$form_up - 2] = $ItemTitles[$form_up - 1];
+        $ItemTitles[$form_up - 1] = $temp_title;
+
+        $temp_types = $ItemTypes[$form_up - 2];
+        $ItemTypes[$form_up - 2] = $ItemTypes[$form_up - 1];
+        $ItemTypes[$form_up - 1] = $temp_types;   
+    }
+    else if ($form_down &&
+                $form_down != $form_last_item)
+    {
+        // TODO: Swap with next
+
+        $temp_title = $ItemTitles[$form_down - 1];
+        $ItemTitles[$form_down - 1] = $ItemTitles[$form_down - 0];
+        $ItemTitles[$form_down - 0] = $temp_title;
+
+        $temp_types = $ItemTypes[$form_down - 1];
+        $ItemTypes[$form_down - 1] = $ItemTypes[$form_down - 0];
+        $ItemTypes[$form_down - 0] = $temp_types;
+
+    }
+
     // Foreach new* from items
-    for ($i = 0; $i < sizeof($ItemTitles) - 1; $i++)
+    for ($i = 0; $i < $form_last_item; $i++)
     {
 
         // If edit button was clicked
         if ($form_edit == $i + 1)
         {
-            echo 'Form Edit: ' . $form_edit;
-            
-            // Detect Edited Item Values
             $item = [
                 Functionalities::IfExistsIndexInArray($_POST, 'form-add-title-' . ($form_edit)),
                 Functionalities::IfExistsIndexInArray($_POST, 'form-add-type-' . ($form_edit))
             ];
 
+            array_push($FormItems, $item);
+
         }
         else if ($form_delete == $i + 1)
         {
-            echo 'Form Delete: ' . $form_delete;
-            // $item = null;
-            // TODO:
-        }
-        else if ($form_up == $i + 1)
-        {
-            echo 'Form Up: ' . $form_up;
-            // TODO:
-        }
-        else if ($form_down == $i + 1)
-        {
-            echo 'Form Down: ' . $form_down;
-            // TODO:
+            $item = null;
         }
         else // Just do nothing
         {
@@ -247,10 +259,9 @@ if (sizeof($lines) > 1)
                 $ItemTitles[$i] ,
                 $ItemTypes[$i]
             ];
-        }
+            array_push($FormItems, $item);
 
-        array_push($FormItems, $item);
-        $FormItems = $FormItems;
+        }
     }
 }
 
