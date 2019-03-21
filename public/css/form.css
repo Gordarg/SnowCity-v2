@@ -1,0 +1,149 @@
+
+body {
+	background-color: #000;
+}
+html,
+body {
+  overflow-y:auto;
+}
+footer {
+    display: none;
+}
+.imagebg {
+	background-image: url("avenue-2215317_1920.jpg");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	background-attachment: fixed;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	-webkit-filter: blur(3px);
+    filter: blur(3px);
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+}
+.form-container {
+  margin-top: 50px;
+  margin-bottom: 50px;
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+	/*margin-top:90px;
+	margin-bottom: 30px;*/
+	padding: 30px;
+	background-color: #fff;
+	position: relative;
+	    box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 20px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.3);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.form-container .row {
+	margin-bottom: 0;
+}
+
+
+/* label color */
+   .input-field label {
+     color: #9c9c9c;
+   }
+   /* label focus color */
+   .input-field input[type=text]:focus + label {
+     color: #9c9c9c;
+   }
+   /* label underline focus color */
+   .input-field input[type=text]:focus {
+     border-bottom: 1px solid #9c9c9c;
+     box-shadow: 0 1px 0 0 #9c9c9c;
+   }
+   /* valid color */
+   .input-field input[type=text].valid {
+     border-bottom: 1px solid #9c9c9c;
+     box-shadow: 0 1px 0 0 #9c9c9c;
+   }
+   /* invalid color */
+   .input-field input[type=text].invalid {
+     border-bottom: 1px solid #9c9c9c;
+     box-shadow: 0 1px 0 0 #9c9c9c;
+   }
+   /* icon prefix focus color */
+   .input-field .prefix.active {
+     color: #9c9c9c;
+   }
+   input:not([type]):focus:not([readonly]), 
+   input[type=text]:focus:not([readonly]), 
+   input[type=password]:focus:not([readonly]), 
+   input[type=email]:focus:not([readonly]), 
+   input[type=url]:focus:not([readonly]), 
+   input[type=time]:focus:not([readonly]), 
+   input[type=date]:focus:not([readonly]), 
+   input[type=datetime]:focus:not([readonly]), 
+   input[type=datetime-local]:focus:not([readonly]), 
+   input[type=tel]:focus:not([readonly]), 
+   input[type=number]:focus:not([readonly]), 
+   input[type=search]:focus:not([readonly]), 
+   textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid #009ddc;
+    box-shadow: 0 1px 0 0 #009ddc;
+}
+input:not([type]):focus:not([readonly])+label, 
+input[type=text]:focus:not([readonly])+label, 
+input[type=password]:focus:not([readonly])+label, 
+input[type=email]:focus:not([readonly])+label, 
+input[type=url]:focus:not([readonly])+label, 
+input[type=time]:focus:not([readonly])+label, 
+input[type=date]:focus:not([readonly])+label, 
+input[type=datetime]:focus:not([readonly])+label, 
+input[type=datetime-local]:focus:not([readonly])+label, 
+input[type=tel]:focus:not([readonly])+label, 
+input[type=number]:focus:not([readonly])+label, 
+input[type=search]:focus:not([readonly])+label, 
+textarea.materialize-textarea:focus:not([readonly])+label {
+    color: #009ddc;
+}
+.form-container .btn {
+    background-color: #009ddc;
+
+}
+.submitbtn {
+	line-height: 48px;
+	display: block;
+	height: 48px;
+	width: 100%;
+}
+.form-container h3 {
+	font-size: 42px;
+    letter-spacing: 0.1em;
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    font-weight: 700;
+    text-transform: uppercase;
+    position: absolute;
+    top: -46px;
+}
+@media  all and (max-width: 640px) {
+	.form-container {
+		position: static;
+		-webkit-transform: translate(0, 0);
+		-ms-transform: translate(0, 0);
+		-o-transform: translate(0, 0);
+		transform: translate(0, 0);
+		width: 100%;
+		margin-top: 70px;
+		margin-bottom: 20px;
+	}
+	.form-container h3 {
+	    font-size: 24px;
+	    top: -26px;
+	}
+}

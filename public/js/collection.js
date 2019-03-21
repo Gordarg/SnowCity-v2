@@ -6,6 +6,7 @@ function collection(){ // Constructor class
             $("tbody").append('<tr>'
                 + '<th scope="row">'
                 + '<a class="m-1 btn-sm" href="' + Hi.baseurl() + "say/qust/" + obj["Language"] + '/' + obj['MasterID'] +'">Edit Form</a>'
+                + '<a class="m-1 btn-sm" href="' + Hi.baseurl() + "form/" + obj["Language"] + '/' + obj['MasterID'] +'">View Form</a>'
                 + '<a class="m-1 btn-sm" href="">View Answers</a>'
                 + '<a class="m-1 btn-sm" href="">Export Data</a>'
                 + '</th>'

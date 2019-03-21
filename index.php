@@ -87,7 +87,7 @@ include_once BASEPATH.'public/plug-in/Links.php';
 // Read meta from config file
 $META_DESCRIPTION = Config::META_DESCRIPTION;
 $META_AUTHOR = Config::META_AUTHOR;
-if ($PATHINFO[1] == 'view')
+if ($PATHINFO[1] == 'view' || $PATHINFO[1] == 'form')
 {
     $Language = $PATHINFO[2];
     $Id = $PATHINFO[3];
