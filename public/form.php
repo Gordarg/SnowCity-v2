@@ -8,9 +8,49 @@ $form_last_item = sizeof($ItemTitles) - 1;
 ?>
 
 <div class="imagebg"></div>
+
+<?php
+if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) == 'answers')
+{
+    echo '
+<div class="container">
+    <div class="answers-container">
+        <a href="' . $BASEURL . 'form/' . $Language . '/' . $row['MasterID'] . '">(' . Translate::Label('مشاهده') . ')</a>
+        <h3> ' . Translate::Label('پاسخ‌ها') . ' </h3>
+        <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" >a</th>
+                <th scope="col" >b</th>
+                <th scope="col" >c</th>
+                <th scope="col" >d</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">e</th>
+                <td>f</td>
+                <td>g</td>
+                <td>h</td>
+            </tr>
+            <tr>
+                <th scope="row">e</th>
+                <td>f</td>
+                <td>g</td>
+                <td>h</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+</div>
+    ';
+    return;
+}
+?>
 <div class="container">
     <div class="form-container z-depth-5">
-        <a href="<?php echo $BASEURL . 'say/QUST/' . $Language . '/' . $row['MasterID'] ?>">(<?php echo Translate::Label('Edit') ?>)</a>
+        <a href="<?php echo $BASEURL . 'say/QUST/' . $Language . '/' . $row['MasterID'] ?>">(<?php echo Translate::Label('ویرایش') ?>)</a>
+        <a href="<?php echo $BASEURL . 'form/' . $Language . '/' . $row['MasterID'] . '/answers' ?>">(<?php echo Translate::Label('پاسخ‌ها') ?>)</a>
         <h3>
             <?php echo $row['Title'] ?>
         </h3> 
@@ -55,4 +95,5 @@ $form_last_item = sizeof($ItemTitles) - 1;
             </div> -->
         </div>
     </div>
+   
 </div>

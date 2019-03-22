@@ -334,7 +334,7 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 5) == 'delete')
         ';
 else    
 switch ($Type)
-{    
+{
     case 'POST':
         echo '
             <input type="hidden" name="submit" value="' . $Submit . '" />
@@ -515,7 +515,10 @@ else if ($row != null) {
     echo '<input type="submit" name="clear" class="btn btn-warning m-1" value="' . $Translate->Label("حذف پیوست") . '" />';
     echo '<input type="submit" name="block" class="btn btn-danger m-1" value="' . $Translate->Label("بلوکه") . '" />';
     echo '<a class="btn btn-dark m-1 text-light" href="' . $BASEURL . 'say/post/' . $Language . '/' . $MasterID . '/' . 'delete' . '">' . $Translate->Label("حذف") . '</a>';
-    echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . $_COOKIE['LANG'] . '/' . $row['MasterId'] . '">' . $Translate->Label("مشاهده") . '</a>';
+    if ($Type == 'QUST')
+        echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'form/' . $_COOKIE['LANG'] . '/' . $row['MasterId'] . '">' . $Translate->Label("مشاهده") . '</a>';
+    else
+        echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . $_COOKIE['LANG'] . '/' . $row['MasterId'] . '">' . $Translate->Label("مشاهده") . '</a>';
 }
 else {
     echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
