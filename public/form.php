@@ -5,6 +5,35 @@ $ItemTitles = explode(",", $lines[0]);
 $ItemTypes = explode(",", $lines[1]);
 $form_last_item = sizeof($ItemTitles) - 1;
 
+if (isset($_POST['send']))
+{
+    $Body = '';
+    foreach($_POST as $key => $value)
+    {
+        $index = Functionalities::IfStringStartsWith($key, 'field-');
+        $Body .= $value . ',';
+    }
+
+    include_once BASEPATH.'model/Post.php';
+    $Post = new Post();
+
+    $Post->SetValue("MasterId", Functionalities::GenerateGUID());
+    $Post->SetValue("RefrenceId", $PATHINFO[3]);
+    $Post->SetValue("Title", '');
+    $Post->SetValue("Body", $Body);
+    $Post->SetValue("Index", '0');
+    $Post->SetValue("Level", 'DC');
+
+    $Post->SetValue("Type", 'ANSR');
+    $Post->SetValue("Submit", DATETIMENOW);
+    $Post->SetValue("Language", $CURRENTLANGUAGE);
+    $Post->SetValue("UserId", Functionalities::IfExistsIndexInArray($_COOKIE, 'USERID'));
+
+    $Post->SetValue("Status", 'SENT');
+
+    $Post->Insert();
+}
+
 ?>
 
 <div class="imagebg"></div>
@@ -55,7 +84,7 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) == 'answers')
             <?php echo $row['Title'] ?>
         </h3> 
         <div class="row">
-            <form class="col s12">
+            <form method="post" enctype="multipart/form-data" class="col s12">
                 <?php
                 for ($i = 0; $i < $form_last_item; $i++)
                 {
@@ -66,10 +95,17 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) == 'answers')
                 ';
                     switch ($ItemTypes[$i])
                     {
-                        case "":
+                        case "Numeric":
+                            echo '<input type="number" name="field-' . ($i + 1) . '" class="validate form-control">';
+                            break;
+                        case "Multiline Text":
+                            echo '<input type="number" name="field-' . ($i + 1) . '" class="validate form-control">';
+                            break;
+                        case "Characters":
+                            echo '<input type="text" name="field-' . ($i + 1) . '" class="validate form-control">';
                             break;
                         default:
-                            echo '<input type="text" name="field-' . ($i + 1) . '" required class="validate form-control">';
+                            echo '<input type="text" name="field-' . ($i + 1) . '" class="validate form-control">';
                             break;
                     }
                     echo '
@@ -79,7 +115,7 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) == 'answers')
                 }
                 ?>
                 <div>
-                    <button class="btn form-control" type="submit">Submit</button>
+                    <input name="send" class="btn form-control" type="submit" value="<?php echo Translate::Label('تائید') ?>"/>
                 </div>
             </form>
             <!-- <div id="error_message" style="width:100%; height:100%; display:none; ">

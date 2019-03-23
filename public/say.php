@@ -12,12 +12,7 @@ include_once BASEPATH.'model/Post.php';
 
 $Type = strtoupper($PATHINFO[2]);
 
-$MasterID = sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
-mt_rand( 0, 0xffff ),
-mt_rand( 0, 0x0fff ) | 0x4000,
-mt_rand( 0, 0x3fff ) | 0x8000,
-mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ));
+$MasterID = Functionalities::GenerateGUID();
 
 $Title = '';
 $Language = $CURRENTLANGUAGE;
@@ -484,11 +479,13 @@ switch ($Type)
                         <div class="form-group">
                             <label for="form_add_after">' . Translate::Label('بعد از') . '</label>
                             <select class="form-control m-1" name="form_add_after">
-                                <option value="0">' . Translate::Label('ابتدا') . '</option>'
+                                <option value="0">' . Translate::Label('ابتدا') . '</option>' // TODO
                                 //        . '<option value="test">TODO</option>'
                             . '</select>
-                        </div>
-                    </div>
+                        </div>'
+                        // TODO: Required or not!?
+                        // TODO: Validation message
+                    .'</div>
                     <div class="form-group">
                         <input type="submit" name="form_add_submit" class="btn btn-primary btn-block btn-sm" value="' . $Translate->Label("افزودن فیلد") . '" />
                     </div>

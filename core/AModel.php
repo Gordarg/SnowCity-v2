@@ -8,7 +8,7 @@
  * @since         1.0
  */
 
-// Improve Data Structure to support validation messages and more complicated Data Types
+// TODO: Improve Data Structure to support validation messages and more complicated Data Types
 
 include_once 'Initialize.php';
 include_once BASEPATH . 'core/Database.php';
