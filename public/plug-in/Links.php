@@ -49,7 +49,10 @@ class Links
         <meta name="description" content="' . $META_DESCRIPTION . '">
         <meta name="keywords" content="' . Config::META_KEYWORDS . '">
         <meta name="author" content="' . $META_AUTHOR . '">
-        <meta name="generator" content="SnowKMS ' . (new Xei())::THEVERSION . '">
+        '
+        // <meta name="generator" content="SnowKMS ' . (new Xei())::THEVERSION . '">
+        // TODO: Error: [24-Mar-2019 19:50:45 Asia/Tehran] PHP Parse error:  syntax error, unexpected '::' (T_PAAMAYIM_NEKUDOTAYIM) in /home/gordarg/skills.community/public/plug-in/Links.php on line 52
+        . '
         <meta http-equiv="content-type" content="text/html;charset=UTF-8">
         <meta name="language" content="'. Config::LANGUAGE . '" />
         <meta name="geo.region" CONTENT="'. Config::REGION . '" />

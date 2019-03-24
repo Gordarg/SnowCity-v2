@@ -69,7 +69,8 @@ if (!Authorization::ValidatePath($ROLE,
 }
 
 // Choose Language
-if(!isset($_COOKIE["LANG"]) && !$AJAX)   
+if(!isset($_COOKIE["LANG"]) &&
+    (!$AJAX && $PATHINFO[1] != 'language'))
     header('Location:language/' . Config::DefaultLanguage);
 // Multi-Language Plug-In
 include_once BASEPATH.'public/plug-in/Translate.php';
