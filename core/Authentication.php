@@ -17,9 +17,14 @@ class Authentication
     public static function Login($Username, $Password){
 
 		$model = new User();
-		$model->SetValue("Username", $Username);
-		$model->SetValue("HashPassword", "✓");
-        $data = $model->Select(-1 , 1)[0];
+        $model->SetValue("Username", $Username);
+        
+        $model->SetValue("HashPassword", "✓");
+        $result = $model->Select(-1 , 1);
+        if (count($result) != 1)
+            return false;
+
+        $data = $result[0];
 		if (Cryptography::Hash($Password) == $data['HashPassword'])
 		{
             // TODO: Set token for future validations

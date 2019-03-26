@@ -31,7 +31,7 @@ TODO:
 22. SEO: Microdata
 23. SEO: Content type : https://developer.mozilla.org/en-us/docs/Web/Guide/HTML/Content_categories
 29. SEO: Twitter card
-34. Generate dynamic keywords
+34. Keywords must be added automatically after detecting hashtags in POST
 37. Statistics
 39. SEO: Demographics : https://searchengineland.com/connecting-demographics-search-queries-243440
 40. SEO: Trending
@@ -49,6 +49,7 @@ TODO:
 92. Print option for books
 93. Datawarehouse for enterprise usage
 95. Handle sql injecttions in post/...
+96. Delete keywords on related post delete
 
 # SnowKMS
 
