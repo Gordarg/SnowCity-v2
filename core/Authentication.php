@@ -19,8 +19,12 @@ class Authentication
 
 
     public static function ValidateRole($Username, $Role){
-        // TODO: 
-        return true;
+        $model = new User();
+        // TODO: SQL INJECTION BUG ON $Username and $Token
+        // Functionalities::SQLINJECTIOENCODE
+        $result = $model->Select(0 , 1, 'Submit' ,'DESC',
+            "WHERE `Username`='" . $Username . "' AND `Role`>" . $Role);
+        return Functionalities::IfExistsIndexInArray($result, 0) != false;
     }
 
     public static function Login($Username, $Password){

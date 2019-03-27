@@ -16,6 +16,8 @@ ini_set('display_errors', '1');
 include_once 'Initialize.php';
 include_once BASEPATH . 'core/Authentication.php';
 
+require '../lib/json_encoder_itspriddle.php';
+
 abstract class AController
 {
 	private $data = '' ;
@@ -24,7 +26,7 @@ abstract class AController
 	
 	function __construct(){
 		$this->{$_SERVER['REQUEST_METHOD']}();
-		$this->httpstatus = http_response_code(200);
+		$this->httpstatus = 'HTTP/1.1 200 Ok';
 	}
 	function __destruct(){
 		// TODO: What to do. What not to do? -Arastoo Amel!
@@ -51,11 +53,48 @@ abstract class AController
 		if (APIRESULTTYPE=='application/json')
 		{
 			header("Content-Type: " . APIRESULTTYPE);
-			echo json_encode($this->data);
+			// TODO: cannot convert heavy resutls to json!
+			// echo json_encode($this->data);
+			$json = new Services_JSON();
+			echo $json->encode($this->data);
 		}
 		else echo $this->data;
 		return $this->data;
 	}
+	function ValidateAutomatic($Role)
+	{
+		switch ($Role) {
+            case 'ADMIN':
+                $Role = 3;
+                break;
+
+            case 'EDTOR':
+                $Role = 2;
+                break;
+            
+            default:
+                $Role = 1;
+                break;
+		}
+		
+		if ($Role == 1)
+			return true;
+		
+		$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+		parse_str(
+			Functionalities::IfExistsIndexInArray(parse_url($actual_link), 'query')
+			,$params);
+		$Username = Functionalities::IfExistsIndexInArray($params, 'Username');
+		$Token = Functionalities::IfExistsIndexInArray($params, 'Token');
+
+		$result = Authentication::ValidateToken($Username, $Token)
+			&& Authentication::ValidateRole($Username, $Role);
+		
+		if (!$result)
+			header("HTTP/1.0 401 Unauthorized");
+		return $result;		
+	}
+
 	function VIEW(){
 		// TODO: Show hint about this controller 
 	}

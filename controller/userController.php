@@ -6,7 +6,6 @@ include_once BASEPATH . 'model/User.php';
 class userController extends AController{
 
 	function GET(){
-		Authentication::ValidateAutomatic(['ADMIN']);
 		// TODO: Authorize
 		parent::GET();
 		$model = new User();
@@ -19,7 +18,6 @@ class userController extends AController{
 	}
 
 	function POST(){
-		// TODO: Authorize
 		parent::POST();
 		$user = new User();	
 		foreach($user->GetProperties() as $key => $value){
@@ -34,7 +32,6 @@ class userController extends AController{
 
 	function PUT()
 	{
-		Authentication::ValidateAutomatic(['ADMIN','EDTOR','VSTOR']);
 		// TODO: Authorize
 		parent::PUT();
 		$user = new User();
@@ -50,7 +47,6 @@ class userController extends AController{
 	}
 
 	function DELETE(){
-		Authentication::ValidateAutomatic(['ADMIN']);
 		// TODO: Authorize
 		parent::DELETE();
 		$user = new User();

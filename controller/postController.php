@@ -13,7 +13,7 @@ class postController extends AController{
 	}
 
 	function GET(){
-		Authentication::ValidateAutomatic(['VSTOR', 'EDTOR', 'ADMIN']);
+		parent::ValidateAutomatic('VSTOR');
 		// TODO: Authorize
 		parent::GET();
 		$model = new Post();
@@ -26,7 +26,7 @@ class postController extends AController{
 	}
 
 	function POST(){
-		Authentication::ValidateAutomatic(['EDTOR', 'ADMIN']);
+		parent::ValidateAutomatic('EDTOR');
 		// TODO: Authorize
 		parent::POST();
 		$post = new Post();	
@@ -42,7 +42,7 @@ class postController extends AController{
 
 	function PUT()
 	{
-		Authentication::ValidateAutomatic(['EDTOR', 'ADMIN']);
+		parent::ValidateAutomatic('EDITOR');
 		// TODO: Authorize
 		parent::PUT();
 		$post = new Post();
@@ -58,7 +58,7 @@ class postController extends AController{
 	}
 
 	function DELETE(){
-		Authentication::ValidateAutomatic(['EDTOR', 'ADMIN']);
+		parent::ValidateAutomatic('EDTOR');
 		// TODO: Authorize
 		parent::DELETE();
 		$post = new Post();

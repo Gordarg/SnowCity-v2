@@ -6,7 +6,7 @@ include_once BASEPATH . 'model/PostDetail.php';
 class postdetailController extends AController{
 
 	function GET(){
-		Authentication::ValidateAutomatic(['VSTOR', 'EDTOR', 'ADMIN']);
+		parent::ValidateAutomatic('VSTOR');
 		// TODO: Authorize
 		parent::GET();
 		// TODO: Validations must be done in public side and api side
