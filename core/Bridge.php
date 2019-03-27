@@ -1,4 +1,6 @@
 <?php
+include_once BASEPATH . 'model/Log.php';
+
 class Bridge
 {
     public static function Execute($Name, $Params, $Result = true){
@@ -18,5 +20,14 @@ class Bridge
             $rows[] = $row;
 		}
 		return $rows;
-    }
+	}
+	public static function LogToDb($Event, $Key, $Value)
+	{
+		$model = new Log();
+        $model->SetValue("Event", $Event);
+        $model->SetValue("Key", $Key);
+		$model->SetValue("Value", $Value);
+		$model->Insert();
+        return $model;
+	}
 }

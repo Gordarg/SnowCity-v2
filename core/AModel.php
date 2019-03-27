@@ -117,6 +117,8 @@ abstract class AModel
 		}
 		$db = new Db();
 		$conn = $db->Open();
+		// echo $query;
+		// exit;
 		$result = mysqli_query($conn, $query);
 		if (!$result)
 		{

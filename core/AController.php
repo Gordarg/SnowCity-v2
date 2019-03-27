@@ -19,13 +19,20 @@ include_once BASEPATH . 'core/Authentication.php';
 abstract class AController
 {
 	private $data = '' ;
+	private $httpstatus ;
 	private $request = [];
 	
 	function __construct(){
 		$this->{$_SERVER['REQUEST_METHOD']}();
+		$this->httpstatus = http_response_code(200);
 	}
 	function __destruct(){
 		// TODO: What to do. What not to do? -Arastoo Amel!
+	}
+	function setStatus($code)
+	{
+		// TODO: Set message anf tother details based on passed $code
+		$this->httpstatus = 'HTTP/1.1 401 Unauthorized';
 	}
 	function setData($data){
 		$this->data = $data;
@@ -40,6 +47,7 @@ abstract class AController
 		return (isset($this->request[$index])?$this->request[$index]:null);
 	}
 	function returnData (){
+		header($this->httpstatus);
 		if (APIRESULTTYPE=='application/json')
 		{
 			header("Content-Type: " . APIRESULTTYPE);

@@ -1,14 +1,13 @@
 --
--- Table structure for table `Logs`
+-- Table structure for table `logs`
 --
 
-CREATE TABLE `Logs` (
+CREATE TABLE `logs` (
   `Id` int(11) NOT NULL,
-  `Content` varchar(3000) DEFAULT NULL,
-  `UserId` int(11) DEFAULT NULL,
-  `Agent` varchar(10) DEFAULT 'DATABASE',
-  `Connection` varchar(1000) DEFAULT NULL,
-  `Event` datetime DEFAULT CURRENT_TIMESTAMP
+  `Event` varchar(10) DEFAULT NULL,
+  `Key` varchar(100) DEFAULT NULL,
+  `Value` varchar(3000) DEFAULT NULL,
+  `Submit` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -16,12 +15,12 @@ CREATE TABLE `Logs` (
 --
 
 --
--- Indexes for table `Logs`
+-- Indexes for table `logs`
 --
-ALTER TABLE `Logs`
+ALTER TABLE `logs`
   ADD PRIMARY KEY (`Id`);
 
 
-ALTER TABLE `Logs`
+ALTER TABLE `logs`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;

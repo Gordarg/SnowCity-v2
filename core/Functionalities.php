@@ -27,6 +27,9 @@ class Functionalities
         mt_rand( 0, 0x3fff ) | 0x8000,
         mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ));
     }
+    public static function GenerateToken(){
+        return bin2hex(random_bytes(78));
+    }
 }
 
 ?>
