@@ -81,6 +81,9 @@ abstract class AModel
 
 	function Select($Skip = -1 , $Take = -1, $OrderField = 'Id', $OrderArrange = 'ASC', $Clause = '')
 	{
+		// TODO: Use operands same as update form select condition
+
+
 		$fields = '';
 
 		foreach($this->GetProperties() as $key => $value)

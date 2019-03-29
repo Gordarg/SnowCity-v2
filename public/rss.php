@@ -1,5 +1,4 @@
 <?php
-
 if (!$AJAX)
     echo '
         <nav class="navbar">
@@ -9,10 +8,11 @@ if (!$AJAX)
             <a class="navbar-brand" href="' . $BASEURL . '">' . Translate::Label(Config::TITLE) . '</a>
             <a type="application/rss+xml" href="' . $BASEURL . 'ajax/rss">' . Translate::Label('خوراک') . '</a>
         </nav>
-        <pre class="container"><code class="xml">
-';
-$Language = $PATHINFO[2] ?? Config::DefaultLanguage;
+        <pre class="container"><code class="xml"> ';
+    
+$Language = Functionalities::IfExistsIndexInArray($PATHINFO,2);
 $Sender = Functionalities::IfExistsIndexInArray($PATHINFO, 3);
+
 $output = '<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
 <channel>
@@ -27,8 +27,10 @@ $output = '<?xml version="1.0" encoding="UTF-8" ?>
 ';
 
 $rows = $PostDetail->Select(-1, 10, "Submit", "DESC",
-"WHERE `Language` = '" . $Language . "'" . 
-(($Sender != null) ? " AND CONCAT('@',`Username`) LIKE '@%'" : ""));
+"WHERE 1" .
+(($Language != null) ? " AND `Language` = '" . $Language . "'" : "") . 
+(($Sender != null) ? " AND CONCAT('@',`Username`) LIKE '@" . $Sender . "'" : ""))
+;
 foreach ($rows as $row) {
     $output .= '
     <item>
