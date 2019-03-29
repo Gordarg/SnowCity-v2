@@ -107,6 +107,7 @@ else if ($PATHINFO[1] == 'post')
 else if ($PATHINFO[1] == 'rss' && $AJAX)
 {
     header("Content-Type: application/xml; charset=utf-8");
+    header('Access-Control-Allow-Origin: *'); 
 }
 
 
@@ -136,6 +137,5 @@ if (!$AJAX)
 else
 {
     include_once BASEPATH.'public/'.$PATHINFO[1].'.php';
-
 }
 ?>
