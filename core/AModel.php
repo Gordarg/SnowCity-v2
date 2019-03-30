@@ -12,6 +12,7 @@
 
 include_once 'Initialize.php';
 include_once BASEPATH . 'core/Database.php';
+include_once BASEPATH . 'core/Cryptography.php';
 
 abstract class AModel
 {
@@ -32,10 +33,6 @@ abstract class AModel
 			(substr($Field, 0, 2) == "Is" && !$IgnoreAggregate ) ||
 			substr($Field, 0, 3) == "Bin" ||
 			substr($Field, 0, 4) == "Hash");
-	}
-	function DoHash($InputString)
-	{
-		return password_hash($InputString, PASSWORD_DEFAULT);
 	}
 	function SetReadOnly($ReadOnly){
 		$this->readonly = $ReadOnly;
@@ -81,9 +78,6 @@ abstract class AModel
 
 	function Select($Skip = -1 , $Take = -1, $OrderField = 'Id', $OrderArrange = 'ASC', $Clause = '')
 	{
-		// TODO: Use operands same as update form select condition
-
-
 		$fields = '';
 
 		foreach($this->GetProperties() as $key => $value)
@@ -165,7 +159,7 @@ abstract class AModel
 			else if ($this->IsReserved($key)
 				&& substr($key, 0, 4) == "Hash")
 			{
-				$value = "'" . $this->DoHash($value) . "'";
+				$value = "'" . Cryptography::Hash($value) . "'";
 			}
 			else if ($this->IsReserved($key)
 				&& substr($key, 0, 3) == "Bin")
@@ -216,7 +210,7 @@ abstract class AModel
 			else if ($this->IsReserved($key)
 				&& substr($key, 0, 4) == "Hash")
 			{
-				$value = "'" . $this->DoHash($value) . "'";
+				$value = "'" . Cryptography::Hash($value) . "'";
 			}
 			else if ($this->IsReserved($key)
 				&& substr($key, 0, 3) == "Bin")

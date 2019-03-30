@@ -31,7 +31,7 @@ class Authentication
 		$model = new User();
         $model->SetValue("Username", $Username);
         $model->SetValue("HashPassword", "✓");
-        $result = $model->Select(-1 , 1);
+        $result = $model->Select(-1 , 1, 'Id', 'ASC', "WHERE `Username`='" . $Username . "'");
         if (count($result) != 1)
             return false;
         $data = $result[0];
