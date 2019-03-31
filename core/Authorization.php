@@ -14,7 +14,7 @@ class Authorization
             if ($acccesslevel->path == $Path)
             {
                 $output = false;
-                if (((string)$acccesslevel) == $Role)
+                if (((string)$acccesslevel) == (string)$Role)
                     return true;
             }
         }
