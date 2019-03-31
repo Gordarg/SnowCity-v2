@@ -76,25 +76,25 @@ abstract class AController
                 $Role = 1;
                 break;
 		}
-		
 		if ($Role == 1)
 			return true;
-		
+
 		$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 		parse_str(
 			Functionalities::IfExistsIndexInArray(parse_url($actual_link), 'query')
 			,$params);
-		$Username = Functionalities::IfExistsIndexInArray($params, 'Username');
+		
+		$Username = Functionalities::IfExistsIndexInArray($params, 'Userlogin');
 		$Token = Functionalities::IfExistsIndexInArray($params, 'Token');
-
+		
 		$result = Authentication::ValidateToken($Username, $Token)
 			&& Authentication::ValidateRole($Username, $Role);
 		
 		if (!$result)
-			header("HTTP/1.0 401 Unauthorized");
-		return $result;		
+			$this->httpstatus = "HTTP/1.0 401 Unauthorized";
+		
+		return array("Username" => $Username, "Result" => $result);
 	}
-
 	function VIEW(){
 		// TODO: Show hint about this controller 
 	}

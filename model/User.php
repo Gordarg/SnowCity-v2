@@ -15,7 +15,7 @@ class User extends AModel
 			'Username' => NULL,
 			'HashPassword' => NULL,
 			'IsActive' => 1,
-			'Role' => 'VSTOR',
+			'Role' => 1, // 1: VSTOR, 2:EDTOR, 3:ADMIN
 		));
 	}
 }
