@@ -51,6 +51,8 @@ TODO:
 95. Handle sql injecttions in post/...
 96. Delete keywords on related post delete
 97. Export Answers to `.h5` and `.csv`
+98. Generate Invoke forms for Controllers same as Microsoft ASMX
+    If controller allowed VIEW method
 
 # SnowKMS
 
