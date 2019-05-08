@@ -53,6 +53,8 @@ TODO:
 97. Export Answers to `.h5` and `.csv`
 98. Generate Invoke forms for Controllers same as Microsoft ASMX
     If controller allowed VIEW method
+99. Add domains (as publications); human will be able to create his/her own domain and attach their website to this RSS.
+
 
 # SnowKMS
 
