@@ -31,6 +31,8 @@ $Q = Functionalities::IfExistsIndexInArray($PATHINFO, 2) != null ? $PATHINFO[2]
 <?php
 if ($Q != null)
 {
+    if (substr($Q, 0, 1) == "@") echo '<div class="profile"></div>';
+
     include_once BASEPATH . 'core/Bridge.php';
     $rows = Bridge::Execute('explore', [['Q', $Q]], true);
 

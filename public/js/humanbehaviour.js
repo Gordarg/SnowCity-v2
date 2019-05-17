@@ -19,6 +19,7 @@ function humanbehaviour(){ // Constructor class
                 + '<td>' + obj["Task"] + '</td>'
                 + '<td>' + obj["Brief"] + '</td>'
                 + '<td>' + obj["UserId"] + '</td>'
+                // TODO: We can assign a humanbehaviour to a post
                 + "</tr>"
             );
         });
