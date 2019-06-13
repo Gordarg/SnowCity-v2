@@ -14,20 +14,25 @@ class Authentication
         $result = $model->Select(0 , 1, 'Submit' ,'DESC',
             "WHERE `Event`='LOGIN' AND `Key`='" .
             $Username . "' AND `Value`='" . $Token . "'");
-        $result_bool = Functionalities::IfExistsIndexInArray($result, 0) != false;
+
+        if ($result instanceof Exception)
+            $result_bool = false;
+        else 
+            $result_bool = Functionalities::IfExistsIndexInArray($result, 0) != false;
         return $result_bool;
     }
+
 
     public static function ValidateRole($Username, $Role){
         $model = new User();
         // TODO: SQL INJECTION BUG ON $Username and $Token
         // Functionalities::SQLINJECTIOENCODE
-        $result = $model->Select(0 , 1, 'Id' ,'DESC',
+        $result = $model->Select(0 , 1, 'Register' ,'DESC',
             "WHERE `Username`='" . $Username . "' AND `Role`>=" . $Role);
         $result_bool = Functionalities::IfExistsIndexInArray($result, 0) != false;
         return $result_bool;
     }
-    
+
     public static function Login($Username, $Password){
 		$model = new User();
         $model->SetValue("Username", $Username);

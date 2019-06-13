@@ -11,6 +11,7 @@
 // TODO: Every controller must have in-app output (Integration) and parsed output (Web API)
 
 error_reporting(E_ALL);
+header('Access-Control-Allow-Origin: *');
 ini_set('display_errors', '1');
 
 include_once 'Initialize.php';
@@ -37,7 +38,13 @@ abstract class AController
 		$this->httpstatus = 'HTTP/1.1 401 Unauthorized';
 	}
 	function setData($data){
-		$this->data = $data;
+		if ($data instanceof Exception)
+		{
+			$this->data = $data->getMessage();
+			$this->setStatus('HTTP/1.1 500 Internal Server Error');
+		}
+		else
+			$this->data = $data;
 	}
 	function setRequest($request){
 		$this->request = $request;
@@ -78,37 +85,24 @@ abstract class AController
 		}
 		if ($Role == 1)
 			return true;
-			
+
 		$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 		parse_str(
 			Functionalities::IfExistsIndexInArray(parse_url($actual_link), 'query')
 			,$params);
-
+		
 		$Username = Functionalities::IfExistsIndexInArray($params, 'Userlogin');
 		$Token = Functionalities::IfExistsIndexInArray($params, 'Token');
-
+		
 		$result = Authentication::ValidateToken($Username, $Token)
 			&& Authentication::ValidateRole($Username, $Role);
 		
-		$UserID = null;
-		$UserRole = null;
 		if (!$result)
 			$this->httpstatus = "HTTP/1.0 401 Unauthorized";
-		else
-		{
-			// TODO: SQL INJECTION BUG ON $Username and $Token
-			// Functionalities::SQLINJECTIOENCODE
-			$user = (new User())->Select(0 , 1, 'Id' ,'DESC', "WHERE `Username`='" . $Username . "'")[0];
-			$UserID = $user['Id'];
-			$UserRole = $user['Role'];
-		}
-
-		return array(
-			"Username" => $Username,
-			"UserID" => $UserID,
-			"UserRole" => $UserRole,
-			"Result" => $result);
+		
+		return array("Username" => $Username, "Result" => $result);
 	}
+
 	function VIEW(){
 		// TODO: Show hint about this controller 
 	}

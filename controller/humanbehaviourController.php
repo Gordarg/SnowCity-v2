@@ -46,14 +46,21 @@ class humanbehaviourController extends AController{
 			($auth["Result"] && $auth['UserRole'] >= 3)
 			|| $auth['UserID'] == parent::getRequest('UserId') )
 		{
+			
 			$model = new HumanBehaviour();	
 			foreach($model->GetProperties() as $key => $value){
 				$model->SetValue($key, 
 					(parent::getRequest($key) == null) ? $value : parent::getRequest($key)
 				);
 			}
-			$model->Insert();
-			parent::setData($model->GetProperties());
+
+			$result = $model->Insert();
+
+			if ($result instanceof Exception)
+				parent::setData($result);
+			else
+				parent::setData($model->GetProperties());
+			parent::returnData();
 		}
 		parent::returnData();
 	}

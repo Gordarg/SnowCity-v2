@@ -115,6 +115,9 @@ abstract class AModel
 		$db = new Db();
 		$conn = $db->Open();
 		$result = mysqli_query($conn, $query);
+		$error = mysqli_error($conn);
+		if ($error != null)
+			return new Exception($error); // NOT THROW
 		if (!$result)
 		{
 			header("HTTP/1.0 404 Not Found");
@@ -134,6 +137,10 @@ abstract class AModel
 		$conn = $db->Open();
 		$query  = "DELETE FROM `" . $this->table . "` WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];
 		mysqli_query($conn, $query);
+		$error = mysqli_error($conn);
+		if ($error != null)
+			return new Exception($error); // NOT THROW
+		else return true;
 	}
 	function Update()
 	{
@@ -152,9 +159,9 @@ abstract class AModel
 				&& substr($key, 0, 2) == "Is")
 			{
 				if ($value == "on")
-					$value = "1";
+					$value = true;
 				else if ($value == "off")
-					$value = "0";
+					$value = false;
 			}		
 			else if ($this->IsReserved($key)
 				&& substr($key, 0, 4) == "Hash")
@@ -175,6 +182,9 @@ abstract class AModel
 		$query = substr($query, 0, -2); // Delete last ,
 		$query .=" WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];	
 		mysqli_query($conn, $query);
+		$error = mysqli_error($conn);
+		if ($error != null)
+			return new Exception($error); // NOT THROW
 		$this->Select();
 	}
 	function Insert()
@@ -193,19 +203,17 @@ abstract class AModel
 
 			// prevenet sql injection ;)
 			// TODO: find a better way!
-
-			$value = 
-			($value != null) ?
-			str_replace("'", "\'", $value)
-			: null;
-
+			if ($value != null)
+			{
+				str_replace("'", "\'", $value);
+			}
 			if ($this->IsReserved($key)
 				&& substr($key, 0, 2) == "Is")
 			{
 				if ($value == "on")
-					$value = "1";
+					$value = 1;
 				else if ($value == "off")
-					$value = "0";
+					$value = 0;
 			}		
 			else if ($this->IsReserved($key)
 				&& substr($key, 0, 4) == "Hash")
@@ -219,7 +227,11 @@ abstract class AModel
 					$value = "FROM_BASE64('" . explode(',', $value)[1] . "')";
 			}
 			if (isset($value))
-				if ($this->IsReserved($key) and $this->pkType != "String")
+				if ($key == $this->pk and $this->pkType != "String")
+					$query .=  $value;			
+				else if ($key == $this->pk and $this->pkType == "String")
+					$query .= "'" . $value . "'";
+				else if ($this->IsReserved($key, false))
 					$query .=  $value;
 				else
 					$query .= "'" . $value . "'";
@@ -230,7 +242,14 @@ abstract class AModel
 		$query = substr($query, 0, -2); // Delete last ,
 		$query = $query . ");";
 		mysqli_query($conn, $query);
-		$this->SetValue($this->pk, mysqli_insert_id($conn));
+		$error = mysqli_error($conn);
+		if ($error != null)
+			return new Exception($error); // NOT THROW
+		if ($this->GetProperties()[$this->pk] == null)
+			$this->SetValue($this->pk, mysqli_insert_id($conn));
+		else 
+			$this->SetValue('Id', mysqli_insert_id($conn));
+                return true;
 	}
 }
 ?>
