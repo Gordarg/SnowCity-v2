@@ -1,4 +1,11 @@
+@font-face {
+    font-family: 'Behdad';
+    src: url('../fonts/Behdad-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/Behdad-Regular.woff') format('woff'), /* Pretty Modern Browsers */
+         url('../fonts/Behdad-Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
+  }
+
 *{
-    font-family: 'Nazanin';
+    font-family: 'Behdad';
     direction: rtl;
 }

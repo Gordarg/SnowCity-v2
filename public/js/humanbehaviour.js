@@ -1,8 +1,8 @@
+url = Hi.controller() + "humanbehaviourController.php?" + Hi.loginprotocol(); // controller address
+
 function humanbehaviour(){ // Constructor class
 
-    $.get(Hi.controller() + "humanbehaviourController.php?" + Hi.loginprotocol() , function(data, status){ 
-        
-        alert(data);
+    $.get(url , function(data, status){ 
 
         data.forEach(obj => {
             $("tbody").append('<tr>'
@@ -25,3 +25,24 @@ function humanbehaviour(){ // Constructor class
         });
     });
 }
+
+$("#humanbehaviour-form").on('submit', function (event) { // submit event
+    var mydata = $( "#humanbehaviour-form" ).serialize(); // prepare data
+    event.preventDefault(); // handle only javascript
+
+    $.post( url, mydata , function( data ) {
+        console.log('Success', data);
+        alert('Success');
+    }, "json")
+    .fail(function(errir) {
+        console.log('Error', errir);
+        alert('Success');
+    })
+    .always(function() {
+        $("#humanbehaviour-form")[0].reset();
+        console.log('End');
+        alert('always');
+    });
+     
+    ;
+});

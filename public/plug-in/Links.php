@@ -6,9 +6,9 @@ class Links
     {
         $items = explode('/',preg_replace("/[^a-zA-Z0-9_\-\/اآبپتثجچحخدذرزسشصضطظعغفقکگلمنوهی]/","-",$URL));
         $output = '
-<link rel="stylesheet" href="' . $BASEURL . 'public/css/' . $CURRENTLANGUAGE . '.css" crossorigin="anonymous">
-<link rel="stylesheet" href="' . $BASEURL . 'public/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-<link rel="stylesheet" href="' . $BASEURL . 'public/css/master.css">
+        <link rel="stylesheet" href="' . $BASEURL . 'public/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <link rel="stylesheet" href="' . $BASEURL . 'public/css/master.css">
+        <link rel="stylesheet" href="' . $BASEURL . 'public/css/' . $CURRENTLANGUAGE . '.css" crossorigin="anonymous">
 ';
         for ($i = 1 ; $i < count($items); $i++ )
         {
