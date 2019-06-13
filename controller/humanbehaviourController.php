@@ -40,19 +40,20 @@ class humanbehaviourController extends AController{
 
 	function POST(){
 		parent::POST();
-		$auth = parent::ValidateAutomatic('EDTOR');
+
+		$auth = parent::ValidateAutomatic('USER');
 		if (
 			($auth["Result"] && $auth['UserRole'] >= 3)
 			|| $auth['UserID'] == parent::getRequest('UserId') )
 		{
-			$user = new HumanBehaviour();	
-			foreach($user->GetProperties() as $key => $value){
-				$user->SetValue($key, 
+			$model = new HumanBehaviour();	
+			foreach($model->GetProperties() as $key => $value){
+				$model->SetValue($key, 
 					(parent::getRequest($key) == null) ? $value : parent::getRequest($key)
 				);
 			}
-			$user->Insert();
-			parent::setData($user->GetProperties());
+			$model->Insert();
+			parent::setData($model->GetProperties());
 		}
 		parent::returnData();
 	}

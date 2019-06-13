@@ -25,9 +25,9 @@ class HumanBehaviour extends AModel
 			'Day'=>date('d'),
 			'From'=>NULL,
 			'To'=>NULL,
-			'Quality'=>NULL,
-			'Task'=>NULL,
-			'Brief'=>NULL,
+			'Quality'=>0,
+			'Task'=>'',
+			'Brief'=>'',
 			'UserId'=>NULL,
 			)
 		);

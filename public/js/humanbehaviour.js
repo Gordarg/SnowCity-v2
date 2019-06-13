@@ -2,7 +2,11 @@ url = Hi.controller() + "humanbehaviourController.php?" + Hi.loginprotocol(); //
 
 function humanbehaviour(){ // Constructor class
 
+    $('input[name="UserId"]').val($.cookie("USERID"));
+
     $.get(url , function(data, status){ 
+
+        $("tbody").html('');
 
         data.forEach(obj => {
             $("tbody").append('<tr>'
@@ -31,17 +35,14 @@ $("#humanbehaviour-form").on('submit', function (event) { // submit event
     event.preventDefault(); // handle only javascript
 
     $.post( url, mydata , function( data ) {
-        console.log('Success', data);
-        alert('Success');
+
     }, "json")
     .fail(function(errir) {
         console.log('Error', errir);
-        alert('Success');
     })
     .always(function() {
         $("#humanbehaviour-form")[0].reset();
-        console.log('End');
-        alert('always');
+        humanbehaviour();
     });
      
     ;
