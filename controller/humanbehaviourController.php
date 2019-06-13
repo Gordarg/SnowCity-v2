@@ -42,9 +42,11 @@ class humanbehaviourController extends AController{
 		parent::POST();
 
 		$auth = parent::ValidateAutomatic('USER');
+
 		if (
 			($auth["Result"] && $auth['UserRole'] >= 3)
-			|| $auth['UserID'] == parent::getRequest('UserId') )
+			||
+			($auth['UserID'] == parent::getRequest('UserId')) )
 		{
 			
 			$model = new HumanBehaviour();	
@@ -54,6 +56,7 @@ class humanbehaviourController extends AController{
 				);
 			}
 
+			
 			$result = $model->Insert();
 
 			if ($result instanceof Exception)

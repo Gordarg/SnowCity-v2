@@ -27,7 +27,7 @@ class Authentication
         $model = new User();
         // TODO: SQL INJECTION BUG ON $Username and $Token
         // Functionalities::SQLINJECTIOENCODE
-        $result = $model->Select(0 , 1, 'Register' ,'DESC',
+        $result = $model->Select(0 , 1, 'Id' ,'DESC',
             "WHERE `Username`='" . $Username . "' AND `Role`>=" . $Role);
         $result_bool = Functionalities::IfExistsIndexInArray($result, 0) != false;
         return $result_bool;

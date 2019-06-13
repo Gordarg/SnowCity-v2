@@ -249,7 +249,8 @@ abstract class AModel
 			$this->SetValue($this->pk, mysqli_insert_id($conn));
 		else 
 			$this->SetValue('Id', mysqli_insert_id($conn));
-                return true;
+		return true;
+
 	}
 }
 ?>

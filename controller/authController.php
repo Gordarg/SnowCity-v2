@@ -10,7 +10,7 @@ class authController extends AController{
 	function GET(){
 		parent::GET();
 		$result = Authentication::ValidateToken(
-			parent::getRequest("Username"),
+			parent::getRequest("Userlogin"),
 			parent::getRequest("Token")
 		);
 		if (!$result)

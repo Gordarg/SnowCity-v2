@@ -12,6 +12,7 @@
 
 error_reporting(E_ALL);
 header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, HEAD, VIEW');
 ini_set('display_errors', '1');
 
 include_once 'Initialize.php';
@@ -78,29 +79,47 @@ abstract class AController
             case 'EDTOR':
                 $Role = 2;
                 break;
-            
+			
+			case 'USER':
+				$Role = 1;
+				break;
+
             default:
-                $Role = 1;
+                $Role = 0;
                 break;
 		}
-		if ($Role == 1)
+		if ($Role == 0)
 			return true;
-
+			
 		$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 		parse_str(
 			Functionalities::IfExistsIndexInArray(parse_url($actual_link), 'query')
 			,$params);
-		
+
 		$Username = Functionalities::IfExistsIndexInArray($params, 'Userlogin');
 		$Token = Functionalities::IfExistsIndexInArray($params, 'Token');
-		
+
 		$result = Authentication::ValidateToken($Username, $Token)
 			&& Authentication::ValidateRole($Username, $Role);
 		
+		$UserID = null;
+		$UserRole = null;
 		if (!$result)
 			$this->httpstatus = "HTTP/1.0 401 Unauthorized";
-		
-		return array("Username" => $Username, "Result" => $result);
+		else
+		{
+			// TODO: SQL INJECTION BUG ON $Username and $Token
+			// Functionalities::SQLINJECTIOENCODE
+			$user = (new User())->Select(0 , 1, 'Id' ,'ASC', "WHERE `Username`='" . $Username . "'")[0];
+			$UserID = $user['Id'];
+			$UserRole = $user['Role'];
+		}
+
+		return array(
+			"Username" => $Username,
+			"UserID" => $UserID,
+			"UserRole" => $UserRole,
+			"Result" => $result);
 	}
 
 	function VIEW(){

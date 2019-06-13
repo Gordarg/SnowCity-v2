@@ -6,7 +6,7 @@ Hi = {
         $(".message").fadeIn('slow').delay(5000).fadeOut();
     },
     loginprotocol(){
-        return "UserId=" + $.cookie("USERID")
+        return "Userlogin=" + $.cookie("USERNAME")
         + "&Token=" + $.cookie("LOGINTOKEN");
     },
     baseurl(){
