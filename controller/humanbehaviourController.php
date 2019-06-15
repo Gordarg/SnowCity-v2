@@ -42,13 +42,13 @@ class humanbehaviourController extends AController{
 		parent::POST();
 
 		$auth = parent::ValidateAutomatic('USER');
-
+		
 		if (
 			($auth["Result"] && $auth['UserRole'] >= 3)
 			||
 			($auth['UserID'] == parent::getRequest('UserId')) )
 		{
-			
+
 			$model = new HumanBehaviour();	
 			foreach($model->GetProperties() as $key => $value){
 				$model->SetValue($key, 
@@ -67,6 +67,10 @@ class humanbehaviourController extends AController{
 		}
 		parent::returnData();
 	}
+
+
+	// TODO: DELETE
+
 }
 
 $humanbehaviourcontroller = new humanbehaviourController();
