@@ -57,6 +57,7 @@ class emailController extends AController{
                     $email_deleted = ($headerinfo->Deleted == 'D') ? true : false;
                     $email_unseen = ($headerinfo->Unseen == 'U') ? true : false;
                     
+                    $message_normal = preg_replace('/(^\w.+:\n)?(^>.*(\n|$))+/mi', '', $message);
 
                     $model = new Email();
                     $model->SetValue('RAW', $header.$message);
@@ -65,15 +66,19 @@ class emailController extends AController{
                     $model->SetValue('Sender', $email_sender);
                     $model->SetValue('Date', $email_date);
                     $model->SetValue('Message', $message);
-                    $model->SetValue('MessageNormal', $mesage_normal);
+                    $model->SetValue('MessageNormal',
+                        $message_normal
+                    );
                     $result = $model->Insert();
                     
                     if ($result instanceof Exception)
-                        parent::setData($result);
+                    {
+                        // parent::setData($result);
+		                // parent::returnData();
+                    }
                     else
                     {
-                        parent::setData($model->GetProperties());
-                        array_push($data, $model);
+                        array_push($data, $model->GetProperties());
                     }
                 }
             }
@@ -82,7 +87,7 @@ class emailController extends AController{
             imap_close($inbox);
         }
 		
-        parent::setData($data);
+        // parent::setData($data);
 		parent::returnData();
 	}
 }
