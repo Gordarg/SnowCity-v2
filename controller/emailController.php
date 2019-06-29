@@ -28,7 +28,7 @@ class emailController extends AController{
 		}
 		
 		// $auth = parent::ValidateAutomatic('USER');
-        $data = null;
+        $data = [];
 
         // if ($auth["Result"])
         {
@@ -38,23 +38,59 @@ class emailController extends AController{
             $inbox = imap_open($hostname,$username,$password) or die('Cannot connect to GordMail: ' . imap_last_error());
             $emails = imap_search($inbox,'ALL');
             if($emails) {
-                $output = '';
                 rsort($emails);
                 foreach($emails as $email_number) {
-                    $message = (imap_fetchbody($inbox,$email_number,1.1)); 
+                    $header = imap_fetchheader($inbox,$email_number,1.1); 
+                    $message = imap_fetchbody($inbox,$email_number,1.1);
+                    $headerinfo = imap_headerinfo($inbox, $email_number);
+                    
                     if($message == '')
                     {
-                        $message = (imap_fetchbody($inbox,$email_number,1));
+                        $header = imap_fetchheader($inbox,$email_number,1); 
+                        $message = imap_fetchbody($inbox,$email_number,1);
+                        $headerinfo = imap_header($inbox, $email_number);
                     }
-                    $array = explode("\n", $message);
+
+                    $email_sender = Functionalities::ExtractEmails(htmlentities($headerinfo->senderaddress))[0];
+                    $email_toaddress = Functionalities::ExtractEmails(htmlentities($headerinfo->toaddress));
+                    $email_date = $headerinfo->date;
+                    $email_size = $headerinfo->Size;
+                    // $email_cc = $headerinfo->ccaddress;
+                    // $email_bcc = $headerinfo->bccaddress;
+                    // $email_refrences = $headerinfo->references;
+                    $email_messageid = htmlentities($headerinfo->message_id);
+                    $email_inreplyto = @htmlentities($headerinfo->in_reply_to);
+                    $email_deleted = ($headerinfo->Deleted == 'D') ? true : false;
+                    $email_unseen = ($headerinfo->Unseen == 'U') ? true : false;
+                    
+                    print ("<pre>");
+                    print ($email_inreplyto);
+                    print ("<br/>");
+                    print ($email_sender);
+                    print ("<br/>");
+                    print (join(' ', $email_toaddress));
+                    print ("<br/>");
+                    print ($email_messageid);
+                    print ("<br/><br/><br/>");
+                    print ($message);
+                    print ("</pre>");
+                    print ("<hr/>");
+
+
+                    $raw = $header . $message;
+                    array_push($data, $raw);
+                    // print("============================");
                 }
-                print_r($array);
             }
+            imap_errors();
+            imap_alerts();
             imap_close($inbox);
         }
 		
-		parent::setData($emails);
-		parent::returnData();
+        parent::setData($data);
+        
+        
+		// parent::returnData();
 	}
 
 }
