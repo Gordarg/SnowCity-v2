@@ -41,4 +41,8 @@ class Config
     const META_AUTHOR = "";
     
     const WebMaster = "info@gordarg.com";
+
+    const mail_hostname = "{mail.gordarg.com:110/pop3/notls}Inbox";
+    const mail_username = "info@gordarg.com";
+    const mail_password = '';
 }
