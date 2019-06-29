@@ -1,6 +1,5 @@
 <?php
 include_once BASEPATH . 'model/User.php';
-include_once BASEPATH . 'core/Authorization.php';
 include_once BASEPATH . 'core/Bridge.php';
 include_once BASEPATH . 'core/Cryptography.php';
 

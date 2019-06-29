@@ -7,7 +7,7 @@ Hi = {
     },
     loginprotocol(){
         return "Userlogin=" + $.cookie("USERNAME")
-        + "&Token=" + $.cookie("LOGINTOKEN");
+        + "&Token=" + $.cookie("USERTOKEN");
     },
     baseurl(){
         return "http://localhost/SnowFramework/";

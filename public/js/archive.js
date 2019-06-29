@@ -1,6 +1,7 @@
 function archive(){ // Constructor class
 
-    $.get(Hi.controller() + "postdetailController.php?BinContent=✓&Type=POST&" + Hi.loginprotocol() , function(data, status){ 
+    // TODO: Needs attention
+    $.get(Hi.controller() + "PostController.php?BinContent=✓&Type=POST&" + Hi.loginprotocol() , function(data, status){ 
     
         data.forEach(obj => {
             $("tbody").append('<tr>'

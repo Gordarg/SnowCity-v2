@@ -1,6 +1,6 @@
 function collection(){ // Constructor class
 
-    $.get(Hi.controller() + "postdetailController.php?BinContent=✓&Type=QUST&" + Hi.loginprotocol() , function(data, status){ 
+    $.get(Hi.controller() + "PostController.php?BinContent=✓&Type=QUST&" + Hi.loginprotocol() , function(data, status){ 
     
         data.forEach(obj => {
             $("tbody").append('<tr>'

@@ -14,7 +14,7 @@ class Log extends AModel
 			'Id' => NULL,
 			'Event' => 'LOGIN',
 			'Key' => 'USERNAME',
-			'Value' => 'LOGINTOKEN',
+			'Value' => 'USERTOKEN',
 			'Submit' => DATETIMENOW,
 		));
 	}

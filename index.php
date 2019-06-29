@@ -7,7 +7,6 @@ include_once 'core/Initialize.php';
 
 // Authentication and authorization
 include_once 'core/Authentication.php';
-include_once 'core/Authorization.php';
 
 // Override error_handler()
 set_error_handler(function($errno, $errstr, $errfile, $errline ){
@@ -40,6 +39,7 @@ if ($PATHINFO[1] == 'ajax')
     $PATHINFO = array_values($PATHINFO);
     $AJAX = true;
 }
+
 // Check if requested page exists already
 else if (!file_exists(BASEPATH.'public/'.$PATHINFO[1].'.php'))
 {
@@ -50,35 +50,24 @@ else if (!file_exists(BASEPATH.'public/'.$PATHINFO[1].'.php'))
 // Current User Info
 $USERID = Functionalities::IfExistsIndexInArray($_COOKIE, 'USERID');
 $USERNAME = Functionalities::IfExistsIndexInArray($_COOKIE, 'USERNAME');
-$LOGINTOKEN = Functionalities::IfExistsIndexInArray($_COOKIE, 'LOGINTOKEN');
-$ROLE = Functionalities::IfExistsIndexInArray($_COOKIE, 'ROLE');
-if ($USERID)
-{
-    // TODO: Validate Token
-    // I mean: Check if Role and Username and Token are valid
-}
-if (!Authorization::ValidatePath($ROLE, 
-        ($PATHINFO[1] == 'say')
-        ? 'say|' . Functionalities::IfExistsIndexInArray($PATHINFO,2)
-        : $PATHINFO[1]
-    )
-)
-{
-    header("HTTP/1.0 401 Unauthorized");
-    return;   
-}
+$USERTOKEN = Functionalities::IfExistsIndexInArray($_COOKIE, 'USERTOKEN');
+$USERROLE = Functionalities::IfExistsIndexInArray($_COOKIE, 'ROLE');
 
 // Choose Language
 if(!isset($_COOKIE["LANG"]) &&
     (!$AJAX && $PATHINFO[1] != 'language'))
     header('Location:language/' . Config::DefaultLanguage);
+
 // Multi-Language Plug-In
 include_once BASEPATH.'public/plug-in/Translate.php';
 $Translate = new Translate();
 $CURRENTLANGUAGE = Functionalities::IfExistsIndexInArray($_COOKIE, 'LANG');
-// Load PostDetail Class
-include_once BASEPATH.'model/PostDetail.php';
-$PostDetail = new PostDetail();
+
+// Load Post Class
+include_once BASEPATH.'model/Post.php';
+$Post = new Post();
+$Post->AuthConstruct($USERNAME, $USERTOKEN);
+
 // Load Markdown to Markup Converter Plug-In
 require_once BASEPATH.'public/plug-in/Parsedown.php';
 $Parsedown = new Parsedown();
@@ -92,7 +81,7 @@ if ($PATHINFO[1] == 'view' || $PATHINFO[1] == 'form')
 {
     $Language = $PATHINFO[2];
     $Id = $PATHINFO[3];
-    $row = $PostDetail->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $Id . "'")[0];
+    $row = $Post->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $Id . "'")[0];
 
     // Generate custom meta
     $META_DESCRIPTION = Text::GenerateAbstractForPost($Parsedown->text($row['Body']), 500);
@@ -102,7 +91,7 @@ else if ($PATHINFO[1] == 'post')
 {
     $Language = $PATHINFO[3];
     $Id = $PATHINFO[4];
-    $row = $PostDetail->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $Id . "'")[0];
+    $row = $Post->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $Id . "'")[0];
 }
 else if ($PATHINFO[1] == 'rss' && $AJAX)
 {

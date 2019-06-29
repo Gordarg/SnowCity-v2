@@ -9,18 +9,18 @@
 
 include_once BASEPATH . 'core/AModel.php';
 
-class Association extends AModel
+class Contact extends AModel
 {
 
 	function __construct()
 	{
-		self::SetTable('associations');
+		self::SetTable('contacts');
 		self::SetPrimaryKey('Id');
 		self::SetPrimaryKeyType('Int');
 		self::SetProperties(array(
-			// 'KEY' => DEFAULT_VALUE,
-			'Email'=>NULL,
 			'UserId'=>NULL,
+			'Type'=>'email',
+			'Value'=>'a@b.c',
 			)
 		);
 	}

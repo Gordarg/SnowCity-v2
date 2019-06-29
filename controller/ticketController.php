@@ -16,7 +16,7 @@ class ticketController extends AController{
 	function GET(){
 		
 		parent::GET();
-		$model = new HumanBehaviour();
+		$model = new Ticket();
 		foreach($model->GetProperties() as $key => $value){
 			$model->SetValue($key, parent::getRequest($key));
 		}
@@ -52,7 +52,7 @@ class ticketController extends AController{
 			($auth['UserID'] == parent::getRequest('UserId')) )
 		{
 
-			$model = new HumanBehaviour();	
+			$model = new Ticket();	
 			foreach($model->GetProperties() as $key => $value){
 				$model->SetValue($key, 
 					(parent::getRequest($key) == null) ? $value : parent::getRequest($key)
@@ -83,7 +83,7 @@ class ticketController extends AController{
 			($auth['UserID'] == parent::getRequest('UserId')) )
 		{
 
-			$model = new HumanBehaviour();	
+			$model = new Ticket();	
 			foreach($model->GetProperties() as $key => $value){
 				$model->SetValue($key, 
 					(parent::getRequest($key) == null) ? $value : parent::getRequest($key)

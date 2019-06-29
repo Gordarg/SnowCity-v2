@@ -26,7 +26,7 @@ $output = '<?xml version="1.0" encoding="UTF-8" ?>
     </image>
 ';
 
-$rows = $PostDetail->Select(-1, 10, "Submit", "DESC",
+$rows = $Post->Select(-1, 10, "Submit", "DESC",
 "WHERE 1" .
 (($Language != null) ? " AND `Language` = '" . $Language . "'" : "") . 
 (($Sender != null) ? " AND CONCAT('@',`Username`) LIKE '@" . $Sender . "'" : ""))

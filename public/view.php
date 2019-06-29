@@ -32,7 +32,7 @@ if ($row == null)
     <div id="keywords">
     <?php
     foreach
-    ((new PostDetail())->
+    ((new Post())->
         Select(-1, -1, 'Id', 'DESC',
         "WHERE `TYPE` = 'KWRD' AND `Language`='" . $Language .
         "' AND `RefrenceID`='" . $row['MasterID'] . "'")

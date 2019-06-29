@@ -1,117 +1,62 @@
 <?php
-// Handle html method="post"
-
 include_once BASEPATH.'model/Post.php';
-?>
-
-
-
-<?php
 
 // Default values
-
-$Type = strtoupper($PATHINFO[2]);
 
 $MasterID = Functionalities::GenerateGUID();
 
 $Title = '';
 $Language = $CURRENTLANGUAGE;
 $Index = '0';
-$Submit = DATETIMENOW; // Comes from Initialize
-$UserID = Functionalities::IfExistsIndexInArray($_COOKIE, 'USERID');
-                            // TODO: WHY the function recived array? [0]
 $Level = '0';
 $Body = '';
 $Status = 'Publish';
 $Content = null;
-$RefrenceID = null;
-
-
-?>
-
-
-
-<?php
 
 $Post = new Post();
 
-// Handle Post
-
+// Handle HTTP_POST
 if (
 isset($_POST["block"]) ||
 isset($_POST["approve"]) ||
 isset($_POST["pubilsh"]) ||
 isset($_POST["draft"]) ||
 isset($_POST["insert"]) ||
-isset($_POST["update"]) ||
-isset($_POST["clear"]) ||
-isset($_POST["delete"]) ||
-isset($_POST["post_add_keyword"])
+isset($_POST["update"])
 )
-
-{
-    if (isset($_POST['post_add_keyword']))
-    {
-        $Post->SetValue("MasterId",  $MasterID);
-        $Post->SetValue("RefrenceId", Functionalities::IfExistsIndexInArray($_POST, 'masterid'));
-        $Post->SetValue("Title",  $_POST['post_title_keyword']);
-        $_POST['type'] = 'KWRD';
-        $Post->SetValue("Body", null);
-    }
-    else{
-        $Post->SetValue("MasterId",  $_POST['masterid']);
-        $Post->SetValue("RefrenceId", Functionalities::IfExistsIndexInArray($_POST, 'refrenceid'));
-        $Post->SetValue("Title",  $_POST['title']);
-        $Post->SetValue("Body", $_POST['body']);
-        $Post->SetValue("Index", Functionalities::IfExistsIndexInArray($_POST, 'index'));
-        $Post->SetValue("Level", Functionalities::IfExistsIndexInArray($_POST, 'level'));
-    }
-    $Post->SetValue("Type", $_POST['type']);
-    $Post->SetValue("Submit", $_POST['submit']);
-    $Post->SetValue("Language", $_POST['language']);
-    $Post->SetValue("UserId", $_POST['userid']);
-    
+{    
     if (isset($_POST["block"])) // BLOCK A CONTENT WITHOUT DELETING
-        $Post->SetValue("Status", 'BLOCKED');
+        $Status =  'BLOCKED';
     else if (isset($_POST["approve"])) // USED FOR ANSWERS
-        $Post->SetValue("Status", 'APPROVED');
+        $Status =  'APPROVED';
     else if (isset($_POST["pubilsh"])) // CAN BE VIEWED BY PUBLIC
-        $Post->SetValue("Status",  'PUBLISHED');
+        $Status =   'PUBLISHED';
     else if (isset($_POST["draft"])) // DRAFT FOR LATER USE
-        $Post->SetValue("Status", 'DRAFT');
+        $Status =  'DRAFT';
     else if (isset($_POST["insert"]) || isset($_POST["update"])) // WAITING FOR ADMIN TO PUBLISH
-        $Post->SetValue("Status", 'SENT');
+        $Status =  'SENT';
 
-    $Post->Insert();
+    $Post->SendPost(
+        $_POST['masterid']
+        , $_POST['title']
+        , Functionalities::IfExistsIndexInArray($_POST, 'level')
+        , $_FILES['content']
+        , $_POST['body']
+        , $Status
+        , $_POST['language']
+    );
     // $Id = $Post->GetProperties()['Id'];
 }
 
 if (isset($_POST["delete"])) {
-    $Post->SetOperand("IsDeleted");
-    $Post->SetValue("IsDeleted", "1");
-    $Post->Update();
-    // Attention: Maybe there is a bug when deleting a post <> $CURRENTLANGUAGE or $PATHINFO or etc ...
-    $Post->ClearOperands("IsDeleted");
+    $Post->DeletePost($_POST['masterid']);
 }
 else if (isset($_POST["clear"]))
 {
-    $Post->SetOperand("IsContentDeleted");
-    $Post->SetValue("IsContentDeleted", "1");
-    $Post->Update();
-    $Post->ClearOperands("IsContentDeleted");
-}
-else if (((isset($_POST["update"])) or (isset($_POST["insert"])))
-        && ($_FILES['content']['size'] > 0))
-{
-    $Post->SetOperand("BinContent");
-    $Post->SetValue("BinContent", ',' . urlencode(base64_encode(file_get_contents($_FILES['content']['tmp_name']))));
-    $Post->Update();
+    $Post->DeletePostAttachment($_POST['masterid']);
 }
 
 if (isset($_POST["delete"]))
-if ($Post->GetProperties()['Type'] == 'KWRD') 
-    exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['RefrenceId'] ));
-else
     exit(header("Location: " . $BASEURL . 'dashboard' ));
 else if (
     isset($_POST["block"]) ||
@@ -121,23 +66,15 @@ else if (
     isset($_POST["insert"]) ||
     isset($_POST["update"]) ||
     isset($_POST["clear"])
-)   // TODO: Disable redirects in Ajax calls (needs UI designer attention)
+)
+// TODO: Disable redirects in Ajax calls (needs UI designer attention)
 {
-    if ($Post->GetProperties()['Type'] == 'QUST')
-        exit(header("Location: " . $BASEURL . 'say/qust/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
-    else if ($Post->GetProperties()['Type'] == 'POST')
-        exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
+    exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
 }
 
-?>
-
-<?php
-
 // Select Post Details for Edit Window
-
 $row = null;
 $lines = array();
-
 if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
 {
     $MasterID = Functionalities::IfExistsIndexInArray($PATHINFO, 4);
@@ -149,152 +86,10 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
         $Title = Functionalities::IfExistsIndexInArray($row,'Title');
         $Level = Functionalities::IfExistsIndexInArray($row,'Level');
         $RefrenceID = Functionalities::IfExistsIndexInArray($row,'RefrenceId');
-
-        switch ($Type)
-        {
-            case "QUST":
-                $Body =  Functionalities::IfExistsIndexInArray($row,'Body');
-                $lines = explode('\n', $Body);
-                break;
-            case "POST":
-                $Body = Functionalities::IfExistsIndexInArray($row,'Body');
-                break;
-        }
-    }
-}
-?>
-
-<?php
-global $form_delete;
-global $form_edit;
-global $form_up;
-global $form_down;
-
-$form_delete = $form_edit = $form_up = $form_down = false;
-
-foreach(array_keys($_POST) as $key)
-{
-    $form_delete = Functionalities::IfStringStartsWith($key, 'form-operation-delete-');
-    $form_edit = Functionalities::IfStringStartsWith($key, 'form-operation-edit-');
-    $form_up = Functionalities::IfStringStartsWith($key, 'form-operation-up-');
-    $form_down = Functionalities::IfStringStartsWith($key, 'form-operation-down-');
-
-    if ($form_delete || $form_edit || $form_up || $form_down)
-        break;
-}
-
-// Generate Form Items from hidden value
-if (
-    $form_delete || $form_edit || $form_up || $form_down
-    || isset($_POST['form_add_submit']))
-{
-    $lines = explode('\n', str_replace('\\' . '\n', '\n', Functionalities::IfExistsIndexInArray($_POST,'body')));
-}
-
-
-$FormItems = array();
-if (sizeof($lines) > 1)
-{
-
-    // Items stored in hidden values
-    $ItemTitles = explode(",", $lines[0]);
-    $ItemTypes = explode(",", $lines[1]);
-    $form_last_item = sizeof($ItemTitles) - 1;
-
-    if ($form_up > 1)
-    {
-        // TODO: Swap with previous
-        $temp_title = $ItemTitles[$form_up - 2];
-        $ItemTitles[$form_up - 2] = $ItemTitles[$form_up - 1];
-        $ItemTitles[$form_up - 1] = $temp_title;
-
-        $temp_types = $ItemTypes[$form_up - 2];
-        $ItemTypes[$form_up - 2] = $ItemTypes[$form_up - 1];
-        $ItemTypes[$form_up - 1] = $temp_types;   
-    }
-    else if ($form_down &&
-                $form_down != $form_last_item)
-    {
-        // TODO: Swap with next
-
-        $temp_title = $ItemTitles[$form_down - 1];
-        $ItemTitles[$form_down - 1] = $ItemTitles[$form_down - 0];
-        $ItemTitles[$form_down - 0] = $temp_title;
-
-        $temp_types = $ItemTypes[$form_down - 1];
-        $ItemTypes[$form_down - 1] = $ItemTypes[$form_down - 0];
-        $ItemTypes[$form_down - 0] = $temp_types;
-
-    }
-
-    // Foreach new* from items
-    for ($i = 0; $i < $form_last_item; $i++)
-    {
-
-        // If edit button was clicked
-        if ($form_edit == $i + 1)
-        {
-            $item = [
-                Functionalities::IfExistsIndexInArray($_POST, 'form-add-title-' . ($form_edit)),
-                Functionalities::IfExistsIndexInArray($_POST, 'form-add-type-' . ($form_edit))
-            ];
-
-            array_push($FormItems, $item);
-
-        }
-        else if ($form_delete == $i + 1)
-        {
-            $item = null;
-        }
-        else // Just do nothing
-        {
-
-            // Load other items to UI
-            $item = [
-                $ItemTitles[$i] ,
-                $ItemTypes[$i]
-            ];
-            array_push($FormItems, $item);
-
-        }
+        $Body = Functionalities::IfExistsIndexInArray($row,'Body');
     }
 }
 
-if (isset($_POST['form_add_submit']))
-{
-    // TODO: Reorder the array
-    // $_POST['form_add_after']
-    $item = [
-        $_POST['form_add_title'] ,
-        $_POST['form_add_type'] 
-    ];
-
-    array_push($FormItems, $item);
-
-    // $Body = Functionalities::IfExistsIndexInArray($lines,0) . str_replace(",", "-", $item[0]) . ",";
-    // $Body .= '\\' . '\n';
-    // $Body .= Functionalities::IfExistsIndexInArray($lines,1) . $item[1] . ',';
-}
-
-
-// Generate Hidden Value from Form Items
-if (
-    $form_delete || $form_edit || $form_up || $form_down
-    || isset($_POST['form_add_submit']))
-{
-    $Body = '';
-    for ($i = 0; $i < sizeof($FormItems); $i++)
-        $Body .= $FormItems[$i][0] . ',';
-    $Body .= '\\' . '\n';
-    for ($i = 0; $i < sizeof($FormItems); $i++)
-        $Body .= $FormItems[$i][1] . ',';
-}
-
-
-?>
-
-
-<?php
 if (!$AJAX)
 {
     echo '
@@ -309,227 +104,25 @@ if (!$AJAX)
     <main role="main" class="container p-5">
   ';
 }
-?>
-<!--
-    TODO: Disable redirects for ajax calls (Needs UI Designer Attention)
--->
-<form id="gordform" method="post" action="<?= $BASEURL . 'say/' . $Type . (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null ? ('/' . $PATHINFO[3] . '/' . $PATHINFO[4]) : '' )  ?>" enctype="multipart/form-data">
-<input type="hidden" name="masterid" value="<?= $MasterID ?>" />
-<?php
-if (Functionalities::IfExistsIndexInArray($PATHINFO, 5) == 'delete')
-    echo '
-        <input type="hidden" name="submit" value="' . $Submit . '" />
-        <input type="hidden" name="userid" value="' . $UserID . '" />
-        <input type="hidden" name="index" value="' . $Index . '" />
-        <input type="hidden" name="refrenceid" value="' . $RefrenceID . '" />
-        <input type="hidden" name="status" value="' . $Status . '" />
-        <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
-        <input type="text" disabled class="form-control" name="title" value="' . $Title . '" />
-        <input type="hidden" name="body" value="' . $Body . '" />
-        ';
-else    
-switch ($Type)
-{
-    case 'POST':
-        echo '
-            <input type="hidden" name="submit" value="' . $Submit . '" />
-            <input type="hidden" name="userid" value="' . $UserID . '" />
-            <input type="hidden" name="index" value="' . $Index . '" />
-            <input type="hidden" name="refrenceid" value="' . $RefrenceID . '" />
-            <input type="hidden" name="status" value="' . $Status . '" />
-            <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
 
-            <label for="title">' . Translate::Label("عنوان") . '</label>
-            <input class="form-control" name="title" required placeholder="' . Translate::Label("عنوان") . '" type="text" value="' . $Title . '" />
-
-            <label for="level">' . Translate::Label("مرتبه") . '</label>
-            <select class="form-control"  name="level">
-            <option ' . ( ($Level == "1") ? "selected" : "" ) . ' value="1">' . Translate::Label("سریع") . ' - ' . Translate::Label("بالا") . '</option>
-            <option ' . ( ($Level == "2") ? "selected" : "" ) . ' value="2">' . Translate::Label("متوسط") . ' - ' . Translate::Label("مرکز") . '</option>
-            <option ' . ( ($Level == "3") ? "selected" : "" ) . ' value="3">' . Translate::Label("کند") . ' - ' . Translate::Label("پایین") . '</option>
-            </select>
-
-            <label for="body">' . Translate::Label("متن") . '</label>
-            <textarea name="body">' . $Body  . '</textarea>
-            <label for="content">' . Translate::Label("پرونده") . '</label>
-            <input class="form-control" type="file" name="content" id="file" />
-            '
-            . '<div class="card m-4">
-            <div class="form-inline card-body">
-            <div class="form-group row">
-                <label for="form_add_type">' . Translate::Label('کلمه‌ی کلیدی') . '</label>
-                <input type="text" name="post_title_keyword" class="form-control m-1" value="'  . '" />
-                <input type="submit" name="post_add_keyword" class="btn btn-success m-1" value="' . $Translate->Label("افزودن") . '" />
-            </div><hr/>';
-            foreach (
-            (new PostDetail())->
-                Select(-1, -1, 'Id', 'DESC',
-                "WHERE `TYPE` = 'KWRD' AND `Language`='" . $Language .
-                "' AND `RefrenceID`='" . $MasterID . "'")
-            as $keyword)
-            {
-                /* TODO: tooltip??? hint on hover */
-                echo '<a class="btn btn-sm btn-link" tooltip="' . Translate::Label('حذف') . '" href="' . $BASEURL . 'say/kwrd/' . $keyword['Language'] . '/' . $keyword['MasterID'] . '/delete">' . $keyword['Title'] . '</a>';
-            }
-        echo
-            '</div>
-            </div>
-            '
-            ;
-        break;
-    
-    case "QUST":
-        // Level will count dynamic inputs
-        echo '
-            <input type="hidden" name="submit" value="' . $Submit . '" />
-            <input type="hidden" name="userid" value="' . $UserID . '" />
-            <input type="hidden" name="index" value="' . $Index . '" />
-            <input type="hidden" name="status" value="' . $Status . '" />
-            <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
-            <input type="hidden" name="level" value="' . $Level . '" /> <!-- Keeps form count -->
-            <input type="hidden" name="body" value="' . $Body . '" />            
-            <div class="form-group">
-            <label for="title">' . Translate::Label('عنوان') . '</label>
-            <input type="text" class="form-control bg-dark text-light" name="title" value="' . $Title . '" />
-            </div>
-            <div class="form-group">
-            <!--<label for="refrenceid">' . Translate::Label('پیش نیاز') . '</label>-->
-            <input type="hidden" class="form-control bg-dark text-light" name="refrenceid" value="' . $RefrenceID . '" /><!--TODO: پیش نیاز-->
-            </div>
-            '
-            . '
-            <div class="card">
-                <div class="card bg-light text-dark m-4">
-                <div class="form-inline card-body">
-                ';
-
-                $i = 0;
-                foreach ($FormItems as $item)
-                {
-                    $i ++;
-
-                    echo '
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="form-add-title-' . $i . '">' . Translate::Label('عنوان') . '</label>
-                            <input name="form-add-title-' . $i . '" type="text" class="form-control m-1" value="' . $item[0] . '" />
-                        </div>
-                        <div class="form-group">
-                            <label for="form-add-type-' . $i . '">' . Translate::Label('نوع') . '</label>
-                            <select class="form-control m-1" name="form-add-type-' . $i . '">
-                                <option ' . ($item[1] == 'Numeric' ? "selected" : "") . ' value="Numeric">' . Translate::Label('عددی') . '</option>
-                                <option ' . ($item[1] == 'Characters' ? "selected" : "") . ' value="Characters">' . Translate::Label('رشته') . '</option>
-                                <option ' . ($item[1] == 'File' ? "selected" : "") . ' value="File">' . Translate::Label('پرونده') . '</option>
-                                <option ' . ($item[1] == 'Multiline Text' ? "selected" : "") . ' value="Multiline Text">' . Translate::Label('متن چند خط') . '</option>
-                                <option ' . ($item[1] == 'Drop Down List' ? "selected" : "") . ' value="Drop Down List">' . Translate::Label('لیست آبشاری') . '</option>
-                                <option ' . ($item[1] == 'Radio buttons' ? "selected" : "") . ' value="Radio buttons">' . Translate::Label('دکمه‌های رادیویی') . '</option>
-                                <option ' . ($item[1] == 'Check Box' ? "selected" : "") . ' value="Check Box">' . Translate::Label('چک باکس') . '</option>
-                                <option ' . ($item[1] == 'Agree Box' ? "selected" : "") . ' value="Agree Box">' . Translate::Label('باکس تائید') . '</option>
-                                <option ' . ($item[1] == 'Heading' ? "selected" : "") . ' value="Heading">meta:' . Translate::Label('سر‌عنوان') . '</option>
-                                <option ' . ($item[1] == 'Link' ? "selected" : "") . ' value="Link">meta:' . Translate::Label('پیوند') . '</option>
-                                <option ' . ($item[1] == 'Long Text' ? "selected" : "") . ' value="Long Text">meta:' . Translate::Label('متن بلند') . '</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <input name="form-operation-delete-' . $i . '" type="submit" class="form-control m-1 btn-sm btn-danger" value="' . Translate::Label('حذف') . '" />
-                            <input name="form-operation-edit-' . $i . '" type="submit" class="form-control m-1 btn-sm btn-warning" value="' . Translate::Label('ویرایش') . '" />
-                            <input name="form-operation-up-' . $i . '" type="submit" class="form-control m-1 btn-sm btn-info" value="' . Translate::Label('انتقال به بالا') . '" />
-                            <input name="form-operation-down-' . $i . '" type="submit" class="form-control m-1 btn-sm btn-info" value="' . Translate::Label('انتقال به پایین') . '" />
-                        </div>
-                    </div>
-                    ';
-
-                    // Use commented lines in view page :)
-
-                    // switch ($item[1])
-                    // {
-                    //     case "Numeric":
-                    //         echo '<input class="form-control" type="number" name="form_item_' . $i . '" />';
-                    //         break;
-                    // }
-                }
-                if ($i == 0)
-                echo Translate::Label('هیچ موردی یافت نشد');
-
-                echo '                
-                </div>
-                </div>
-                <div class="card bg-primary text-light m-4">
-                    <div class="form-inline card-body">
-                        <div class="form-group">
-                            <label for="form_add_title">' . Translate::Label('عنوان') . '</label>
-                            <input class="form-control m-1" type="text" name="form_add_title">
-                        </div>
-                        <div class="form-group">
-                            <label for="form_add_type">' . Translate::Label('نوع') . '</label>
-                            <select class="form-control m-1" name="form_add_type">
-                                <option value="Numeric">' . Translate::Label('عددی') . '</option>
-                                <option value="Characters">' . Translate::Label('رشته') . '</option>
-                                <option value="File">' . Translate::Label('پرونده') . '</option>
-                                <option value="Multiline Text">' . Translate::Label('متن چند خط') . '</option>
-                                <option value="Drop Down List">' . Translate::Label('لیست آبشاری') . '</option>
-                                <option value="Radio buttons">' . Translate::Label('دکمه‌های رادیویی') . '</option>
-                                <option value="Check Box">' . Translate::Label('چک باکس') . '</option>
-                                <option value="Agree Box">' . Translate::Label('باکس تائید') . '</option>
-                                <option value="Heading">meta:' . Translate::Label('سر‌عنوان') . '</option>
-                                <option value="Link">meta:' . Translate::Label('پیوند') . '</option>
-                                <option value="Long Text">meta:' . Translate::Label('متن بلند') . '</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="form_add_after">' . Translate::Label('بعد از') . '</label>
-                            <select class="form-control m-1" name="form_add_after">
-                                <option value="0">' . Translate::Label('ابتدا') . '</option>' // TODO
-                                //        . '<option value="test">TODO</option>'
-                            . '</select>
-                        </div>'
-                        // TODO: Required or not!?
-                        // TODO: Validation message
-                    .'</div>
-                    <div class="form-group">
-                        <input type="submit" name="form_add_submit" class="btn btn-primary btn-block btn-sm" value="' . $Translate->Label("افزودن فیلد") . '" />
-                    </div>
-                </div>
-            </div>
-        ';
-        break;
-}
-
-if (Functionalities::IfExistsIndexInArray($PATHINFO, 5) == 'delete' && $row != null)
-{
-    echo ' 
-    <div class="alert alert-danger" role="alert">
-        ' . $Translate::Label('آیا اطمینان دارید؟') . '
-    </div>
-    <input type="submit" name="delete" class="btn btn-dark m-1" value="' . $Translate->Label("حذف") . '" />
-    <a class="btn btn-info m-1" href="' . $BASEURL . 'say/post/' . $Language . '/' . $MasterID . '">' . $Translate->Label("بازگشت") . '</a>
-    ';
-}
-else if ($row != null) {
-    //TODO (ADMIN): echo '<input type="submit" class="btn btn-outline-primary m-1" name="publish" value="' . $Translate->Label("انتشار") . '" />';
-    echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
-    echo '<input type="submit" name="update" class="btn btn-success m-1" value="' . $Translate->Label("به روز رسانی") . '" />';
-    echo '<input type="submit" name="clear" class="btn btn-warning m-1" value="' . $Translate->Label("حذف پیوست") . '" />';
-    echo '<input type="submit" name="block" class="btn btn-danger m-1" value="' . $Translate->Label("بلوکه") . '" />';
-    echo '<a class="btn btn-dark m-1 text-light" href="' . $BASEURL . 'say/post/' . $Language . '/' . $MasterID . '/' . 'delete' . '">' . $Translate->Label("حذف") . '</a>';
-    if ($Type == 'QUST')
-        echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'form/' . $_COOKIE['LANG'] . '/' . $row['MasterId'] . '">' . $Translate->Label("مشاهده") . '</a>';
-    else
-        echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . $_COOKIE['LANG'] . '/' . $row['MasterId'] . '">' . $Translate->Label("مشاهده") . '</a>';
-}
-else {
-    echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
-    echo '<input type="submit" class="btn btn-success m-1" name="insert" value="' . $Translate->Label("ارسال") . '" />';
-} 
-?>
-<input type="hidden" name="type" value="<?= $Type ?>" />
-</form>
-<?php
-if (!$AJAX)
-{
 echo '
-<a href="' . $BASEURL . 'dashboard">' . Translate::Label('داشبورد') . '</a>
-</main>
+<form id="gordform" method="post" action="' . $BASEURL . 'say/' . $Type . (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null ? ('/' . $PATHINFO[3] . '/' . $PATHINFO[4]) : '' )  . '" enctype="multipart/form-data">
+<input type="hidden" name="masterid" value="' . $MasterID . '" />
+<input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
+
+<label for="title">' . Translate::Label("عنوان") . '</label>
+<input class="form-control" name="title" required placeholder="' . Translate::Label("عنوان") . '" type="text" value="' . $Title . '" />
+
+<label for="level">' . Translate::Label("مرتبه") . '</label>
+<select class="form-control"  name="level">
+<option ' . ( ($Level == "1") ? "selected" : "" ) . ' value="1">' . Translate::Label("سریع") . ' - ' . Translate::Label("بالا") . '</option>
+<option ' . ( ($Level == "2") ? "selected" : "" ) . ' value="2">' . Translate::Label("متوسط") . ' - ' . Translate::Label("مرکز") . '</option>
+<option ' . ( ($Level == "3") ? "selected" : "" ) . ' value="3">' . Translate::Label("کند") . ' - ' . Translate::Label("پایین") . '</option>
+</select>
+
+<label for="body">' . Translate::Label("متن") . '</label>
+<textarea name="body">' . $Body  . '</textarea>
+<label for="content">' . Translate::Label("پرونده") . '</label>
+<input class="form-control" type="file" name="content" id="file" />
 ';
-}
 ?>

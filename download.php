@@ -3,11 +3,11 @@ include ('core/Initialize.php');
 
 $Id = $_GET["id"];
 
-include_once BASEPATH.'model/PostDetail.php';
-$PostDetail = new PostDetail();
-$PostDetail->SetValue("BinContent", "✓");
-$PostDetail->DisableEncoding(true);
-$item = $PostDetail->Select(-1, 1, 'MasterID', 'ASC', "WHERE `MasterID`='" . $Id . "'")[0];
+include_once BASEPATH.'model/Post.php';
+$Post = new Post();
+$Post->SetValue("BinContent", "✓");
+$Post->DisableEncoding(true);
+$item = $Post->Select(-1, 1, 'MasterID', 'ASC', "WHERE `MasterID`='" . $Id . "'")[0];
 $content = $item["BinContent"];
 
 $finfo = new finfo(FILEINFO_MIME);
