@@ -79,6 +79,9 @@ class emailController extends AController{
                     else
                     {
                         array_push($data, $model->GetProperties());
+                        imap_delete($inbox, $email_number, 1);
+                        imap_delete($inbox, $email_number, 1.1);
+                        imap_expunge($inbox);
                     }
                 }
             }
