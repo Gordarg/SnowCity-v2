@@ -1,6 +1,6 @@
 <?php
 /**
- * Emails
+ * Ticket
  * Tickets Plugin
  * 
  * @author        MohammadReza Tayyebi <rexa@gordarg.com>
@@ -9,25 +9,18 @@
 
 include_once BASEPATH . 'core/AModel.php';
 
-class Email extends AModel
+class Association extends AModel
 {
 
 	function __construct()
 	{
-		self::SetTable('emails');
+		self::SetTable('associations');
 		self::SetPrimaryKey('Id');
 		self::SetPrimaryKeyType('Int');
 		self::SetProperties(array(
 			// 'KEY' => DEFAULT_VALUE,
-			'Id'=>NULL,
-			'ReceiveDate'=>date("Y/m/d h:i:sa"),
-			'RAW'=>NULL,
-			'MessageId'=>NULL,
-			'ReplyId'=>NULL,
-			'Sender'=>NULL,
-			'Date'=>NULL,
-			'Message'=>'',
-			'MessageNormal'=>'',
+			'Email'=>NULL,
+			'UserId'=>NULL,
 			)
 		);
 	}

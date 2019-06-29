@@ -1,10 +1,8 @@
-
-
 <?php
 
 /**
- * Human Behaviour
- * Sample Plugin
+ * Email
+ * Tickets Plugin
  * 
  * @author        MohammadReza Tayyebi <rexa@gordarg.com>
  * @since         1.0
@@ -15,17 +13,13 @@
 // $ sudo service apache2 restart
 
 include_once '../core/AController.php';
-include_once BASEPATH . 'model/HumanBehaviour.php';
+include_once BASEPATH . 'model/Email.php';
 
 class emailController extends AController{
 	
 	function GET(){
 		
-		parent::GET();
-		$model = new HumanBehaviour();
-		foreach($model->GetProperties() as $key => $value){
-			$model->SetValue($key, parent::getRequest($key));
-		}
+		// parent::GET();
 		
 		// $auth = parent::ValidateAutomatic('USER');
         $data = [];
@@ -63,23 +57,24 @@ class emailController extends AController{
                     $email_deleted = ($headerinfo->Deleted == 'D') ? true : false;
                     $email_unseen = ($headerinfo->Unseen == 'U') ? true : false;
                     
-                    print ("<pre>");
-                    print ($email_inreplyto);
-                    print ("<br/>");
-                    print ($email_sender);
-                    print ("<br/>");
-                    print (join(' ', $email_toaddress));
-                    print ("<br/>");
-                    print ($email_messageid);
-                    print ("<br/><br/><br/>");
-                    print ($message);
-                    print ("</pre>");
-                    print ("<hr/>");
 
-
-                    $raw = $header . $message;
-                    array_push($data, $raw);
-                    // print("============================");
+                    $model = new Email();
+                    $model->SetValue('RAW', $header.$message);
+                    $model->SetValue('MessageId', $email_messageid);
+                    $model->SetValue('ReplyId', $email_inreplyto);
+                    $model->SetValue('Sender', $email_sender);
+                    $model->SetValue('Date', $email_date);
+                    $model->SetValue('Message', $message);
+                    $model->SetValue('MessageNormal', $mesage_normal);
+                    $result = $model->Insert();
+                    
+                    if ($result instanceof Exception)
+                        parent::setData($result);
+                    else
+                    {
+                        parent::setData($model->GetProperties());
+                        array_push($data, $model);
+                    }
                 }
             }
             imap_errors();
@@ -88,11 +83,8 @@ class emailController extends AController{
         }
 		
         parent::setData($data);
-        
-        
-		// parent::returnData();
+		parent::returnData();
 	}
-
 }
 
 $emailcontroller = new emailController();
