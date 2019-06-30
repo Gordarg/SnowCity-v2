@@ -5,7 +5,7 @@ $Id = $_GET["id"];
 
 include_once BASEPATH.'model/Post.php';
 $Post = new Post();
-$Post->SetValue("BinContent", "✓");
+$Post->SetHeavyAllowed("BinContent");
 $Post->DisableEncoding(true);
 $item = $Post->Select(-1, 1, 'MasterID', 'ASC', "WHERE `MasterID`='" . $Id . "'")[0];
 $content = $item["BinContent"];

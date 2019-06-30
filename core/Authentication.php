@@ -35,7 +35,7 @@ class Authentication
     public static function Login($Username, $Password){
 		$model = new User();
         $model->SetValue("Username", $Username);
-        $model->SetValue("HashPassword", "✓");
+        $model->SetHeavyAllowed("HashPassword");
         $result = $model->Select(-1 , 1, 'Id', 'ASC', "WHERE `Username`='" . $Username . "'");
         if (count($result) != 1)
             return false;

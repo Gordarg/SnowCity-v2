@@ -18,6 +18,7 @@ abstract class AModel
 {
 	private $props = []; // props [0] = key, props [1] = value
 	private $operands = []; // props that will go for update
+	private $heavy = []; // heavy props allowed
 	private $table = ''; // table name in db
 	private $pk = 'Id'; // pk in table
 	private $pkType = 'Int'; // pk in table
@@ -25,7 +26,7 @@ abstract class AModel
 	private $readonly = false; // commonly used for views
 	private $disableencoding = false; // used to optimize cpu in download.php
 
-	function IsReserved($Field, $IgnoreAggregate = false)
+	function IsKnownAsHeavyOrSecret($Field, $IgnoreAggregate = false)
 	{
 		return
 			(
@@ -51,6 +52,18 @@ abstract class AModel
 			$this->operands = [];
 		else
 			unset($this->operands[$Key]);
+	}
+	function SetHeavyAllowed($Key) {
+		array_push($this->heavy, $Key);
+	}
+	function IsHeavyAllowed($Key){
+		return in_array($Key,$this->heavy);
+	}
+	function ClearHeavyAllowed($Key = null) {
+		if ($Key == null)
+			$this->heavy = [];
+		else
+			unset($this->heavy[$Key]);
 	}
 	function SetProperties($Properties){
 		$this->props = $Properties;
@@ -82,19 +95,17 @@ abstract class AModel
 
 		foreach($this->GetProperties() as $key => $value)
 		{
-			if (!$this->IsReserved($key, true))
+			if (!$this->IsKnownAsHeavyOrSecret($key, true))
 				$fields .= '`' . $key . '`, ';
 			
-			if ($value != null)
+			else
+			if (($key != $this->pk && $this->IsHeavyAllowed($key))
+				|| $key == $this->pk)
 			{
-				if (($key != $this->pk && $value == "✓")
-					|| $key == $this->pk)
-				{
-					if (substr($key, 0, 3) == "Bin" && !$this->disableencoding)
-						$fields .= "TO_BASE64(`" . $key . "`) as " . $key . ", ";
-					else
-						$fields .= '`' . $key . '`, ';
-				}
+				if (substr($key, 0, 3) == "Bin" && !$this->disableencoding)
+					$fields .= "TO_BASE64(`" . $key . "`) as " . $key . ", ";
+				else
+					$fields .= '`' . $key . '`, ';
 			}
 		}
 		$fields = substr($fields, 0, -2);
@@ -156,7 +167,7 @@ abstract class AModel
 			if (!$this->IsOperand($key))
 				continue;
 			
-			if ($this->IsReserved($key)
+			if ($this->IsKnownAsHeavyOrSecret($key)
 				&& substr($key, 0, 2) == "Is")
 			{
 				if ($value == "on")
@@ -164,18 +175,19 @@ abstract class AModel
 				else if ($value == "off")
 					$value = false;
 			}		
-			else if ($this->IsReserved($key)
+			else if ($this->IsKnownAsHeavyOrSecret($key)
 				&& substr($key, 0, 4) == "Hash")
 			{
 				$value = "'" . Cryptography::Hash($value) . "'";
 			}
-			else if ($this->IsReserved($key)
+			else if ($this->IsKnownAsHeavyOrSecret($key)
 				&& substr($key, 0, 3) == "Bin")
 			{
-				$value = "FROM_BASE64('" . explode(',', urldecode($value))[1] . "')";
+				// $value = "FROM_BASE64('" . explode(',', urldecode($value))[1] . "')";
+				$value = "FROM_BASE64('" . $value . "')";
 			}
 			if (isset($value))
-				if ($this->IsReserved($key))
+				if ($this->IsKnownAsHeavyOrSecret($key))
 					$query .= '`' . $key . "` = " . $value . ", ";
 				else
 					$query .= '`' . $key . "` = '" . $value . "', ";
@@ -184,12 +196,11 @@ abstract class AModel
 		if ($this->pkType == "String")
 			$query .= " WHERE " . $this->pk . "='" . $this->GetProperties()[$this->pk] . "'";
 		else
-			$query .=" WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];	
+			$query .=" WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];
 		mysqli_query($conn, $query);
 		$error = mysqli_error($conn);
 		if ($error != null)
 			return new Exception($error); // NOT THROW
-		$this->Select();
 	}
 	function Insert()
 	{
@@ -211,7 +222,7 @@ abstract class AModel
 			{
 				str_replace("'", "\'", $value);
 			}
-			if ($this->IsReserved($key)
+			if ($this->IsKnownAsHeavyOrSecret($key)
 				&& substr($key, 0, 2) == "Is")
 			{
 				if ($value == "on")
@@ -219,12 +230,12 @@ abstract class AModel
 				else if ($value == "off")
 					$value = 0;
 			}		
-			else if ($this->IsReserved($key)
+			else if ($this->IsKnownAsHeavyOrSecret($key)
 				&& substr($key, 0, 4) == "Hash")
 			{
 				$value = "'" . Cryptography::Hash($value) . "'";
 			}
-			else if ($this->IsReserved($key)
+			else if ($this->IsKnownAsHeavyOrSecret($key)
 				&& substr($key, 0, 3) == "Bin")
 			{
 				if ($value != null)
@@ -235,7 +246,7 @@ abstract class AModel
 					$query .=  $value;			
 				else if ($key == $this->pk and $this->pkType == "String")
 					$query .= "'" . $value . "'";
-				else if ($this->IsReserved($key, false))
+				else if ($this->IsKnownAsHeavyOrSecret($key, false))
 					$query .=  $value;
 				else
 					$query .= "'" . $value . "'";

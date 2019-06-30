@@ -2,10 +2,6 @@
 // include models
 include_once BASEPATH.'model/Post.php';
 
-// Make an instance of Post{}
-$Post = new Post();
-$Post->AuthConstruct($USERNAME, $USERTOKEN);
-
 // Handle HTTP_POST
 if (
 isset($_POST["block"]) ||
@@ -74,11 +70,16 @@ if (Functionalities::IfExistsIndexInArray($PATHINFO, 3) != null)
 }
 else
 {
+    
     $MasterID = Functionalities::GenerateGUID();
     $Title = '';
     $Language = $CURRENTLANGUAGE;
     $Level = '0';
     $Body = '';
+
+    // Make an instance of Post{}
+    $Post = new Post();
+    $Post->AuthConstruct($USERNAME, $USERTOKEN);
 }
 
 if (!$AJAX)

@@ -1,5 +1,6 @@
 function collection(){ // Constructor class
 
+    // TODO: if ✓ then SetHeavyAllowed for The Property
     $.get(Hi.controller() + "PostController.php?BinContent=✓&Type=QUST&" + Hi.loginprotocol() , function(data, status){ 
     
         data.forEach(obj => {

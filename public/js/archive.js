@@ -1,6 +1,8 @@
 function archive(){ // Constructor class
 
     // TODO: Needs attention
+
+    // TODO: if ✓ then SetHeavyAllowed for The Property
     $.get(Hi.controller() + "PostController.php?BinContent=✓&Type=POST&" + Hi.loginprotocol() , function(data, status){ 
     
         data.forEach(obj => {

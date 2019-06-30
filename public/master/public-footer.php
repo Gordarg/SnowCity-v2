@@ -24,7 +24,7 @@
         <p><u><a href="<?php echo $BASEURL ?>"><?php echo Translate::Label(Config::TITLE) ?></a></u>
         * <?php echo Config::REGION ?>
         </p>
-        <p class="h6">© <?php echo Translate::Label(Config::NAME) ?> - <a class="text-green ml-2" href="https://www.gordarg.com" target="_blank"><?php echo Translate::Label('گُرد') ?></a></p>
+        <p class="h6">© <?php echo Translate::Label(Config::NAME) ?> - <a class="text-green ml-2" href="https://www.gordarg.com" target="_blank"><?php echo Translate::Label('قدرت گرفته از اسنو‌فریم‌ورک') ?></a></p>
       </div>
       </hr>
     </div>	

@@ -126,8 +126,11 @@ class Post extends AModel
             if ($content['size'] > 0)
             {
                 self::SetOperand("BinContent");
-                self::SetValue("BinContent", ',' . urlencode(base64_encode(file_get_contents($content['tmp_name']))));
+                // self::SetValue("BinContent", ',' . urlencode(base64_encode(file_get_contents($content['tmp_name']))));
+                // echo 'data:image/png;base64,' . base64_encode(file_get_contents($content['tmp_name']));exit;
+                self::SetValue("BinContent", base64_encode(file_get_contents($content['tmp_name'])));
                 self::Update();
+                self::ClearOperands("BinContent");
             }
 
             return self::GetProperties();
@@ -137,8 +140,13 @@ class Post extends AModel
     }
     function DeletePostAttachment($masterid)
     {
-
+        $result = self::Select(-1, 1, 'Id', 'DESC', "WHERE `MasterID`='" . $masterid . "'")[0];
+        self::SendPost($result["MasterID"], $result['Title'], $result['Level'],
+        $result['Content'], $result['Body'], $result['Status'], $result["Language"]);
         self::SetOperand("IsContentDeleted");
+        self::SetValue("IsContentDeleted", "1");
+        $response = self::Update();
+        self::ClearOperands("IsContentDeleted");
     }
     function DeletePost($masterid)
     {
