@@ -54,15 +54,15 @@ $USERTOKEN = Functionalities::IfExistsIndexInArray($_COOKIE, 'USERTOKEN');
 $USERROLE = Functionalities::IfExistsIndexInArray($_COOKIE, 'ROLE');
 
 // Choose Language
-if(!isset($_COOKIE["LANG"]) &&
-    (!$AJAX && $PATHINFO[1] != 'language'))
-    header('Location:language/' . Config::DefaultLanguage);
+// if(!isset($_COOKIE["LANG"]) &&
+//     (!$AJAX && $PATHINFO[1] != 'language'))
+//     header('Location:language/' . Config::DefaultLanguage);
 
 // Multi-Language Plug-In
 include_once BASEPATH.'public/plug-in/Translate.php';
 $Translate = new Translate();
 $CURRENTLANGUAGE = Functionalities::IfExistsIndexInArray($_COOKIE, 'LANG');
-
+$CURRENTLANGUAGE = $CURRENTLANGUAGE ? $CURRENTLANGUAGE : Config::DefaultLanguage;
 // Load Post Class
 include_once BASEPATH.'model/Post.php';
 $Post = new Post();

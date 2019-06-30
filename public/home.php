@@ -61,7 +61,7 @@ include_once BASEPATH . 'core/Bridge.php';
             </h3>
             <div class="mb-1 text-muted">' . $row['Submit'] . '</div>
             <p class="card-text mb-auto">' . Text::GenerateAbstractForPost($row['Body'], 300) . '</p>
-            <a href="#">' . $Translate::Label('ادامه مطلب') . '</a>
+            <a href="' . $BASEURL . 'view/' . $row['Language'] . '/' . $row['MasterID'] . '">' . $Translate::Label('ادامه مطلب') . '</a>
           </div>
           <img alt="' . $row['Title'] . '" style="object-fit:cover;" class="bd-placeholder-img card-img-right flex-auto d-none d-lg-block" width="200" height="250" src="' . $BASEURL . 'download.php?id=' . $row['MasterID'] . '"/>
         </div>

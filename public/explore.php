@@ -59,7 +59,7 @@ if ($Q != null)
                   '</a>';
                   break;
               case 'QUST':
-                  echo '<a href="' . $BASEURL . 'view/' . $_COOKIE['LANG'] . '/' . $row['MasterID'] . '">' . $row['Title']. '</a>';
+                  echo '<a href="' . $BASEURL . 'view/' . $CURRENTLANGUAGE . '/' . $row['MasterID'] . '">' . $row['Title']. '</a>';
                   break;
               // case 'KWRD':
               //     echo '<a href="view.php?id=' . $row['RefrenceID'] . '">' . $row['Title']. '</p>';

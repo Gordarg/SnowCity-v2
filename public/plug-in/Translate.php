@@ -4,18 +4,16 @@ class Translate
 {
     public static function Label($key, $Lang = null)
     {
-        $language = "en-us";
         if ($Lang)
-        {
             $language = $Lang;
-        }
-        else if(isset($_COOKIE["LANG"])) {
-            $language = $_COOKIE["LANG"];
-        }
+        else if(isset($CURRENTLANGUAGE))
+            $language = $CURRENTLANGUAGE;
+        else
+            $language = Config::DefaultLanguage;
+
         if ($language == "fa-ir")
-        {
             return $key;
-        }
+    
         $dictionary = explode("\n", file_get_contents(BASEPATH . 'dictionary.yaml'));
         $keys = [];
         for( $i= 0 ; $i <= sizeof($dictionary) ; $i++ )
