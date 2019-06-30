@@ -4,8 +4,8 @@ function loadform(){
   });
 }
 function loadpost(){
-  $('.content').load(Hi.baseurl() + 'ajax/say/post', function(){
-    loadScript(Hi.baseurl() + "public/js/say/post.js", function(){    });
+  $('.content').load(Hi.baseurl() + 'ajax/say', function(){
+    loadScript(Hi.baseurl() + "public/js/say.js", function(){    });
   });
 }
 loadpost();

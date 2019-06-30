@@ -1,19 +1,10 @@
 <?php
+// include models
 include_once BASEPATH.'model/Post.php';
 
-// Default values
-
-$MasterID = Functionalities::GenerateGUID();
-
-$Title = '';
-$Language = $CURRENTLANGUAGE;
-$Index = '0';
-$Level = '0';
-$Body = '';
-$Status = 'Publish';
-$Content = null;
-
+// Make an instance of Post{}
 $Post = new Post();
+$Post->AuthConstruct($USERNAME, $USERTOKEN);
 
 // Handle HTTP_POST
 if (
@@ -24,7 +15,7 @@ isset($_POST["draft"]) ||
 isset($_POST["insert"]) ||
 isset($_POST["update"])
 )
-{    
+{
     if (isset($_POST["block"])) // BLOCK A CONTENT WITHOUT DELETING
         $Status =  'BLOCKED';
     else if (isset($_POST["approve"])) // USED FOR ANSWERS
@@ -47,8 +38,7 @@ isset($_POST["update"])
     );
     // $Id = $Post->GetProperties()['Id'];
 }
-
-if (isset($_POST["delete"])) {
+else if (isset($_POST["delete"])) {
     $Post->DeletePost($_POST['masterid']);
 }
 else if (isset($_POST["clear"]))
@@ -69,25 +59,26 @@ else if (
 )
 // TODO: Disable redirects in Ajax calls (needs UI designer attention)
 {
-    exit(header("Location: " . $BASEURL . 'say/post/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
+    exit(header("Location: " . $BASEURL . 'say/' . $Post->GetProperties()['Language'] . '/' . $Post->GetProperties()['MasterId'] ));
 }
 
 // Select Post Details for Edit Window
-$row = null;
+
 $lines = array();
-if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null)
+if (Functionalities::IfExistsIndexInArray($PATHINFO, 3) != null)
 {
-    $MasterID = Functionalities::IfExistsIndexInArray($PATHINFO, 4);
-    $Language = Functionalities::IfExistsIndexInArray($PATHINFO, 3);
-    $row = $Post->Select(-1, 1, 'Id', 'DESC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $MasterID . "'");
-    if (sizeof($row) > 0)
-    {
-        $row = $row[0];
-        $Title = Functionalities::IfExistsIndexInArray($row,'Title');
-        $Level = Functionalities::IfExistsIndexInArray($row,'Level');
-        $RefrenceID = Functionalities::IfExistsIndexInArray($row,'RefrenceId');
-        $Body = Functionalities::IfExistsIndexInArray($row,'Body');
-    }
+    $Title = Functionalities::IfExistsIndexInArray($row,'Title');
+    $Level = Functionalities::IfExistsIndexInArray($row,'Level');
+    $RefrenceID = Functionalities::IfExistsIndexInArray($row,'RefrenceId');
+    $Body = Functionalities::IfExistsIndexInArray($row,'Body');
+}
+else
+{
+    $MasterID = Functionalities::GenerateGUID();
+    $Title = '';
+    $Language = $CURRENTLANGUAGE;
+    $Level = '0';
+    $Body = '';
 }
 
 if (!$AJAX)
@@ -106,7 +97,7 @@ if (!$AJAX)
 }
 
 echo '
-<form id="gordform" method="post" action="' . $BASEURL . 'say/' . $Type . (Functionalities::IfExistsIndexInArray($PATHINFO, 4) != null ? ('/' . $PATHINFO[3] . '/' . $PATHINFO[4]) : '' )  . '" enctype="multipart/form-data">
+<form id="gordform" method="post" action="' . $BASEURL . 'say/' . (Functionalities::IfExistsIndexInArray($PATHINFO, 3) != null ? ($PATHINFO[2] . '/' . $PATHINFO[3]) : '' )  . '" enctype="multipart/form-data">
 <input type="hidden" name="masterid" value="' . $MasterID . '" />
 <input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
 
@@ -125,4 +116,39 @@ echo '
 <label for="content">' . Translate::Label("پرونده") . '</label>
 <input class="form-control" type="file" name="content" id="file" />
 ';
+?>
+
+<?php
+if (Functionalities::IfExistsIndexInArray($PATHINFO, 4) == 'delete' && $row != null)
+{
+    echo ' 
+    <div class="alert alert-danger" role="alert">
+        ' . $Translate::Label('آیا اطمینان دارید؟') . '
+    </div>
+    <input type="submit" name="delete" class="btn btn-dark m-1" value="' . $Translate->Label("حذف") . '" />
+    <a class="btn btn-info m-1" href="' . $BASEURL . 'say/' . $Language . '/' . $MasterID . '">' . $Translate->Label("بازگشت") . '</a>
+    ';
+}
+else if ($row != null) {
+    //TODO (ADMIN): echo '<input type="submit" class="btn btn-outline-primary m-1" name="publish" value="' . $Translate->Label("انتشار") . '" />';
+    echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
+    echo '<input type="submit" name="update" class="btn btn-success m-1" value="' . $Translate->Label("به روز رسانی") . '" />';
+    echo '<input type="submit" name="clear" class="btn btn-warning m-1" value="' . $Translate->Label("حذف پیوست") . '" />';
+    echo '<input type="submit" name="block" class="btn btn-danger m-1" value="' . $Translate->Label("بلوکه") . '" />';
+    echo '<a class="btn btn-dark m-1 text-light" href="' . $BASEURL . 'say/' . $Language . '/' . $MasterID . '/delete' . '">' . $Translate->Label("حذف") . '</a>';
+    echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . $_COOKIE['LANG'] . '/' . $row['MasterID'] . '">' . $Translate->Label("مشاهده") . '</a>';
+}
+else {
+    echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
+    echo '<input type="submit" class="btn btn-success m-1" name="insert" value="' . $Translate->Label("ارسال") . '" />';
+}
+?>
+</form>
+<?php
+if (!$AJAX)
+{
+    echo '
+    </main>
+  ';
+}
 ?>

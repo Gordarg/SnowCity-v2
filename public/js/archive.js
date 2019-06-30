@@ -6,7 +6,7 @@ function archive(){ // Constructor class
         data.forEach(obj => {
             $("tbody").append('<tr>'
                 + '<th scope="row">'
-                + '<a href="' + Hi.baseurl() + "say/post/" + obj["Language"] + '/' + obj['MasterID'] +'">Edit</a>'
+                + '<a href="' + Hi.baseurl() + "say/" + obj["Language"] + '/' + obj['MasterID'] +'">Edit</a>'
                 + '</th>'
                 + '<td>' + obj["Title"] + '</td>'
                 + '<td>' + obj["Submit"] + '</td>'

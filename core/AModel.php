@@ -120,8 +120,9 @@ abstract class AModel
 			return new Exception($error); // NOT THROW
 		if (!$result)
 		{
-			header("HTTP/1.0 404 Not Found");
-			return;
+			// header("HTTP/1.0 404 Not Found");
+			// return;
+			return new Exception("No records found");
 		}
 		$rows = array();
 		while(($row = mysqli_fetch_assoc($result))) {
@@ -180,7 +181,10 @@ abstract class AModel
 					$query .= '`' . $key . "` = '" . $value . "', ";
 		}
 		$query = substr($query, 0, -2); // Delete last ,
-		$query .=" WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];	
+		if ($this->pkType == "String")
+			$query .= " WHERE " . $this->pk . "='" . $this->GetProperties()[$this->pk] . "'";
+		else
+			$query .=" WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];	
 		mysqli_query($conn, $query);
 		$error = mysqli_error($conn);
 		if ($error != null)

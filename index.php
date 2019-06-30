@@ -77,7 +77,7 @@ include_once BASEPATH.'public/plug-in/Links.php';
 // Read meta from config file
 $META_DESCRIPTION = Config::META_DESCRIPTION;
 $META_AUTHOR = Config::META_AUTHOR;
-if ($PATHINFO[1] == 'view' || $PATHINFO[1] == 'form')
+if ($PATHINFO[1] == 'view')
 {
     $Language = $PATHINFO[2];
     $Id = $PATHINFO[3];
@@ -87,11 +87,14 @@ if ($PATHINFO[1] == 'view' || $PATHINFO[1] == 'form')
     $META_DESCRIPTION = Text::GenerateAbstractForPost($Parsedown->text($row['Body']), 500);
     $META_AUTHOR = $row['Username'];
 }
-else if ($PATHINFO[1] == 'post')
+else if ($PATHINFO[1] == 'say')
 {
-    $Language = $PATHINFO[3];
-    $Id = $PATHINFO[4];
-    $row = $Post->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $Id . "'")[0];
+    $Language = Functionalities::IfExistsIndexInArray($PATHINFO, 2);
+    $MasterID = Functionalities::IfExistsIndexInArray($PATHINFO, 3);
+    $row = 
+        Functionalities::IfExistsIndexInArray(
+            $Post->Select(-1, 1, 'MasterID', 'ASC', "WHERE `Language`='" . $Language . "' AND `MasterID`='" . $MasterID . "'"),
+        0);
 }
 else if ($PATHINFO[1] == 'rss' && $AJAX)
 {
