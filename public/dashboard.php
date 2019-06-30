@@ -21,6 +21,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           
           <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('humanbehaviour')"><?php echo Translate::Label('رفتار انسانی') ?></a>
+          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('email')"><?php echo Translate::Label('پست الکترونیک') ?></a>
           <a class="dropdown-item" style="cursor:pointer" onclick="loadpost()"><?php echo Translate::Label('پست') ?></a>
           <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('archive')"><?php echo Translate::Label('آرشیو') ?> </a>
           <a class="dropdown-item" style="cursor:pointer" onclick="loadform()"><?php echo Translate::Label('فرم‌ساز') ?></a>

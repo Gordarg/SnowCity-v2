@@ -14,9 +14,12 @@
 
 include_once '../core/AController.php';
 include_once BASEPATH . 'model/Email.php';
+include_once BASEPATH . 'model/Ticket.php';
 
 class emailController extends AController{
-	
+    
+    // This function is only accessable by admin
+    // to view email inbox, delete them, etc ...
 	function GET(){
 		
 		parent::GET();
@@ -49,6 +52,7 @@ class emailController extends AController{
                 // $email_cc = $headerinfo->ccaddress;
                 // $email_bcc = $headerinfo->bccaddress;
                 // $email_refrences = $headerinfo->references;
+                $email_subject = $headerinfo->subject;
                 $email_messageid = htmlentities($headerinfo->message_id);
                 $email_inreplyto = @htmlentities($headerinfo->in_reply_to);
                 $email_deleted = ($headerinfo->Deleted == 'D') ? true : false;
@@ -56,18 +60,21 @@ class emailController extends AController{
                 
                 $message_normal = preg_replace('/(^\w.+:\n)?(^>.*(\n|$))+/mi', '', $message);
 
+                // Insert to emails table
                 $model = new Email();
                 $model->SetValue('RAW', $header.$message);
+                $model->SetValue('Title', $email_subject);
                 $model->SetValue('MessageId', $email_messageid);
                 $model->SetValue('ReplyId', $email_inreplyto);
                 $model->SetValue('Sender', $email_sender);
                 $model->SetValue('Date', $email_date);
-                $model->SetValue('Message', $message);
-                $model->SetValue('MessageNormal',
-                    $message_normal
-                );
+                $model->SetValue('Message', urlencode($message));
+                $model->SetValue('MessageNormal', $message_normal);
                 $result = $model->Insert();
+
+                $email_model_id = $model->GetProperties()['Id'];
                 
+                // TODO: This if doesnt work!
                 if ($result instanceof Exception)
                 {
                     // parent::setData($result);
@@ -75,13 +82,23 @@ class emailController extends AController{
                 }
                 else
                 {
-                    array_push($data, $model->GetProperties());
+                    // Insert to tickets table
+                    $model = new Ticket();
+                    $model->SetValue('Title', $email_subject);
+                    $model->SetValue('SenderEmail', $email_sender);
+                    $model->SetValue('Message', $message);
+                    // $model->SetValue('File', );
+                    $model->SetValue('EmailId', $email_model_id);
+                    $result = $model->Insert();
+
+                    // Delete email from server
                     imap_delete($inbox, $email_number, 1);
                     imap_delete($inbox, $email_number, 1.1);
                     imap_expunge($inbox);
                 }
             }
         }
+        // Disable imap errors print
         imap_errors();
         imap_alerts();
         imap_close($inbox);
@@ -89,12 +106,30 @@ class emailController extends AController{
         $auth = parent::ValidateAutomatic('USER');
         if ($auth["Result"])
         if (parent::getRequest('UserId') == null)
-            if ($auth['UserRole'] >= 3)		
-                parent::setData($data);
-            else
+            if (! $auth['UserRole'] >= 3)
                 parent::setStatus(403);
+            else{
+                // TODO: Load data from tables
+
+                $model = new Email();
+                foreach($model->GetProperties() as $key => $value){
+                    $model->SetValue($key, parent::getRequest($key));
+                }
+                $data = $model->Select(-1 , -1, 'Id', 'DESC');              
+                parent::setData($data);
+            }
 		parent::returnData();
-	}
+    }
+    
+    static public function SendEmail($to, $title, $message)
+    {
+        // TODO: Send emails from here!
+        // For example, when a ticket is sent,
+        // call the user...!
+
+        // Sent emails must be stored in database,
+        // and flagged that we are the owner.
+    }
 }
 
 $emailcontroller = new emailController();

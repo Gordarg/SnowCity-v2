@@ -18,10 +18,20 @@ class Ticket extends AModel
 		self::SetPrimaryKey('Id');
 		self::SetPrimaryKeyType('Int');
 		self::SetProperties(array(
-			// 'KEY' => DEFAULT_VALUE,
-			'Id'=>NULL,
-			'ReceiveDate'=>date(),
-			'Message'=>'',
+			'Id' => NULL,
+			'Title' => NULL,
+			'IsDeleted' => '0',
+			'IsClosed' => '0',
+			'Priority' => 3,
+			'SenderEmail' => NULL,
+			'Message' => NULL,
+			'File' => NULL,
+			'DepartmentId' => NULL,
+			'SubmitDate' => date("Y/m/d h:i:s"),
+			'AdminId' => NULL,
+			'ValidationCode' => Functionalities::GenerateGUID(),
+			'IsValid' => '0',
+			'EmailId' => NULL,
 			)
 		);
 	}

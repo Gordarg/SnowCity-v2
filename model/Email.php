@@ -20,7 +20,9 @@ class Email extends AModel
 		self::SetProperties(array(
 			// 'KEY' => DEFAULT_VALUE,
 			'Id'=>NULL,
-			'ReceiveDate'=>date("Y/m/d h:i:s"),
+			'Title'=>NULL,
+			'IsOutbound'=>'0',
+			'SubmitDate'=>date("Y/m/d h:i:s"),
 			'RAW'=>NULL,
 			'MessageId'=>NULL,
 			'ReplyId'=>NULL,
