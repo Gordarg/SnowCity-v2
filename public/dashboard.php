@@ -21,16 +21,21 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           
           <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('humanbehaviour')"><?php echo Translate::Label('رفتار انسانی') ?></a>
-          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('email')"><?php echo Translate::Label('پست الکترونیک') ?></a>
+          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('ticket')"><?php echo Translate::Label('برگه') ?></a>
           <a class="dropdown-item" style="cursor:pointer" onclick="loadpost()"><?php echo Translate::Label('پست') ?></a>
           <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('archive')"><?php echo Translate::Label('آرشیو') ?> </a>
           <a class="dropdown-item" style="cursor:pointer" onclick="loadform()"><?php echo Translate::Label('فرم‌ساز') ?></a>
           <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('collection')"><?php echo Translate::Label('کلکسیون') ?></a>
+          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('box')"><?php echo Translate::Label('جعبه') ?></a>
+          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('profile', $.cookie('USERNAME'))"><?php echo Translate::Label('پروفایل') ?></a>
 
           <div class="dropdown-divider"></div>
           <h6 class="px-3 mb-1 text-muted"><span><?php echo Translate::Label('ادمین') ?></span></h6>
 
           <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('people')"><?php echo Translate::Label('مردم') ?></a>
+          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('email')"><?php echo Translate::Label('پست الکترونیک') ?></a>
+          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('contact')"><?php echo Translate::Label('ارتباط') ?></a>
+
         </div>
       </li>
       

@@ -22,21 +22,17 @@ class ticketController extends AController{
 		}
 		
 		$auth = parent::ValidateAutomatic('USER');
-
 		$data = null;
 		
 		if ($auth["Result"])
-			if (parent::getRequest('UserId') == null)
+			if (parent::getRequest('Id') == null)
 				if ($auth['UserRole'] >= 3)
 					$data = $model->Select(-1 , -1, 'Id', 'DESC');
 				else
 					$data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE `UserId`='" . $auth['UserID'] . "'");
-			else
-				if ($auth['UserRole'] >= 3)
-					$data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE `UserId`='" . parent::getRequest('UserId') . "'");
-				else if (parent::getRequest('UserId') == $auth['UserID'])
-					$data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE `UserId`='" . $auth['UserID'] . "'");
 		
+		$data = $model->Select(-1 , -1, 'Id', 'DESC');
+
 		parent::setData($data);
 		parent::returnData();
 	}
@@ -51,14 +47,12 @@ class ticketController extends AController{
 			||
 			($auth['UserID'] == parent::getRequest('UserId')) )
 		{
-
 			$model = new Ticket();	
 			foreach($model->GetProperties() as $key => $value){
 				$model->SetValue($key, 
 					(parent::getRequest($key) == null) ? $value : parent::getRequest($key)
 				);
 			}
-
 			
 			$result = $model->Insert();
 
@@ -70,7 +64,6 @@ class ticketController extends AController{
 		}
 		parent::returnData();
 	}
-
 
 	function DELETE(){
 		parent::DELETE();

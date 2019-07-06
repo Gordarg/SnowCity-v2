@@ -7,8 +7,8 @@ class User extends AModel
 	function __construct()
 	{
 		self::SetTable('users');
-		self::SetPrimaryKey('Username');
-		self::SetPrimaryKeyType('String');
+		self::SetPrimaryKey('Id');
+		self::SetPrimaryKeyType('int');
 		self::SetProperties(array(
 			// 'KEY' => DEFAULT_VALUE,
 			'Id' => NULL,

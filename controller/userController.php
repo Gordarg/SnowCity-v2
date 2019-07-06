@@ -31,6 +31,9 @@ class userController extends AController{
 					(parent::getRequest($key) == null) ? $value : parent::getRequest($key)
 				);
 			}
+			// $user->SetValue("Role", 1);
+			// $user->SetValue("IsValidPhoneNumber", 'off');
+			// $user->SetValue("IsValidEmail", 'off');
 			$user->Insert();
 			parent::setData($user->GetProperties());
 		}
@@ -42,33 +45,39 @@ class userController extends AController{
 		// TODO: Authorize
 		parent::PUT();
 		$auth = parent::ValidateAutomatic('ADMIN');
+
 		if ($auth["Result"] || $auth['Username'] == parent::getRequest('previousUsername') )
 		{
+			$data = true;
+
 			$user = new User();
 			foreach($user->GetProperties() as $key => $value){
+
+				$user->SetValue('Id', $auth['UserID']);
+
 				if (parent::getRequest($key) == null)
 					continue;
 				$user->SetValue($key, parent::getRequest($key));
 				$user->SetOperand($key);
-			}
-			$user->Update(parent::getRequest("previousUsername"));
-			parent::setData($user->GetProperties());
-		}
-		parent::returnData();
-	}
 
-	function DELETE()
-	{
-		// TODO: Authorize
-		parent::DELETE();
-		$auth = parent::ValidateAutomatic('ADMIN');
-		if ($auth["Result"] || $auth['Username'] == parent::getRequest('Username') )
-		{
-			$user = new User();
-			$user->SetValue("Username", parent::getRequest("Username"));
-			$user->Delete();
+				if (parent::getRequest("HashPassword") != null)
+				{
+					$data = Authentication::Login(
+						parent::getRequest('previousUsername')
+						, parent::getRequest('Current')
+					);
+					if ($data)
+						$user->SetValue('Id', $data['Id']);
+				}
+			}
+
+			if (!$data) parent::setStatus(403);
+			else $user->Update();
+
 			parent::setData($user->GetProperties());
 		}
+		else parent::setStatus(403);
+
 		parent::returnData();
 	}
 }
