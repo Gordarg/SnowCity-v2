@@ -34,7 +34,7 @@ include_once BASEPATH . 'core/Bridge.php';
 
   <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
     <?php
-    $rows = $Post-> Select(-1, 1, "Submit", "DESC", "WHERE `Type` = 'POST' AND `Level` = '3' AND `LANGUAGE`='" . $CURRENTLANGUAGE  . "'");
+    $rows = $Post-> Select(-1, 1, "Submit", "DESC", "WHERE `Type` = 'POST' AND `Level` = '3' AND `LANGUAGE`='" . CURRENTLANGUAGE  . "'");
     foreach ($rows as $row) {
       echo '
       <div class="col-md-6 px-0">
@@ -49,7 +49,7 @@ include_once BASEPATH . 'core/Bridge.php';
 
   <div class="row mb-2">
     <?php
-    $rows = $Post-> Select(-1, 2, "Submit", "DESC", "WHERE `Type` = 'POST' AND `Level` = '2' AND `LANGUAGE`='" . $CURRENTLANGUAGE  . "'");
+    $rows = $Post-> Select(-1, 2, "Submit", "DESC", "WHERE `Type` = 'POST' AND `Level` = '2' AND `LANGUAGE`='" . CURRENTLANGUAGE  . "'");
     foreach ($rows as $row) {
       echo '
         <div class="col-md-6">
@@ -80,7 +80,7 @@ include_once BASEPATH . 'core/Bridge.php';
       </h3> -->
 
       <?php
-      $rows = $Post->Select(-1, 3, "Submit", "DESC", "WHERE `Type` = 'POST' AND `Level` = '1' AND `LANGUAGE`='" . $CURRENTLANGUAGE  . "'");
+      $rows = $Post->Select(-1, 3, "Submit", "DESC", "WHERE `Type` = 'POST' AND `Level` = '1' AND `LANGUAGE`='" . CURRENTLANGUAGE  . "'");
       foreach ($rows as $row) {
         echo '
         <div class="blog-post">

@@ -6,8 +6,8 @@ class Translate
     {
         if ($Lang)
             $language = $Lang;
-        else if(isset($CURRENTLANGUAGE))
-            $language = $CURRENTLANGUAGE;
+        else if(CURRENTLANGUAGE !== null)
+            $language = CURRENTLANGUAGE;
         else
             $language = Config::DefaultLanguage;
 

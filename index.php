@@ -60,9 +60,9 @@ $USERROLE = Functionalities::IfExistsIndexInArray($_COOKIE, 'ROLE');
 
 // Multi-Language Plug-In
 include_once BASEPATH.'public/plug-in/Translate.php';
-$Translate = new Translate();
 $CURRENTLANGUAGE = Functionalities::IfExistsIndexInArray($_COOKIE, 'LANG');
-$CURRENTLANGUAGE = $CURRENTLANGUAGE ? $CURRENTLANGUAGE : Config::DefaultLanguage;
+define("CURRENTLANGUAGE", $CURRENTLANGUAGE ? $CURRENTLANGUAGE : Config::DefaultLanguage);
+$Translate = new Translate();
 // Load Post Class
 include_once BASEPATH.'model/Post.php';
 $Post = new Post();
@@ -105,8 +105,8 @@ else if ($PATHINFO[1] == 'rss' && $AJAX)
 
 // Generate meta global variables
 $META = Links::GenerateMeta($META_DESCRIPTION, $META_AUTHOR);
-$CSSLINKS = Links::GenerateCssLinks($URL, $CURRENTLANGUAGE, $BASEURL);
-$JSLINKS = Links::GenerateJsLinks($URL, $CURRENTLANGUAGE, $BASEURL);
+$CSSLINKS = Links::GenerateCssLinks($URL, CURRENTLANGUAGE, $BASEURL);
+$JSLINKS = Links::GenerateJsLinks($URL, CURRENTLANGUAGE, $BASEURL);
 
 // Handle ajax requests
 if (!$AJAX)

@@ -73,7 +73,7 @@ else
     
     $MasterID = Functionalities::GenerateGUID();
     $Title = '';
-    $Language = $CURRENTLANGUAGE;
+    $Language = CURRENTLANGUAGE;
     $Level = '0';
     $Body = '';
 
@@ -100,7 +100,7 @@ if (!$AJAX)
 echo '
 <form id="gordform" method="post" action="' . $BASEURL . 'say/' . (Functionalities::IfExistsIndexInArray($PATHINFO, 3) != null ? ($PATHINFO[2] . '/' . $PATHINFO[3]) : '' )  . '" enctype="multipart/form-data">
 <input type="hidden" name="masterid" value="' . $MasterID . '" />
-<input type="hidden" name="language" value="' . $CURRENTLANGUAGE . '" />
+<input type="hidden" name="language" value="' . CURRENTLANGUAGE . '" />
 
 <label for="title">' . Translate::Label("عنوان") . '</label>
 <input class="form-control" name="title" required placeholder="' . Translate::Label("عنوان") . '" type="text" value="' . $Title . '" />
@@ -137,7 +137,7 @@ else if ($row != null) {
     echo '<input type="submit" name="clear" class="btn btn-warning m-1" value="' . $Translate->Label("حذف پیوست") . '" />';
     echo '<input type="submit" name="block" class="btn btn-danger m-1" value="' . $Translate->Label("بلوکه") . '" />';
     echo '<a class="btn btn-dark m-1 text-light" href="' . $BASEURL . 'say/' . $Language . '/' . $MasterID . '/delete' . '">' . $Translate->Label("حذف") . '</a>';
-    echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . $CURRENTLANGUAGE . '/' . $row['MasterID'] . '">' . $Translate->Label("مشاهده") . '</a>';
+    echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . CURRENTLANGUAGE . '/' . $row['MasterID'] . '">' . $Translate->Label("مشاهده") . '</a>';
 }
 else {
     echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';

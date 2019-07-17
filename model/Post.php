@@ -155,7 +155,7 @@ class Post extends AModel
         self::SetOperand("IsDeleted");
         self::SetValue("IsDeleted", "1");
         $response = self::Update();
-        // Attention: Maybe there is a bug when deleting a post <> $CURRENTLANGUAGE or $PATHINFO or etc ...
+        // Attention: Maybe there is a bug when deleting a post <> CURRENTLANGUAGE or $PATHINFO or etc ...
         self::ClearOperands("IsDeleted");
     }
 
