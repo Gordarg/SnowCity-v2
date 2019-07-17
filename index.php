@@ -53,11 +53,6 @@ $USERNAME = Functionalities::IfExistsIndexInArray($_COOKIE, 'USERNAME');
 $USERTOKEN = Functionalities::IfExistsIndexInArray($_COOKIE, 'USERTOKEN');
 $USERROLE = Functionalities::IfExistsIndexInArray($_COOKIE, 'ROLE');
 
-// Choose Language
-// if(!isset($_COOKIE["LANG"]) &&
-//     (!$AJAX && $PATHINFO[1] != 'language'))
-//     header('Location:language/' . Config::DefaultLanguage);
-
 // Multi-Language Plug-In
 include_once BASEPATH.'public/plug-in/Translate.php';
 $CURRENTLANGUAGE = Functionalities::IfExistsIndexInArray($_COOKIE, 'LANG');

@@ -46,7 +46,7 @@ class emailController extends AController{
         // * Sync emails with mail server
         $hostname = "{mail.gordarg.com:110/pop3/notls}Inbox";
         $username = "info@gordarg.com";
-        $password = '';
+        $password = '.+uVJ8Pu?WI7L+Zw$]b-T?$T';
         $inbox = imap_open($hostname,$username,$password) or die('Cannot connect to EMail: ' . imap_last_error());
         $emails = imap_search($inbox,'ALL');
         if($emails) {

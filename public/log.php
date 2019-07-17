@@ -1,4 +1,5 @@
 <?php
+
 include_once BASEPATH . 'core/Authentication.php';
 
 if (isset($_POST['Login']))
@@ -24,6 +25,12 @@ if ($PATHINFO[2] == 'out')
     setcookie('USERTOKEN', $data['Token'], time() - 3600, '/');   
     header('Location: ' . $BASEURL . 'log/in');
     exit;
+}
+else
+{
+    if(isset($_COOKIE["USERNAME"])) {
+        echo '<script>window.location.replace("../dashboard");</script>';
+    }
 }
 
 // TODO: Register page

@@ -64,14 +64,19 @@ $lines = array();
 if (Functionalities::IfExistsIndexInArray($PATHINFO, 3) != null)
 {
     $Title = Functionalities::IfExistsIndexInArray($row,'Title');
+    $Language = Functionalities::IfExistsIndexInArray($row,'Language');
     $Level = Functionalities::IfExistsIndexInArray($row,'Level');
     $RefrenceID = Functionalities::IfExistsIndexInArray($row,'RefrenceId');
     $Body = Functionalities::IfExistsIndexInArray($row,'Body');
 }
 else
 {
+    // TODO: Add translations
+    // Translations are posts with same master id and different languages
     
-    $MasterID = Functionalities::GenerateGUID();
+    $MasterID = 
+        Functionalities::GenerateGUID();
+    
     $Title = '';
     $Language = CURRENTLANGUAGE;
     $Level = '0';
@@ -99,14 +104,23 @@ if (!$AJAX)
 
 echo '
 <form id="gordform" method="post" action="' . $BASEURL . 'say/' . (Functionalities::IfExistsIndexInArray($PATHINFO, 3) != null ? ($PATHINFO[2] . '/' . $PATHINFO[3]) : '' )  . '" enctype="multipart/form-data">
-<input type="hidden" name="masterid" value="' . $MasterID . '" />
-<input type="hidden" name="language" value="' . CURRENTLANGUAGE . '" />
+<input type="hidden" name="masterid" value="' . $MasterID . '" />';
 
+echo '
 <label for="title">' . Translate::Label("عنوان") . '</label>
-<input class="form-control" name="title" required placeholder="' . Translate::Label("عنوان") . '" type="text" value="' . $Title . '" />
+<input class="form-control" name="title" required placeholder="' . Translate::Label("عنوان") . '" type="text" value="' . $Title . '" />';
 
+echo '
+<label for="language">' . Translate::Label("انتخاب زبان") . '</label>
+<select name="language" class="form-control">';
+foreach (Config::Languages() as $lang)
+    echo '<option ' . ($Language == $lang->code . '-' . $lang->region ?'selected' : '') . ' value="' . $lang->code . '-' . $lang->region . '" >' . $lang . '</option>';
+echo '</select>';
+
+
+echo '
 <label for="level">' . Translate::Label("مرتبه") . '</label>
-<select class="form-control"  name="level">
+<select class="form-control" name="level">
 <option ' . ( ($Level == "1") ? "selected" : "" ) . ' value="1">' . Translate::Label("سریع") . ' - ' . Translate::Label("بالا") . '</option>
 <option ' . ( ($Level == "2") ? "selected" : "" ) . ' value="2">' . Translate::Label("متوسط") . ' - ' . Translate::Label("مرکز") . '</option>
 <option ' . ( ($Level == "3") ? "selected" : "" ) . ' value="3">' . Translate::Label("کند") . ' - ' . Translate::Label("پایین") . '</option>
@@ -137,7 +151,7 @@ else if ($row != null) {
     echo '<input type="submit" name="clear" class="btn btn-warning m-1" value="' . $Translate->Label("حذف پیوست") . '" />';
     echo '<input type="submit" name="block" class="btn btn-danger m-1" value="' . $Translate->Label("بلوکه") . '" />';
     echo '<a class="btn btn-dark m-1 text-light" href="' . $BASEURL . 'say/' . $Language . '/' . $MasterID . '/delete' . '">' . $Translate->Label("حذف") . '</a>';
-    echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . CURRENTLANGUAGE . '/' . $row['MasterID'] . '">' . $Translate->Label("مشاهده") . '</a>';
+    echo '<a target="_blank" class="m-1" href="' . $BASEURL . 'view/' . $CURRENTLANGUAGE . '/' . $row['MasterID'] . '">' . $Translate->Label("مشاهده") . '</a>';
 }
 else {
     echo '<input type="submit" name="draft" class="btn btn-secondary m-1" value="' . $Translate->Label("پیش‌نویس") . '" />';
