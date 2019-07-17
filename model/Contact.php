@@ -18,6 +18,7 @@ class Contact extends AModel
 		self::SetPrimaryKey('Id');
 		self::SetPrimaryKeyType('Int');
 		self::SetProperties(array(
+			'Id' => NULL,
 			'UserId'=>NULL,
 			'Type'=>'email',
 			'Value'=>'a@b.c',

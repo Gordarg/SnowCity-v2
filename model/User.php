@@ -8,7 +8,7 @@ class User extends AModel
 	{
 		self::SetTable('users');
 		self::SetPrimaryKey('Id');
-		self::SetPrimaryKeyType('int');
+		self::SetPrimaryKeyType('Int');
 		self::SetProperties(array(
 			// 'KEY' => DEFAULT_VALUE,
 			'Id' => NULL,

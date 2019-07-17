@@ -74,10 +74,20 @@ class userController extends AController{
 			if (!$data) parent::setStatus(403);
 			else $user->Update();
 
+			$user->ClearOperands("HashPassword");
+			$user->ClearHeavyAllowed("HashPassword");
+			$result = $user->Select(-1 , -1, 'Id', 'DESC', "WHERE Id='" . $user->GetProperties()['Id'] . "'");
+			foreach($user->GetProperties() as $key => $value)
+				if (Functionalities::IfExistsIndexInArray($result[0], $key))
+					$user->SetValue($key, $result[0][$key]);
+
+			
+
 			parent::setData($user->GetProperties());
 		}
 		else parent::setStatus(403);
 
+		
 		parent::returnData();
 	}
 }

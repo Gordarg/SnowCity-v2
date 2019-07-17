@@ -34,7 +34,6 @@
 
           <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('people')"><?php echo Translate::Label('مردم') ?></a>
           <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('email')"><?php echo Translate::Label('پست الکترونیک') ?></a>
-          <a class="dropdown-item" style="cursor:pointer" onclick="Hi.load('contact')"><?php echo Translate::Label('ارتباط') ?></a>
 
         </div>
       </li>

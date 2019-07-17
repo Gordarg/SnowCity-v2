@@ -131,11 +131,11 @@ abstract class AController
 	function POST(){
 		$this->setRequest($_POST);
 	}
-	function DELETE(){	
+	function DELETE(){
 		$raw_data = file_get_contents('php://input');
 		$_DELETE = array();
 		$boundary = substr($raw_data, 0, strpos($raw_data, "\r\n"));
-		if ($boundary == null) // x-www-form-urlencoded
+		if ($boundary == null && $raw_data != 'null') // x-www-form-urlencoded
 		{
 			$split_parameters = explode('&', $raw_data);
 
@@ -144,7 +144,7 @@ abstract class AController
 				$_DELETE[$final_split[0]] = $final_split[1];
 			}
 		}
-		else // form-data
+		else if ($raw_data != 'null')
 		{
 			$parts = array_slice(explode($boundary, $raw_data), 1);
 			foreach ($parts as $part) {
@@ -177,6 +177,19 @@ abstract class AController
 				}
 
 			}
+		}
+		else
+		{
+			$url = $_SERVER['REQUEST_URI'];
+
+			$split_parameters = explode('&', $url);
+
+			for($i = 0; $i < count($split_parameters); $i++) {
+				$final_split = explode('=', $split_parameters[$i]);
+				$_DELETE[$final_split[0]] = $final_split[1];
+			}
+
+			var_dump($url);
 		}
 		$this->setRequest($_DELETE);
 	}

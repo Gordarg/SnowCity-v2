@@ -1,4 +1,4 @@
-<form class="form-group" Id="changepassword-form">
+<form class="form" Id="changepassword-form">
     <input type="hidden" class="form-control" name="previousUsername">
 
     <div class="form-group">
@@ -15,6 +15,49 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<form class="form" >
+    <div class="form-group">
+        <label for="usenrame">Username</label>
+        <input type="text" class="form-control" name="username" disabled />
+    </div>
+    <div class="form-group checkbox">
+        <label><input type="checkbox">Is Active</label>
+    </div>
+    <div class="form-group">
+        <label for="role">Role</label>
+        <select name="role" class="form-control">
+            <option value="3">Administrator</option>
+            <option value="2">Editor</option>
+            <option value="1">Visitor</option>
+        </select>
+    </div>
+</form>
+
+<table class="table m-5" id="Contact">
+<caption>User contacts table</caption>
+<thead>
+    <tr>
+        <th scope="col"></th>
+        <th scope="col">User</th>
+        <th scope="col">Type</th>
+        <th scope="col">Value</th>
+    </tr>
+</thead>
+<tbody>
+    
+</tbody>
+</table>
+
+<form class="form-inline m-5" Id="contact-form">
+    <input type="hidden" name="Id">
+    <input type="hidden" name="UserId">
+    <select class="form-control" name="Type">
+        <option value="email">EMail</option>
+        <option value="mobile">Mobile</option>
+    </select>
+    <input type="text" class="form-control" name="Value" placeholder="Value">
+    <button type="submit" class="btn btn-primary btn-sm">Save</button>
 </form>
 
 TODO:

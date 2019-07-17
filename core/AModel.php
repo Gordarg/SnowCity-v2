@@ -92,7 +92,7 @@ abstract class AModel
 	function Select($Skip = -1 , $Take = -1, $OrderField = 'Id', $OrderArrange = 'ASC', $Clause = '')
 	{
 		$fields = '';
-
+		
 		foreach($this->GetProperties() as $key => $value)
 		{
 			if (!$this->IsKnownAsHeavyOrSecret($key, true))
@@ -110,7 +110,8 @@ abstract class AModel
 		}
 		$fields = substr($fields, 0, -2);
 		$query  = "SELECT " . $fields . " FROM `" . $this->table . "`";
-		if ($this->GetProperties()[$this->pk] != null) // TODO: Any parameter that wasn't null
+		if ($this->GetProperties()[$this->pk] != null // Search by Key
+			&& $Clause == null)
 		{
 			if ($this->pkType == 'String')
 				$this->SetValue($this->pk, "'" .  $this->GetProperties()[$this->pk] . "'" );
@@ -148,6 +149,7 @@ abstract class AModel
 		$db = new Db();
 		$conn = $db->Open();
 		$query  = "DELETE FROM `" . $this->table . "` WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];
+		print($query);exit;
 		mysqli_query($conn, $query);
 		$error = mysqli_error($conn);
 		if ($error != null)

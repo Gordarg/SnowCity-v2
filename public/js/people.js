@@ -6,7 +6,7 @@ function people(){ // Constructor class
 
             $("tbody").append('<tr>'
                 + '<th scope="row">'
-                + '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="edit(\'' + obj["Id"] + '\')">Edit</button>'
+                + '<button type="button" class="btn btn-primary" onclick="Hi.load(\'profile\',\'' + obj["Username"] + '\')">Edit</button>'
                 + '</th>'
                 + '<td>' + obj["Username"] + '</td>'
                 + '<td>' + obj["IsActive"] + '</td>'
@@ -15,9 +15,4 @@ function people(){ // Constructor class
             );
         });
     });
-}
-
-function edit(Id)
-{
-    
 }

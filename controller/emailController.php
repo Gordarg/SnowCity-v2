@@ -25,11 +25,29 @@ class emailController extends AController{
 		parent::GET();
         
         $data = [];
+        $auth = parent::ValidateAutomatic('ADMIN');
+        if (! $auth['UserRole'] >= 3)
+            parent::setStatus(403);
+        $model = new Email();
 
+        // * Select a single email from database
+		foreach($model->GetProperties() as $key => $value){
+			$model->SetValue($key, parent::getRequest($key));
+		}
+        if (parent::getRequest('Id') != null)
+        {
+            $data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE `Id`=". parent::getRequest('Id') . "");
+            parent::setData($data);
+            parent::returnData();
+            exit;
+        }
+
+
+        // * Sync emails with mail server
         $hostname = "{mail.gordarg.com:110/pop3/notls}Inbox";
         $username = "info@gordarg.com";
-        $password = '.+uVJ8Pu?WI7L+Zw$]b-T?$T';
-        $inbox = imap_open($hostname,$username,$password) or die('Cannot connect to GordMail: ' . imap_last_error());
+        $password = '';
+        $inbox = imap_open($hostname,$username,$password) or die('Cannot connect to EMail: ' . imap_last_error());
         $emails = imap_search($inbox,'ALL');
         if($emails) {
             rsort($emails);
@@ -53,12 +71,15 @@ class emailController extends AController{
                 // $email_bcc = $headerinfo->bccaddress;
                 // $email_refrences = $headerinfo->references;
                 $email_subject = $headerinfo->subject;
-                $email_messageid = htmlentities($headerinfo->message_id);
+
+                $email_messageid = @htmlentities($headerinfo->message_id);
                 $email_inreplyto = @htmlentities($headerinfo->in_reply_to);
                 $email_deleted = ($headerinfo->Deleted == 'D') ? true : false;
                 $email_unseen = ($headerinfo->Unseen == 'U') ? true : false;
-                
-                $message_normal = preg_replace('/(^\w.+:\n)?(^>.*(\n|$))+/mi', '', $message);
+
+                // TODO: Normilize message
+                $message_normal = $message;
+                // $message_normal = preg_replace('/(^\w.+:\n)?(^>.*(\n|$))+/mi', '', $message);
 
                 // Insert to emails table
                 $model = new Email();
@@ -87,8 +108,27 @@ class emailController extends AController{
                     $model->SetValue('Title', $email_subject);
                     $model->SetValue('SenderEmail', $email_sender);
                     $model->SetValue('Message', $message);
+                    $model->SetValue('EmailId', $email_model_id);                    
                     // $model->SetValue('File', );
-                    $model->SetValue('EmailId', $email_model_id);
+              
+                    // Find the matching ticket to reply to
+                    if ($email_inreplyto != null)
+                    {
+                        // TODO:
+                        // find the email from remply_messga_Id
+                        // find the ticket from email_ID
+                        // set reply_to
+
+                        $head_email = new Email();
+                        $head_ticket = new Ticket();
+
+                        $head_email_id = 
+                            $head_email->Select(-1 , -1, 'Id', 'DESC', "WHERE MessageId='" . $email_inreplyto . "'")[0]['Id'];
+                        $head_ticket_id =
+                            $head_ticket->Select(-1 , -1, 'Id', 'DESC', "WHERE EmailId='" . $head_email_id . "'")[0]['Id'];
+
+                        $model->SetValue('ReplyId', $head_ticket_id);
+                    }
                     $result = $model->Insert();
 
                     // Delete email from server
@@ -103,21 +143,9 @@ class emailController extends AController{
         imap_alerts();
         imap_close($inbox);
 
-        $auth = parent::ValidateAutomatic('USER');
-        if ($auth["Result"])
-        if (parent::getRequest('UserId') == null)
-            if (! $auth['UserRole'] >= 3)
-                parent::setStatus(403);
-            else{
-                // TODO: Load data from tables
-
-                $model = new Email();
-                foreach($model->GetProperties() as $key => $value){
-                    $model->SetValue($key, parent::getRequest($key));
-                }
-                $data = $model->Select(-1 , -1, 'Id', 'DESC');              
-                parent::setData($data);
-            }
+        // Select emails in database
+        $data = $model->Select(-1 , -1, 'Id', 'DESC');              
+        parent::setData($data);
 		parent::returnData();
     }
     

@@ -1,53 +1,39 @@
 <?php
 
-/**
- * Ticket
- * Tickets Plugin
- * 
- * @author        MohammadReza Tayyebi <rexa@gordarg.com>
- * @since         1.0
- */
-
 include_once '../core/AController.php';
-include_once BASEPATH . 'model/Ticket.php';
+include_once BASEPATH . 'model/Contact.php';
 
-class ticketController extends AController{
+class contactController extends AController{
 	
 	function GET(){
 		
 		parent::GET();
-		$model = new Ticket();
+		$model = new Contact();
 		foreach($model->GetProperties() as $key => $value){
 			$model->SetValue($key, parent::getRequest($key));
 		}
 		
 		$auth = parent::ValidateAutomatic('USER');
+
 		$data = null;
 		
 		if ($auth["Result"])
-			// Selecting all tickets
-			if (parent::getRequest('Id') == null)
-			{
+			if (parent::getRequest('UserId') == null)
 				if ($auth['UserRole'] >= 3)
-					$data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE `ReplyId` IS NULL");
+					$data = $model->Select(-1 , -1, 'Id', 'DESC');
 				else
-					$data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE `ReplyId` IS NULL AND `UserId`='" . $auth['UserID'] . "'");
-			}
-
-			// Reading a ticket with replies
+					$data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE `UserId`='" . $auth['UserID'] . "'");
 			else
-			{
 				if ($auth['UserRole'] >= 3)
-					$data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE `Id`=". parent::getRequest('Id') . " OR `ReplyId`=". parent::getRequest('Id') . "");
-				else
-					$data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE (`Id`=". parent::getRequest('Id') . " OR `ReplyId`=". parent::getRequest('Id') . ") AND `UserId`='" . $auth['UserID'] . "'");
-			}
-			
+					$data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE `UserId`='" . parent::getRequest('UserId') . "'");
+				else if (parent::getRequest('UserId') == $auth['UserID'])
+					$data = $model->Select(-1 , -1, 'Id', 'DESC', "WHERE `UserId`='" . $auth['UserID'] . "'");
+		
 		parent::setData($data);
 		parent::returnData();
-	}
+    }
 
-	function POST(){
+    function POST(){
 		parent::POST();
 
 		$auth = parent::ValidateAutomatic('USER');
@@ -57,12 +43,14 @@ class ticketController extends AController{
 			||
 			($auth['UserID'] == parent::getRequest('UserId')) )
 		{
-			$model = new Ticket();	
+
+			$model = new Contact();	
 			foreach($model->GetProperties() as $key => $value){
 				$model->SetValue($key, 
 					(parent::getRequest($key) == null) ? $value : parent::getRequest($key)
 				);
 			}
+
 			
 			$result = $model->Insert();
 
@@ -75,18 +63,21 @@ class ticketController extends AController{
 		parent::returnData();
 	}
 
+
 	function DELETE(){
 		parent::DELETE();
 
 		$auth = parent::ValidateAutomatic('USER');
 		
+		print("Hello world");exit;
+
 		if (
 			($auth["Result"] && $auth['UserRole'] >= 3)
 			||
 			($auth['UserID'] == parent::getRequest('UserId')) )
 		{
 
-			$model = new Ticket();	
+			$model = new Contact();	
 			foreach($model->GetProperties() as $key => $value){
 				$model->SetValue($key, 
 					(parent::getRequest($key) == null) ? $value : parent::getRequest($key)
@@ -102,8 +93,8 @@ class ticketController extends AController{
 		}
 		parent::returnData();
 	}
-
 }
 
-$ticketcontroller = new ticketController();
+$contactController = new contactController();
+
 ?>

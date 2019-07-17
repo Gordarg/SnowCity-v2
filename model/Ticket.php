@@ -19,6 +19,7 @@ class Ticket extends AModel
 		self::SetPrimaryKeyType('Int');
 		self::SetProperties(array(
 			'Id' => NULL,
+			'ReplyId' => NULL,
 			'Title' => NULL,
 			'IsDeleted' => '0',
 			'IsClosed' => '0',

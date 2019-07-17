@@ -8,9 +8,61 @@
         <th scope="col">RAW</th>
         <th scope="col">From</th>
         <th scope="col">Date</th>
-        <th scope="col">Message</th>
     </tr>
 </thead>
 <tbody>
 </tbody>
-</table>    
+</table>
+
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"></h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            
+
+            <div class="card m-1">
+              <!--
+              <img class="card-img-top" src="Logo.svg" alt="Attachment if is image">
+              -->    
+              <div class="card-body">
+                  <h5 class="card-title">Message Body</h5>
+                  <p class="card-text" id="email_body">
+                  loading...
+                  </p>
+              </div>
+              <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><b>Outbound: </b><span id="Outbound"></span></li>
+                  <li class="list-group-item"><b>Message Id: </b><span id="MessageId"></span></li>
+                  <li class="list-group-item"><b>Submit Date: </b><span id="SubmitDate"></span></li>
+                  <li class="list-group-item"><b>Date: </b><span id="Date"></span></li>
+                  <li class="list-group-item"><b>Sender: </b><span id="Sender"></span></li>
+              </ul>
+              <div class="card-body">
+                  <a href="#" class="card-link">View Ticket</a>
+              </div>
+              <div class="card-body">
+                  <h5 class="card-title">Message RAW</h5>
+                  <p class="card-text" id="email_raw">
+                  loading...
+                  </p>
+              </div>
+            </div>
+            
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Exit Window</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
