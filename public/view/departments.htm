@@ -1,0 +1,63 @@
+<table class="table">
+<thead>
+    <tr>
+    <th scope="col">#</th>
+    <th scope="col">Name</th>
+    <th scope="col">IsPrivate</th>
+    </tr>
+</thead>
+<tbody id="departments">
+</tbody>
+</table>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Show Department</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="form-group" id="update_department">
+                    <h6>Update Department Name</h6>
+                    <input type="text" name="Name" class="form-control" placeholder="Enter the Name" required />
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input name="IsPrivate" type="checkbox" value="remember-me">Private Department
+                        </label>
+                    </div>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Update" />
+                </form>
+                <table class="table">
+                    <thead>
+                        <th>Remove</th>
+                        <th>User Id</th>
+                        <th>Username</th>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                    <tfoot>
+                      <form class="form m-4 p-4">
+                        <input type="hidden" name="DepartmentId" />
+                        TODO: Load form db:
+                        <select name="UserId" class="form-control">
+                          <option value="1">Username here</option>
+                          <option value="1">Username here</option>
+                          <option value="1">Username here</option>
+                        </select>
+                        <input type="submit" class="btn btn-primary btn-sm" value="Add Assoc" />
+                      </form>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Exit Window</button>
+            </div>
+          </div>
+      
+        </div>
+      </div>

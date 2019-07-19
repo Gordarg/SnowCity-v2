@@ -188,8 +188,6 @@ abstract class AController
 				$final_split = explode('=', $split_parameters[$i]);
 				$_DELETE[$final_split[0]] = $final_split[1];
 			}
-
-			var_dump($url);
 		}
 		$this->setRequest($_DELETE);
 	}

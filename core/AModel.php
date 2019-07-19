@@ -149,7 +149,6 @@ abstract class AModel
 		$db = new Db();
 		$conn = $db->Open();
 		$query  = "DELETE FROM `" . $this->table . "` WHERE " . $this->pk . "=" . $this->GetProperties()[$this->pk];
-		print($query);exit;
 		mysqli_query($conn, $query);
 		$error = mysqli_error($conn);
 		if ($error != null)
