@@ -15,6 +15,7 @@ function ticket(){ // Constructor class
                 + '<td>' + obj["Title"] + '</td>'
                 + '<td>' + obj["Priority"] + '</td>'
                 + '<td>' + obj["SenderEmail"] + '</td>'
+                + '<td>' + obj["UserId"] + '</td>'
                 + '<td>' + obj["SubmitDate"] + '</td>'
                 + '<td>' + obj["AdminId"] + '</td>'             
                 + '<td>' + obj["IsValid"] + '</td>'

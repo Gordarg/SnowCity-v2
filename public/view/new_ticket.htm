@@ -2,20 +2,23 @@
 To Start a new tocket to a department.
 -->
 
-<form class="form">
+<form class="form" id="new_ticket">
+
+    <!-- If was admin, he can be in begin tiket mode which can mention a user and turn on the flag, IsUserReciever -->
+    Checkbox here, select USer if admin wants.
+    remember that admin can also send a ticket. he is a user!
 
     <input type="hidden" name="UserId" />
 
-
     Department:
-    <select>
-        <option>test</option>
-        <option>test</option>
-        <option>test</option>
+    <select name="DepartmentId" class="form-control">
     </select>
 
-    Message
-    <textarea class="form-control" name="body" ></textarea>
+    Title:
+    <input type="text" class="form-control" name="Title" />
+
+    Message:
+    <textarea name="MessageNormal" class="form-control" name="body" ></textarea>
     
-    <input type="submit" value="Send" />
+    <input type="submit" value="Send" class="btn btn-primary" />
 </form>
